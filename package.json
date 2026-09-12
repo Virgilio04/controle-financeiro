@@ -1,0 +1,26 @@
+{
+  "name": "controle-financeiro",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": "scripts": {
+  "dev": "vite",
+  "build": "vite build",
+  "preview": "vite preview"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Virgilio04/controle-financeiro.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Virgilio04/controle-financeiro/issues"
+  },
+  "homepage": "https://github.com/Virgilio04/controle-financeiro#readme",
+  "devDependencies": {
+    "vite": "^8.3.0"
+  }
+}
