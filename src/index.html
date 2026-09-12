@@ -692,7 +692,7 @@
             document.getElementById('modalConta').classList.add('hidden');
         }
 
-        function salvarConta(event) {
+        async function salvarConta(event) {
             event.preventDefault();
             const editId = document.getElementById('contaEditId').value;
             const nome = document.getElementById('contaNome').value.trim();
@@ -719,9 +719,10 @@
                 contas.push(nova);
             }
 
-            salvarNoStorage();
+            // --- ATUALIZE AQUI ---
+            // Em vez de salvarNoStorage(), mandamos para o Supabase:
+            await salvarContaNoSupabase(editId ? conta : nova); 
             fecharModalConta();
-            renderizar();
             mostrarMensagem("Sucesso", "Conta salva com sucesso!", "success");
         }
 
@@ -950,8 +951,26 @@
             mostrarMensagem("Removido", "Registro de saída removido.", "info");
         }
 
+        // --- ATUALIZE AQUI NO FINAL DO CÓDIGO ---
+        async function carregarDadosDoSupabase() {
+            try {
+                const { data: dContas } = await supabase.from('financas_contas').select('*');
+                if (dContas) contas = dContas;
+
+                const { data: dAportes } = await supabase.from('financas_aportes').select('*');
+                if (dAportes) historicoAportes = dAportes;
+
+                const { data: dSaidas } = await supabase.from('financas_saidas').select('*');
+                if (dSaidas) historicoSaidas = dSaidas;
+
+                renderizar();
+            } catch (err) {
+                console.error("Erro ao carregar do Supabase:", err);
+            }
+        }
+
         window.onload = function() {
-            renderizar();
+            carregarDadosDoSupabase();
         };
     </script>
 </body>
