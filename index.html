@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle Financeiro Inteligente</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#151f32',
+                            950: '#0a0f1d'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+    <header class="bg-slate-900 border-b border-slate-800 px-4 sm:px-6 py-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sticky top-0 z-40 backdrop-blur-md bg-opacity-95">
+        <div>
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                    <i class="fa-solid fa-wallet text-white text-sm"></i>
+                </div>
+                <h1 class="font-bold text-lg sm:text-xl text-white tracking-tight">Finanças Inteligentes</h1>
+            </div>
+            <p class="text-xs text-slate-400 mt-0.5">Controle por quinzenas com divisão automática de valores por data</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5">
+            <button onclick="abrirModalAporteGeral()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 rounded-xl text-xs font-medium shadow-lg shadow-emerald-600/25 transition-all flex items-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-coins"></i> Separar Dinheiro
+            </button>
+            <button onclick="abrirModalConverterGuardado()" class="bg-teal-600 hover:bg-teal-500 text-white px-3.5 py-2 rounded-xl text-xs font-medium shadow-lg shadow-teal-600/25 transition-all flex items-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-right-left"></i> Efetivar Guardado p/ Pago
+            </button>
+            <button onclick="abrirModalSaida()" class="bg-rose-600 hover:bg-rose-500 text-white px-3.5 py-2 rounded-xl text-xs font-medium shadow-lg shadow-rose-600/25 transition-all flex items-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-arrow-up-from-bracket"></i> Registrar Saída / Vale
+            </button>
+            <button onclick="abrirModalAdicionar()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3.5 py-2 rounded-xl text-xs font-medium shadow-lg shadow-indigo-600/25 transition-all flex items-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-plus"></i> Nova Conta
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-6">
+
+        <!-- Cards de Resumo Geral -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl -mr-6 -mt-6"></div>
+                <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total de Dívidas / Contas</span>
+                <h3 id="resumoTotalGeral" class="text-xl sm:text-2xl font-bold text-white mt-1">R$ 0,00</h3>
+                <div class="mt-2 text-xs text-slate-400 flex items-center gap-1.5">
+                    <i class="fa-solid fa-scale-balanced text-indigo-400"></i> Somatório de todas as contas
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl -mr-6 -mt-6"></div>
+                <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Dinheiro Já Guardado</span>
+                <h3 id="resumoTotalGuardado" class="text-xl sm:text-2xl font-bold text-emerald-400 mt-1">R$ 0,00</h3>
+                <div class="mt-2 text-xs text-slate-400 flex items-center gap-1.5">
+                    <i class="fa-solid fa-piggy-bank text-emerald-400"></i> Total separado em caixa
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-teal-500/5 rounded-full blur-2xl -mr-6 -mt-6"></div>
+                <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Já Pago / Abatido</span>
+                <h3 id="resumoTotalPago" class="text-xl sm:text-2xl font-bold text-teal-400 mt-1">R$ 0,00</h3>
+                <div class="mt-2 text-xs text-slate-400 flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-check text-teal-400"></i> Abatido diretamente
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-rose-500/5 rounded-full blur-2xl -mr-6 -mt-6"></div>
+                <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Retiradas p/ Outra Ocasião</span>
+                <h3 id="resumoTotalRetiradas" class="text-xl sm:text-2xl font-bold text-rose-400 mt-1">R$ 0,00</h3>
+                <div class="mt-2 text-xs text-slate-400 flex items-center gap-1.5">
+                    <i class="fa-solid fa-triangle-exclamation text-rose-400"></i> Pendência externa / Caixa
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+            <div class="p-4 sm:p-5 border-b border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div>
+                    <h2 class="font-bold text-white text-base">Planejamento e Prioridades</h2>
+                    <p class="text-xs text-slate-400">Cálculo automático de dias, divisão por datas quinzenais e valores diários</p>
+                </div>
+                <div class="flex items-center gap-4 w-full sm:w-auto">
+                    <div id="resumoTotalSepararDiaContainer" class="hidden sm:flex flex-col items-end text-right bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800">
+                        <span class="text-[10px] text-slate-400 uppercase tracking-wider">Total a Separar por Dia</span>
+                        <span id="resumoTotalSepararDia" class="text-xs font-bold text-amber-400">R$ 0,00</span>
+                    </div>
+                    <div class="relative flex-1 sm:w-64">
+                        <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                        <input type="text" id="filtroBusca" oninput="renderizar()" placeholder="Buscar conta..." class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-950/60 border-b border-slate-800 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                            <th class="p-3.5">Prioridade</th>
+                            <th class="p-3.5">Nome / Credor</th>
+                            <th class="p-3.5">Datas de Pgto</th>
+                            <th class="p-3.5 text-right">Valor Total Mês</th>
+                            <th class="p-3.5 text-center">Próx. Venc. / Dias</th>
+                            <th class="p-3.5 text-right">Já Guardado</th>
+                            <th class="p-3.5 text-right">Já Pago</th>
+                            <th class="p-3.5 text-right">Falta Pagar</th>
+                            <th class="p-3.5 text-right">
+                                <div>Separar / Dia</div>
+                                <div id="subLabelTotalSepararDia" class="text-[9px] text-amber-400/80 font-normal lowercase tracking-normal mt-0.5">total: R$ 0,00/dia</div>
+                            </th>
+                            <th class="p-3.5 text-center">Status / Urgência</th>
+                            <th class="p-3.5 text-right">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaContasBody" class="divide-y divide-slate-800/60 text-xs text-slate-200">
+                        <!-- Preenchido via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Histórico de Aportes / Dinheiro Guardado -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl flex flex-col">
+                <div class="p-4 sm:p-5 border-b border-slate-800 flex justify-between items-center">
+                    <div>
+                        <h2 class="font-bold text-white text-base">Histórico de Dinheiro Guardado</h2>
+                        <p class="text-xs text-slate-400">Registro de todas as vezes que você separou valores</p>
+                    </div>
+                    <span id="badgeQtdAportes" class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-full text-[11px] font-medium">0 registros</span>
+                </div>
+                <div class="overflow-x-auto flex-1 max-h-80">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="sticky top-0 bg-slate-950/90 backdrop-blur-sm z-10">
+                            <tr class="border-b border-slate-800 text-[11px] font-semibold text-slate-400 uppercase">
+                                <th class="p-3">Data</th>
+                                <th class="p-3">Conta</th>
+                                <th class="p-3">Motivo / Origem</th>
+                                <th class="p-3 text-right">Valor</th>
+                                <th class="p-3 text-center">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaAportesBody" class="divide-y divide-slate-800/60 text-xs">
+                            <!-- Preenchido via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Histórico de Saídas e Pagamentos Diretos -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl flex flex-col">
+                <div class="p-4 sm:p-5 border-b border-slate-800 flex justify-between items-center">
+                    <div>
+                        <h2 class="font-bold text-white text-base">Histórico de Saídas e Retiradas</h2>
+                        <p class="text-xs text-slate-400">Pagamentos diretos ao credor ou retiradas de caixa</p>
+                    </div>
+                    <span id="badgeQtdSaidas" class="bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2.5 py-1 rounded-full text-[11px] font-medium">0 registros</span>
+                </div>
+                <div class="overflow-x-auto flex-1 max-h-80">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="sticky top-0 bg-slate-950/90 backdrop-blur-sm z-10">
+                            <tr class="border-b border-slate-800 text-[11px] font-semibold text-slate-400 uppercase">
+                                <th class="p-3">Data</th>
+                                <th class="p-3">Tipo / Conta</th>
+                                <th class="p-3">Motivo</th>
+                                <th class="p-3 text-right">Valor</th>
+                                <th class="p-3 text-center">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaSaidasBody" class="divide-y divide-slate-800/60 text-xs">
+                            <!-- Preenchido via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- INÍCIO DA INTEGRAÇÃO COM O SUPABASE -->
+    <!-- 1. Carrega a biblioteca oficial do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- 2. Inicializa o cliente do Supabase com suas chaves -->
+    <script>
+        const SUPABASE_URL = 'sb_publishable_1xc_TQ14g4RIoTf5dGVkLQ_QUOVjFVm';      // Cole sua URL do Supabase aqui
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl5dnV5dHpzYnlvc2xsZmZicWZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxNzAyMTAsImV4cCI6MjEwNDc0NjIxMH0.foRNbqba4mLJulT8N3WMKWULXL2ATLNUR-ZSJdYgxEw';    // Cole sua chave anon do Supabase aqui
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    </script>
+    <!-- FIM DA INTEGRAÇÃO COM O SUPABASE -->
+
+</body>
+</html>
+
+    <!-- Modal Adicionar / Editar Conta -->
+    <div id="modalConta" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
+            <div class="p-5 border-b border-slate-800 flex justify-between items-center">
+                <h3 id="modalContaTitulo" class="font-bold text-white text-base">Nova Conta / Dívida</h3>
+                <button onclick="fecharModalConta()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="formConta" onsubmit="salvarConta(event)" class="p-6 space-y-4">
+                <input type="hidden" id="contaEditId">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Nome do Credor / Conta</label>
+                    <input type="text" id="contaNome" required placeholder="Ex: Rafael, Aluguel..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Prioridade (1 = Mais URGENTE / Alta)</label>
+                    <input type="number" id="contaPrioridade" min="1" value="1" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Dia(s) do Vencimento (Ex: 25 ou 05 e 20)</label>
+                    <input type="text" id="contaDiaPagamento" required placeholder="Ex: 05 e 20" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                    <p class="text-[10px] text-slate-400 mt-1">Separe múltiplos dias por vírgula ou "e" (ex: 05 e 20). O valor total será dividido igualmente entre as datas.</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Valor Total no Mês (R$)</label>
+                    <input type="number" step="0.01" id="contaTotal" required placeholder="Ex: 2000.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <div class="pt-4 flex justify-end gap-3 border-t border-slate-800">
+                    <button type="button" onclick="fecharModalConta()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs font-medium transition-colors cursor-pointer">Cancelar</button>
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-xl text-xs font-medium shadow-lg shadow-indigo-600/25 transition-all cursor-pointer">Salvar Conta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Separar Dinheiro (Aporte) -->
+    <div id="modalAporte" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
+            <div class="p-5 border-b border-slate-800 flex justify-between items-center">
+                <h3 class="font-bold text-white text-base">Separar Dinheiro (Guardar em Caixa)</h3>
+                <button onclick="fecharModalAporte()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="formAporte" onsubmit="salvarAporte(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Selecione a Conta</label>
+                    <select id="aporteContaId" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        <!-- Preenchido via JS -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Valor Separado (R$)</label>
+                    <input type="number" step="0.01" id="aporteValor" required placeholder="Ex: 1000.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Data</label>
+                    <input type="date" id="aporteData" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Motivo / Observação</label>
+                    <input type="text" id="aporteMotivo" required placeholder="Ex: Separei hoje / Pix do cliente" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <div class="pt-4 flex justify-end gap-3 border-t border-slate-800">
+                    <button type="button" onclick="fecharModalAporte()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs font-medium transition-colors cursor-pointer">Cancelar</button>
+                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 rounded-xl text-xs font-medium shadow-lg shadow-emerald-600/25 transition-all cursor-pointer">Confirmar Separação</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Efetivar Dinheiro Guardado em Já Pago -->
+    <div id="modalConverter" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
+            <div class="p-5 border-b border-slate-800 flex justify-between items-center">
+                <h3 class="font-bold text-white text-base">Efetivar Dinheiro Guardado em Já Pago</h3>
+                <button onclick="fecharModalConverter()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="formConverter" onsubmit="salvarConversaoGuardado(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Selecione a Conta</label>
+                    <select id="converterContaId" onchange="atualizarInfoGuardadoConta()" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        <!-- Preenchido via JS -->
+                    </select>
+                </div>
+
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2 text-xs">
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-400">Dinheiro Guardado Disponível:</span>
+                        <span id="infoGuardadoDisponivel" class="font-bold text-emerald-400">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-400">Falta Pagar Atual:</span>
+                        <span id="infoFaltaPagarAtual" class="font-bold text-rose-400">R$ 0,00</span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Valor a Efetivar como Pago (R$)</label>
+                    <input type="number" step="0.01" id="converterValor" oninput="atualizarPreviaEfetivacao()" required placeholder="0.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                </div>
+
+                <!-- Janela / Caixa Informativa de Expectativa (Preview) -->
+                <div class="bg-indigo-950/40 border border-indigo-500/30 p-3 rounded-xl text-xs space-y-1">
+                    <div class="flex items-center gap-1.5 text-indigo-300 font-semibold mb-1">
+                        <i class="fa-solid fa-calculator"></i> Expectativa / Projeção de Expectativa:
+                    </div>
+                    <div class="flex justify-between items-center text-slate-300">
+                        <span>Novo Dinheiro Guardado Restante:</span>
+                        <span id="previaGuardadoRestante" class="font-bold text-emerald-300">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center text-slate-300">
+                        <span>Novo Falta Pagar (Estimado):</span>
+                        <span id="previaFaltaPagar" class="font-bold text-rose-300">R$ 0,00</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-1 italic">* Esta projeção é apenas uma expectativa visual. Só será efetivada quando você clicar em "Efetivar Pagamento".</p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Data</label>
+                    <input type="date" id="converterData" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Motivo / Descrição</label>
+                    <input type="text" id="converterMotivo" required placeholder="Ex: Pago ao credor usando o dinheiro guardado" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                </div>
+
+                <div class="pt-4 flex justify-end gap-3 border-t border-slate-800">
+                    <button type="button" onclick="fecharModalConverter()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs font-medium transition-colors cursor-pointer">Cancelar</button>
+                    <button type="submit" class="bg-teal-600 hover:bg-teal-500 text-white px-5 py-2.5 rounded-xl text-xs font-medium shadow-lg shadow-teal-600/25 transition-all cursor-pointer">Efetivar Pagamento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Registrar Saída / Pagamento / Retirada -->
+    <div id="modalSaida" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
+            <div class="p-5 border-b border-slate-800 flex justify-between items-center">
+                <h3 class="font-bold text-white text-base">Registrar Saída / Pagamento / Retirada</h3>
+                <button onclick="fecharModalSaida()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="formSaida" onsubmit="salvarSaida(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Tipo de Saída</label>
+                    <select id="saidaTipo" onchange="atualizarCamposSaida()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        <option value="pagamento">Pagamento Direto (Abate a dívida do credor)</option>
+                        <option value="retirada">Retirada para Outra Ocasião (Gera pendência/dívida extra no caixa)</option>
+                    </select>
+                </div>
+
+                <div id="containerContaSaida">
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Conta Relacionada</label>
+                    <select id="saidaContaId" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        <!-- Preenchido via JS -->
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Valor da Saída (R$)</label>
+                    <input type="number" step="0.01" id="saidaValor" required placeholder="Ex: 500.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Data da Saída</label>
+                    <input type="date" id="saidaData" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Motivo / Descrição</label>
+                    <input type="text" id="saidaMotivo" required placeholder="Ex: Vale quinzenal pago ao Rafael" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                </div>
+
+                <div class="pt-4 flex justify-end gap-3 border-t border-slate-800">
+                    <button type="button" onclick="fecharModalSaida()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs font-medium transition-colors cursor-pointer">Cancelar</button>
+                    <button type="submit" class="bg-rose-600 hover:bg-rose-500 text-white px-5 py-2.5 rounded-xl text-xs font-medium shadow-lg shadow-rose-600/25 transition-all cursor-pointer">Confirmar Saída</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Mensagem / Alerta Customizado -->
+    <div id="modalMensagem" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl p-6 text-center space-y-4">
+            <div id="msgIcon" class="w-12 h-12 rounded-full mx-auto flex items-center justify-center text-xl bg-indigo-500/10 text-indigo-400">
+                <i class="fa-solid fa-info"></i>
+            </div>
+            <h3 id="msgTitulo" class="font-bold text-white text-base">Aviso</h3>
+            <p id="msgTexto" class="text-xs text-slate-300">Mensagem aqui...</p>
+            <button onclick="fecharMensagem()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer">Entendido</button>
+        </div>
+    </div>
+
+    <script>
+        // Estado inicial da aplicação com suporte a quinzenas e divisão automática
+        let contas = JSON.parse(localStorage.getItem('fin_contas')) || [
+            { id: '1', nome: 'jose', prioridade: 1, diaPagamento: '25', total: 3000.00 },
+            { id: '2', nome: 'agiota', prioridade: 2, diaPagamento: '27', total: 2500.00 },
+            { id: '3', nome: 'aluguel', prioridade: 3, diaPagamento: '5', total: 2000.00 },
+            { id: '4', nome: 'rafael', prioridade: 4, diaPagamento: '05 e 20', total: 2000.00 },
+            { id: '5', nome: 'virgilio', prioridade: 5, diaPagamento: '05 e 20', total: 2200.00 },
+            { id: '6', nome: 'vinicius', prioridade: 6, diaPagamento: '05 e 20', total: 2200.00 },
+            { id: '7', nome: 'internet', prioridade: 7, diaPagamento: '10', total: 100.00 },
+            { id: '8', nome: 'sistema', prioridade: 8, diaPagamento: '5', total: 300.00 }
+        ];
+
+        let historicoAportes = JSON.parse(localStorage.getItem('fin_aportes')) || [];
+        let historicoSaidas = JSON.parse(localStorage.getItem('fin_saidas')) || [];
+
+        function salvarNoStorage() {
+            localStorage.setItem('fin_contas', JSON.stringify(contas));
+            localStorage.setItem('fin_aportes', JSON.stringify(historicoAportes));
+            localStorage.setItem('fin_saidas', JSON.stringify(historicoSaidas));
+        }
+
+        function formatarMoeda(valor) {
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function mostrarMensagem(titulo, texto, tipo = 'info') {
+            document.getElementById('msgTitulo').innerText = titulo;
+            document.getElementById('msgTexto').innerText = texto;
+            const iconDiv = document.getElementById('msgIcon');
+            if (tipo === 'success') {
+                iconDiv.className = "w-12 h-12 rounded-full mx-auto flex items-center justify-center text-xl bg-emerald-500/10 text-emerald-400";
+                iconDiv.innerHTML = '<i class="fa-solid fa-check"></i>';
+            } else {
+                iconDiv.className = "w-12 h-12 rounded-full mx-auto flex items-center justify-center text-xl bg-indigo-500/10 text-indigo-400";
+                iconDiv.innerHTML = '<i class="fa-solid fa-info"></i>';
+            }
+            document.getElementById('modalMensagem').classList.remove('hidden');
+        }
+
+        function fecharMensagem() {
+            document.getElementById('modalMensagem').classList.add('hidden');
+        }
+
+        // Extrai todos os dias numéricos de uma string (ex: "05 e 20" -> [5, 20])
+        function extrairDias(diaPagamentoStr) {
+            if (!diaPagamentoStr || diaPagamentoStr.trim() === '') return [new Date().getDate()];
+            const matches = diaPagamentoStr.match(/\d+/g);
+            if (!matches || matches.length === 0) return [10];
+            return matches.map(d => parseInt(d, 10));
+        }
+
+        function calcularProximoVencimento(diaPagamentoStr) {
+            const diasArr = extrairDias(diaPagamentoStr);
+            const hoje = new Date();
+            const diaAtual = hoje.getDate();
+            const mesAtual = hoje.getMonth();
+            const anoAtual = hoje.getFullYear();
+
+            let menorDiff = 999;
+            let proximaDataStr = '-';
+
+            diasArr.forEach(diaVenc => {
+                let dataVenc = new Date(anoAtual, mesAtual, diaVenc);
+                if (dataVenc < hoje && dataVenc.getDate() !== diaAtual) {
+                    dataVenc = new Date(anoAtual, mesAtual + 1, diaVenc);
+                }
+                const diffTime = dataVenc - hoje;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                if (diffDays >= 0 && diffDays < menorDiff) {
+                    menorDiff = diffDays;
+                    proximaDataStr = `${diaVenc} (${diffDays}d)`;
+                }
+            });
+
+            return { dias: Math.max(1, menorDiff === 999 ? 1 : menorDiff), texto: proximaDataStr };
+        }
+
+        function calcularGuardadoLiquido(contaId) {
+            const totalAportado = historicoAportes
+                .filter(a => a.contaId === contaId)
+                .reduce((acc, curr) => acc + curr.valor, 0);
+
+            const totalConvertido = historicoSaidas
+                .filter(s => s.contaId === contaId && s.tipo === 'pagamento' && s.convertidoDeGuardado)
+                .reduce((acc, curr) => acc + curr.valor, 0);
+
+            return Math.max(0, totalAportado - totalConvertido);
+        }
+
+        function calcularPagoDireto(contaId) {
+            return historicoSaidas
+                .filter(s => s.contaId === contaId && s.tipo === 'pagamento')
+                .reduce((acc, curr) => acc + curr.valor, 0);
+        }
+
+        function calcularRetiradas() {
+            return historicoSaidas
+                .filter(s => s.tipo === 'retirada')
+                .reduce((acc, curr) => acc + curr.valor, 0);
+        }
+
+        function renderizar() {
+            const busca = document.getElementById('filtroBusca').value.toLowerCase();
+            const tbody = document.getElementById('tabelaContasBody');
+            tbody.innerHTML = '';
+
+            const contasOrdenadas = [...contas].sort((a, b) => a.prioridade - b.prioridade);
+
+            let somaTotalGeral = 0;
+            let somaTotalGuardado = 0;
+            let somaTotalPago = 0;
+            let somaTotalRetiradas = calcularRetiradas();
+            let somaTotalSepararDiaGeral = 0;
+
+            contasOrdenadas.forEach(conta => {
+                if (busca && !conta.nome.toLowerCase().includes(busca)) return;
+
+                somaTotalGeral += conta.total;
+                const guardado = calcularGuardadoLiquido(conta.id);
+                somaTotalGuardado += guardado;
+
+                const pagoDireto = calcularPagoDireto(conta.id);
+                somaTotalPago += pagoDireto;
+
+                const diasArr = extrairDias(conta.diaPagamento);
+                const qtdDatas = Math.max(1, diasArr.length);
+                const valorPorData = conta.total / qtdDatas;
+
+                const totalAbatidoOuPago = pagoDireto + guardado;
+                
+                let faltaPagar = 0;
+                if (totalAbatidoOuPago < valorPorData) {
+                    faltaPagar = valorPorData - totalAbatidoOuPago;
+                } else {
+                    const restanteGlobal = Math.max(0, conta.total - totalAbatidoOuPago);
+                    faltaPagar = Math.min(valorPorData, restanteGlobal);
+                }
+
+                const infoVenc = calcularProximoVencimento(conta.diaPagamento);
+                const diasFaltam = infoVenc.dias;
+                
+                const diasCalculo = Math.max(1, diasFaltam);
+                const separarPorDia = faltaPagar > 0 ? (faltaPagar / diasCalculo) : 0;
+                somaTotalSepararDiaGeral += separarPorDia;
+
+                let statusHtml = '';
+                if (faltaPagar === 0) {
+                    statusHtml = '<span class="px-2.5 py-1 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20 text-[10px] font-semibold">Quitado</span>';
+                } else if (diasFaltam <= 3) {
+                    statusHtml = '<span class="px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 text-[10px] font-semibold animate-pulse">Crítico / Vencendo</span>';
+                } else if (diasFaltam <= 10) {
+                    statusHtml = '<span class="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-semibold">Atenção</span>';
+                } else {
+                    statusHtml = '<span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-semibold">Em Dia</span>';
+                }
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/40 transition-colors";
+                tr.innerHTML = `
+                    <td class="p-3.5 font-medium"><span class="w-6 h-6 rounded-lg bg-indigo-600/20 text-indigo-400 font-bold inline-flex items-center justify-center text-xs border border-indigo-500/30">${conta.prioridade}</span></td>
+                    <td class="p-3.5 font-semibold text-white uppercase">${conta.nome}</td>
+                    <td class="p-3.5 text-slate-300 font-medium">${conta.diaPagamento || '-'}</td>
+                    <td class="p-3.5 text-right font-medium text-white">${formatarMoeda(conta.total)}</td>
+                    <td class="p-3.5 text-center font-bold text-indigo-400">${infoVenc.texto}</td>
+                    <td class="p-3.5 text-right font-medium text-emerald-400">${formatarMoeda(guardado)}</td>
+                    <td class="p-3.5 text-right font-medium text-teal-400">${formatarMoeda(pagoDireto)}</td>
+                    <td class="p-3.5 text-right font-bold text-rose-400">${formatarMoeda(faltaPagar)}</td>
+                    <td class="p-3.5 text-right font-bold text-amber-400">${formatarMoeda(separarPorDia)}</td>
+                    <td class="p-3.5 text-center">${statusHtml}</td>
+                    <td class="p-3.5 text-right space-x-1 whitespace-nowrap">
+                        <button onclick="abrirModalAporteParaConta('${conta.id}')" title="Separar Dinheiro" class="text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer p-1"><i class="fa-solid fa-coins"></i></button>
+                        <button onclick="abrirModalConverterParaConta('${conta.id}')" title="Efetivar Guardado em Pago" class="text-slate-400 hover:text-teal-400 transition-colors cursor-pointer p-1"><i class="fa-solid fa-right-left"></i></button>
+                        <button onclick="abrirModalSaidaParaConta('${conta.id}')" title="Registrar Saída / Vale" class="text-slate-400 hover:text-rose-400 transition-colors cursor-pointer p-1"><i class="fa-solid fa-arrow-up-from-bracket"></i></button>
+                        <button onclick="editarConta('${conta.id}')" title="Editar Conta" class="text-slate-400 hover:text-indigo-400 transition-colors cursor-pointer p-1"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button onclick="excluirConta('${conta.id}')" title="Excluir Conta" class="text-slate-400 hover:text-rose-400 transition-colors cursor-pointer p-1"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('resumoTotalGeral').innerText = formatarMoeda(somaTotalGeral);
+            document.getElementById('resumoTotalGuardado').innerText = formatarMoeda(somaTotalGuardado);
+            document.getElementById('resumoTotalPago').innerText = formatarMoeda(somaTotalPago);
+            document.getElementById('resumoTotalRetiradas').innerText = formatarMoeda(somaTotalRetiradas);
+            document.getElementById('resumoTotalSepararDia').innerText = formatarMoeda(somaTotalSepararDiaGeral);
+            document.getElementById('subLabelTotalSepararDia').innerText = `total: ${formatarMoeda(somaTotalSepararDiaGeral)}/dia`;
+
+            renderizarHistoricos();
+        }
+
+        function renderizarHistoricos() {
+            const tbodyAportes = document.getElementById('tabelaAportesBody');
+            tbodyAportes.innerHTML = '';
+            document.getElementById('badgeQtdAportes').innerText = `${historicoAportes.length} registros`;
+
+            const aportesOrdenados = [...historicoAportes].reverse();
+            aportesOrdenados.forEach(aporte => {
+                const conta = contas.find(c => c.id === aporte.contaId);
+                const nomeConta = conta ? conta.nome : 'Conta Removida';
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/40 transition-colors";
+                tr.innerHTML = `
+                    <td class="p-3 text-slate-300">${aporte.data.split('-').reverse().join('/')}</td>
+                    <td class="p-3 font-semibold text-white uppercase">${nomeConta}</td>
+                    <td class="p-3 text-slate-300">${aporte.motivo}</td>
+                    <td class="p-3 text-right font-bold text-emerald-400">${formatarMoeda(aporte.valor)}</td>
+                    <td class="p-3 text-center">
+                        <button onclick="excluirAporte('${aporte.id}')" title="Excluir Aporte" class="text-slate-500 hover:text-rose-400 transition-colors cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbodyAportes.appendChild(tr);
+            });
+
+            const tbodySaidas = document.getElementById('tabelaSaidasBody');
+            tbodySaidas.innerHTML = '';
+            document.getElementById('badgeQtdSaidas').innerText = `${historicoSaidas.length} registros`;
+
+            const saidasOrdenadas = [...historicoSaidas].reverse();
+            saidasOrdenadas.forEach(saida => {
+                const conta = contas.find(c => c.id === saida.contaId);
+                const nomeConta = conta ? conta.nome : 'Outra Ocasião / Caixa';
+                const tipoBadge = saida.tipo === 'pagamento' 
+                    ? '<span class="text-teal-400 font-semibold">Pagamento Direto</span>' 
+                    : '<span class="text-rose-400 font-semibold">Retirada Caixa</span>';
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/40 transition-colors";
+                tr.innerHTML = `
+                    <td class="p-3 text-slate-300">${saida.data.split('-').reverse().join('/')}</td>
+                    <td class="p-3">
+                        <div>${tipoBadge}</div>
+                        <div class="text-[10px] text-slate-400 uppercase">${nomeConta}</div>
+                    </td>
+                    <td class="p-3 text-slate-300">${saida.motivo}</td>
+                    <td class="p-3 text-right font-bold text-rose-400">${formatarMoeda(saida.valor)}</td>
+                    <td class="p-3 text-center">
+                        <button onclick="excluirSaida('${saida.id}')" title="Excluir Saída" class="text-slate-500 hover:text-rose-400 transition-colors cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbodySaidas.appendChild(tr);
+            });
+        }
+
+        function popularSelectContas(elementId, selecionarId = null) {
+            const select = document.getElementById(elementId);
+            select.innerHTML = '';
+            contas.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c.id;
+                opt.text = c.nome.toUpperCase();
+                if (selecionarId && c.id === selecionarId) {
+                    opt.selected = true;
+                }
+                select.appendChild(opt);
+            });
+        }
+
+        function abrirModalAdicionar() {
+            document.getElementById('modalContaTitulo').innerText = "Nova Conta / Dívida";
+            document.getElementById('formConta').reset();
+            document.getElementById('contaEditId').value = '';
+            document.getElementById('contaPrioridade').value = contas.length + 1;
+            document.getElementById('modalConta').classList.remove('hidden');
+        }
+
+        function editarConta(id) {
+            const conta = contas.find(c => c.id === id);
+            if (!conta) return;
+            document.getElementById('modalContaTitulo').innerText = "Editar Conta";
+            document.getElementById('contaEditId').value = conta.id;
+            document.getElementById('contaNome').value = conta.nome;
+            document.getElementById('contaPrioridade').value = conta.prioridade;
+            document.getElementById('contaDiaPagamento').value = conta.diaPagamento;
+            document.getElementById('contaTotal').value = conta.total;
+            document.getElementById('modalConta').classList.remove('hidden');
+        }
+
+        function fecharModalConta() {
+            document.getElementById('modalConta').classList.add('hidden');
+        }
+
+        function salvarConta(event) {
+            event.preventDefault();
+            const editId = document.getElementById('contaEditId').value;
+            const nome = document.getElementById('contaNome').value.trim();
+            const prioridade = parseInt(document.getElementById('contaPrioridade').value);
+            const diaPagamento = document.getElementById('contaDiaPagamento').value.trim();
+            const total = parseFloat(document.getElementById('contaTotal').value);
+
+            if (editId) {
+                const conta = contas.find(c => c.id === editId);
+                if (conta) {
+                    conta.nome = nome;
+                    conta.prioridade = prioridade;
+                    conta.diaPagamento = diaPagamento;
+                    conta.total = total;
+                }
+            } else {
+                const nova = {
+                    id: Date.now().toString(),
+                    nome,
+                    prioridade,
+                    diaPagamento,
+                    total
+                };
+                contas.push(nova);
+            }
+
+            salvarNoStorage();
+            fecharModalConta();
+            renderizar();
+            mostrarMensagem("Sucesso", "Conta salva com sucesso!", "success");
+        }
+
+        function excluirConta(id) {
+            if (confirm("Deseja realmente excluir esta conta e seus históricos associados?")) {
+                contas = contas.filter(c => c.id !== id);
+                historicoAportes = historicoAportes.filter(a => a.contaId !== id);
+                historicoSaidas = historicoSaidas.filter(s => s.contaId !== id);
+                salvarNoStorage();
+                renderizar();
+                mostrarMensagem("Excluído", "Conta removida com sucesso.", "success");
+            }
+        }
+
+        function abrirModalAporteGeral() {
+            if (contas.length === 0) {
+                mostrarMensagem("Atenção", "Cadastre pelo menos uma conta antes de separar dinheiro.", "info");
+                return;
+            }
+            popularSelectContas('aporteContaId');
+            document.getElementById('formAporte').reset();
+            document.getElementById('aporteData').value = new Date().toISOString().split('T')[0];
+            document.getElementById('aporteMotivo').value = "Separação de valor";
+            document.getElementById('modalAporte').classList.remove('hidden');
+        }
+
+        function abrirModalAporteParaConta(contaId) {
+            popularSelectContas('aporteContaId', contaId);
+            document.getElementById('formAporte').reset();
+            document.getElementById('aporteData').value = new Date().toISOString().split('T')[0];
+            document.getElementById('aporteMotivo').value = "Separação de valor";
+            document.getElementById('modalAporte').classList.remove('hidden');
+        }
+
+        function fecharModalAporte() {
+            document.getElementById('modalAporte').classList.add('hidden');
+        }
+
+        function salvarAporte(event) {
+            event.preventDefault();
+            const contaId = document.getElementById('aporteContaId').value;
+            const valor = parseFloat(document.getElementById('aporteValor').value);
+            const data = document.getElementById('aporteData').value;
+            const motivo = document.getElementById('aporteMotivo').value.trim();
+
+            const novoAporte = {
+                id: Date.now().toString(),
+                contaId,
+                valor,
+                data,
+                motivo
+            };
+
+            historicoAportes.push(novoAporte);
+            salvarNoStorage();
+            fecharModalAporte();
+            renderizar();
+            mostrarMensagem("Dinheiro Guardado", "O valor foi separado com sucesso!", "success");
+        }
+
+        function excluirAporte(id) {
+            historicoAportes = historicoAportes.filter(a => a.id !== id);
+            salvarNoStorage();
+            renderizar();
+            mostrarMensagem("Removido", "Registro de dinheiro guardado removido.", "info");
+        }
+
+        function abrirModalConverterGuardado() {
+            if (contas.length === 0) {
+                mostrarMensagem("Atenção", "Nenhuma conta cadastrada.", "info");
+                return;
+            }
+            popularSelectContas('converterContaId');
+            document.getElementById('formConverter').reset();
+            document.getElementById('converterData').value = new Date().toISOString().split('T')[0];
+            document.getElementById('converterMotivo').value = "Pagamento efetivado usando o dinheiro guardado";
+            atualizarInfoGuardadoConta();
+            document.getElementById('modalConverter').classList.remove('hidden');
+        }
+
+        function abrirModalConverterParaConta(contaId) {
+            popularSelectContas('converterContaId', contaId);
+            document.getElementById('formConverter').reset();
+            document.getElementById('converterData').value = new Date().toISOString().split('T')[0];
+            document.getElementById('converterMotivo').value = "Pagamento efetivado usando o dinheiro guardado";
+            atualizarInfoGuardadoConta();
+            document.getElementById('modalConverter').classList.remove('hidden');
+        }
+
+        function fecharModalConverter() {
+            document.getElementById('modalConverter').classList.add('hidden');
+        }
+
+        function atualizarInfoGuardadoConta() {
+            const contaId = document.getElementById('converterContaId').value;
+            const guardado = calcularGuardadoLiquido(contaId);
+            const conta = contas.find(c => c.id === contaId);
+            const pagoDireto = calcularPagoDireto(contaId);
+            const faltaPagarBruto = conta ? Math.max(0, conta.total - pagoDireto) : 0;
+            const faltaPagar = Math.max(0, faltaPagarBruto - guardado);
+
+            const disponivelParaConverter = Math.min(guardado, faltaPagarBruto);
+
+            document.getElementById('infoGuardadoDisponivel').innerText = formatarMoeda(guardado);
+            document.getElementById('infoFaltaPagarAtual').innerText = formatarMoeda(faltaPagar);
+            document.getElementById('converterValor').value = disponivelParaConverter > 0 ? disponivelParaConverter.toFixed(2) : '0';
+            document.getElementById('converterValor').max = guardado;
+            
+            atualizarPreviaEfetivacao();
+        }
+
+        function atualizarPreviaEfetivacao() {
+            const contaId = document.getElementById('converterContaId').value;
+            const valorInput = parseFloat(document.getElementById('converterValor').value) || 0;
+            const guardado = calcularGuardadoLiquido(contaId);
+            const conta = contas.find(c => c.id === contaId);
+            const pagoDireto = calcularPagoDireto(contaId);
+            const faltaPagarBruto = conta ? Math.max(0, conta.total - pagoDireto) : 0;
+            const faltaPagar = Math.max(0, faltaPagarBruto - guardado);
+
+            const novoGuardadoRestante = Math.max(0, guardado - valorInput);
+            // Projeção do falta pagar considerando o que restará de guardado
+            const novoFaltaPagarBruto = Math.max(0, faltaPagarBruto - valorInput);
+            const novoFaltaPagar = Math.max(0, novoFaltaPagarBruto - novoGuardadoRestante);
+
+            document.getElementById('previaGuardadoRestante').innerText = formatarMoeda(novoGuardadoRestante);
+            document.getElementById('previaFaltaPagar').innerText = formatarMoeda(novoFaltaPagar);
+        }
+
+        function salvarConversaoGuardado(event) {
+            event.preventDefault();
+            const contaId = document.getElementById('converterContaId').value;
+            const valor = parseFloat(document.getElementById('converterValor').value);
+            const data = document.getElementById('converterData').value;
+            const motivo = document.getElementById('converterMotivo').value.trim();
+
+            const guardado = calcularGuardadoLiquido(contaId);
+            if (valor > guardado) {
+                mostrarMensagem("Erro", "O valor a efetivar não pode ser maior que o dinheiro guardado disponível para esta conta.", "info");
+                return;
+            }
+
+            const novaSaida = {
+                id: Date.now().toString(),
+                contaId: contaId,
+                tipo: 'pagamento',
+                valor: valor,
+                data: data,
+                motivo: motivo,
+                convertidoDeGuardado: true
+            };
+
+            historicoSaidas.push(novaSaida);
+            salvarNoStorage();
+            fecharModalConverter();
+            renderizar();
+            mostrarMensagem("Sucesso", "Dinheiro guardado efetivado como pago e abatido da dívida!", "success");
+        }
+
+        function abrirModalSaida() {
+            if (contas.length === 0) {
+                mostrarMensagem("Atenção", "Cadastre pelo menos uma conta.", "info");
+                return;
+            }
+            popularSelectContas('saidaContaId');
+            document.getElementById('formSaida').reset();
+            document.getElementById('saidaData').value = new Date().toISOString().split('T')[0];
+            atualizarCamposSaida();
+            document.getElementById('modalSaida').classList.remove('hidden');
+        }
+
+        function abrirModalSaidaParaConta(contaId) {
+            popularSelectContas('saidaContaId', contaId);
+            document.getElementById('saidaTipo').value = 'pagamento';
+            document.getElementById('formSaida').reset();
+            document.getElementById('saidaContaId').value = contaId;
+            document.getElementById('saidaData').value = new Date().toISOString().split('T')[0];
+            document.getElementById('saidaMotivo').value = "Pagamento direto / Vale quinzenal";
+            atualizarCamposSaida();
+            document.getElementById('modalSaida').classList.remove('hidden');
+        }
+
+        function fecharModalSaida() {
+            document.getElementById('modalSaida').classList.add('hidden');
+        }
+
+        function atualizarCamposSaida() {
+            const tipo = document.getElementById('saidaTipo').value;
+            const containerConta = document.getElementById('containerContaSaida');
+            if (tipo === 'retirada') {
+                containerConta.style.display = 'none';
+            } else {
+                containerConta.style.display = 'block';
+            }
+        }
+
+        function salvarSaida(event) {
+            event.preventDefault();
+            const tipo = document.getElementById('saidaTipo').value;
+            const contaId = tipo === 'retirada' ? '' : document.getElementById('saidaContaId').value;
+            const valor = parseFloat(document.getElementById('saidaValor').value);
+            const data = document.getElementById('saidaData').value;
+            const motivo = document.getElementById('saidaMotivo').value.trim();
+
+            const novaSaida = {
+                id: Date.now().toString(),
+                contaId,
+                tipo,
+                valor,
+                data,
+                motivo,
+                convertidoDeGuardado: false
+            };
+
+            historicoSaidas.push(novaSaida);
+            salvarNoStorage();
+            fecharModalSaida();
+            renderizar();
+            mostrarMensagem("Sucesso", "Saída registrada com sucesso!", "success");
+        }
+
+        function excluirSaida(id) {
+            historicoSaidas = historicoSaidas.filter(s => s.id !== id);
+            salvarNoStorage();
+            renderizar();
+            mostrarMensagem("Removido", "Registro de saída removido.", "info");
+        }
+
+        window.onload = function() {
+            renderizar();
+        };
+    </script>
+</body>
+</html>
