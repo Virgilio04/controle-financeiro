@@ -738,33 +738,22 @@
             }
         }
 
-        async function ocultarConta(id) {
-    // 1. Pergunta se você tem certeza
-    let confirmacao = confirm("Tem certeza que deseja ocultar esta conta?");
-    
-    // Se você clicar em 'Cancelar', ele para tudo aqui
-    if (confirmacao === false) {
-        return; 
-    }
-    
-    // 2. Vai no Supabase e cola a etiqueta "oculta = true"
-    try {
-        const { error } = await supabase
-            .from('financas_contas')
-            .update({ oculta: true })
-            .eq('id', id);
+        function ocultarConta(id) {
+    if (!confirm("Deseja colocar esta conta em stand-by?")) return;
 
-        if (error) {
-            alert("Deu um erro no Supabase!");
-            return;
-        }
-        
-        // 3. Atualiza a tela para a conta sumir na hora
-        carregarDadosDoSupabase();
+    // 1. Busca a lista atual no navegador (ou cria uma vazia)
+    let ocultas = JSON.parse(localStorage.getItem('contasOcultas') || '[]');
 
-    } catch (erro) {
-        alert("Algo deu errado na conexão.");
+    // 2. Adiciona o ID da conta se ele ainda não estiver lá
+    if (!ocultas.includes(id)) {
+        ocultas.push(id);
     }
+
+    // 3. Salva de volta no navegador
+    localStorage.setItem('contasOcultas', JSON.stringify(ocultas));
+
+    // 4. Recarrega a tela para sumir com a conta
+    carregarDadosDoSupabase();
 }
 
         function abrirModalAporteGeral() {
@@ -981,23 +970,23 @@
             mostrarMensagem("Removido", "Registro de saída removido.", "info");
         }
 
-        // --- ATUALIZE AQUI NO FINAL DO CÓDIGO ---
-        async function carregarDadosDoSupabase() {
-            try {
-                const { data: dContas } = await supabase.from('financas_contas').select('*');
-                if (dContas) contas = dContas;
+            // --- ATUALIZE AQUI NO FINAL DO CÓDIGO ---
+            async function carregarDadosDoSupabase() {
+                try {
+                    const { data: dContas } = await supabase.from('financas_contas').select('*');
+                    if (dContas) contas = dContas;
 
-                const { data: dAportes } = await supabase.from('financas_aportes').select('*');
-                if (dAportes) historicoAportes = dAportes;
+                    const { data: dAportes } = await supabase.from('financas_aportes').select('*');
+                    if (dAportes) historicoAportes = dAportes;
 
-                const { data: dSaidas } = await supabase.from('financas_saidas').select('*');
-                if (dSaidas) historicoSaidas = dSaidas;
+                    const { data: dSaidas } = await supabase.from('financas_saidas').select('*');
+                    if (dSaidas) historicoSaidas = dSaidas;
 
-                renderizar();
-            } catch (err) {
-                console.error("Erro ao carregar do Supabase:", err);
+                    renderizar();
+                } catch (err) {
+                    console.error("Erro ao carregar do Supabase:", err);
+                }
             }
-        }
 
         window.onload = function() {
             carregarDadosDoSupabase();
