@@ -513,7 +513,6 @@
         }
 
         function renderizar() {
-            const contasOcultas = JSON.parse(localStorage.getItem('contasOcultas') || '[]');
             const busca = document.getElementById('filtroBusca').value.toLowerCase();
             const tbody = document.getElementById('tabelaContasBody');
             tbody.innerHTML = '';
@@ -554,13 +553,8 @@
                 const diasFaltam = infoVenc.dias;
                 
                 const diasCalculo = Math.max(1, diasFaltam);
-const separarPorDia = faltaPagar > 0 ? (faltaPagar / diasCalculo) : 0;
-
-// Só soma no total geral do cabeçalho se a conta NÃO estiver em stand-by
-if (!isOculta) {
-    somaTotalSepararDiaGeral += separarPorDia;
-}
-                
+                const separarPorDia = faltaPagar > 0 ? (faltaPagar / diasCalculo) : 0;
+                somaTotalSepararDiaGeral += separarPorDia;
 
                 let statusHtml = '';
                 if (faltaPagar === 0) {
@@ -665,7 +659,6 @@ if (!isOculta) {
             const select = document.getElementById(elementId);
             select.innerHTML = '';
             contas.forEach(c => {
-                const isOculta = contasOcultas.includes(c.id);
                 const opt = document.createElement('option');
                 opt.value = c.id;
                 opt.text = c.nome.toUpperCase();
@@ -745,22 +738,33 @@ if (!isOculta) {
             }
         }
 
-        function ocultarConta(id) {
-    let ocultas = JSON.parse(localStorage.getItem('contasOcultas') || '[]');
-
-    if (ocultas.includes(id)) {
-        // Se já está oculta, remove da lista (Reativa a conta)
-        ocultas = ocultas.filter(itemId => itemId !== id);
-    } else {
-        // Se não está oculta, adiciona na lista (Coloca em Stand-by)
-        ocultas.push(id);
-    }
-
-    // Salva a nova lista no navegador
-    localStorage.setItem('contasOcultas', JSON.stringify(ocultas));
+        async function ocultarConta(id) {
+    // 1. Pergunta se você tem certeza
+    let confirmacao = confirm("Tem certeza que deseja ocultar esta conta?");
     
-    // Atualiza a tela imediatamente
-    renderizar();
+    // Se você clicar em 'Cancelar', ele para tudo aqui
+    if (confirmacao === false) {
+        return; 
+    }
+    
+    // 2. Vai no Supabase e cola a etiqueta "oculta = true"
+    try {
+        const { error } = await supabase
+            .from('financas_contas')
+            .update({ oculta: true })
+            .eq('id', id);
+
+        if (error) {
+            alert("Deu um erro no Supabase!");
+            return;
+        }
+        
+        // 3. Atualiza a tela para a conta sumir na hora
+        carregarDadosDoSupabase();
+
+    } catch (erro) {
+        alert("Algo deu errado na conexão.");
+    }
 }
 
         function abrirModalAporteGeral() {
@@ -977,23 +981,23 @@ if (!isOculta) {
             mostrarMensagem("Removido", "Registro de saída removido.", "info");
         }
 
-            // --- ATUALIZE AQUI NO FINAL DO CÓDIGO ---
-            async function carregarDadosDoSupabase() {
-                try {
-                    const { data: dContas } = await supabase.from('financas_contas').select('*');
-                    if (dContas) contas = dContas;
+        // --- ATUALIZE AQUI NO FINAL DO CÓDIGO ---
+        async function carregarDadosDoSupabase() {
+            try {
+                const { data: dContas } = await supabase.from('financas_contas').select('*');
+                if (dContas) contas = dContas;
 
-                    const { data: dAportes } = await supabase.from('financas_aportes').select('*');
-                    if (dAportes) historicoAportes = dAportes;
+                const { data: dAportes } = await supabase.from('financas_aportes').select('*');
+                if (dAportes) historicoAportes = dAportes;
 
-                    const { data: dSaidas } = await supabase.from('financas_saidas').select('*');
-                    if (dSaidas) historicoSaidas = dSaidas;
+                const { data: dSaidas } = await supabase.from('financas_saidas').select('*');
+                if (dSaidas) historicoSaidas = dSaidas;
 
-                    renderizar();
-                } catch (err) {
-                    console.error("Erro ao carregar do Supabase:", err);
-                }
+                renderizar();
+            } catch (err) {
+                console.error("Erro ao carregar do Supabase:", err);
             }
+        }
 
         window.onload = function() {
             carregarDadosDoSupabase();
