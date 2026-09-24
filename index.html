@@ -20,7 +20,6 @@
             }
         }
     </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -36,7 +35,7 @@
         <div>
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-                    <i class="fa-solid fa-wallet text-white text-sm"></i>
+                    <span class="text-white text-sm" role="img" aria-hidden="true">💰</span>
                 </div>
                 <h1 class="font-bold text-lg sm:text-xl text-white tracking-tight">Finanças Inteligentes</h1>
             </div>
@@ -45,16 +44,19 @@
 
         <div class="flex flex-wrap items-center gap-2.5">
             <button onclick="abrirModalAporteGeral()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 rounded-xl text-xs font-medium shadow-lg shadow-emerald-600/25 transition-all flex items-center gap-2 cursor-pointer">
-                <i class="fa-solid fa-coins"></i> Separar Dinheiro
+                <span role="img" aria-hidden="true">🪙</span> Separar Dinheiro
             </button>
             <button onclick="abrirModalConverterGuardado()" class="bg-teal-600 hover:bg-teal-500 text-white px-3.5 py-2 rounded-xl text-xs font-medium shadow-lg shadow-teal-600/25 transition-all flex items-center gap-2 cursor-pointer">
-                <i class="fa-solid fa-right-left"></i> Efetivar Guardado p/ Pago
+                <span role="img" aria-hidden="true">🔁</span> Efetivar Guardado p/ Pago
+            </button>
+            <button onclick="abrirModalTransferir()" class="bg-violet-600 hover:bg-violet-500 text-white px-3.5 py-2 rounded-xl text-xs font-medium shadow-lg shadow-violet-600/25 transition-all flex items-center gap-2 cursor-pointer">
+                <span role="img" aria-hidden="true">🔀</span> Transferir Guardado
             </button>
             <button onclick="abrirModalSaida()" class="bg-rose-600 hover:bg-rose-500 text-white px-3.5 py-2 rounded-xl text-xs font-medium shadow-lg shadow-rose-600/25 transition-all flex items-center gap-2 cursor-pointer">
-                <i class="fa-solid fa-arrow-up-from-bracket"></i> Registrar Saída / Vale
+                <span role="img" aria-hidden="true">📤</span> Registrar Saída / Vale
             </button>
             <button onclick="abrirModalAdicionar()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3.5 py-2 rounded-xl text-xs font-medium shadow-lg shadow-indigo-600/25 transition-all flex items-center gap-2 cursor-pointer">
-                <i class="fa-solid fa-plus"></i> Nova Conta
+                <span role="img" aria-hidden="true">➕</span> Nova Conta
             </button>
         </div>
     </header>
@@ -68,7 +70,7 @@
                 <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total de Dívidas / Contas</span>
                 <h3 id="resumoTotalGeral" class="text-xl sm:text-2xl font-bold text-white mt-1">R$ 0,00</h3>
                 <div class="mt-2 text-xs text-slate-400 flex items-center gap-1.5">
-                    <i class="fa-solid fa-scale-balanced text-indigo-400"></i> Somatório de todas as contas
+                    <span class="text-indigo-400" role="img" aria-hidden="true">⚖️</span> Somatório de todas as contas
                 </div>
             </div>
 
@@ -77,7 +79,7 @@
                 <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Dinheiro Já Guardado</span>
                 <h3 id="resumoTotalGuardado" class="text-xl sm:text-2xl font-bold text-emerald-400 mt-1">R$ 0,00</h3>
                 <div class="mt-2 text-xs text-slate-400 flex items-center gap-1.5">
-                    <i class="fa-solid fa-piggy-bank text-emerald-400"></i> Total separado em caixa
+                    <span class="text-emerald-400" role="img" aria-hidden="true">🐷</span> Total separado em caixa
                 </div>
             </div>
 
@@ -86,7 +88,7 @@
                 <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Já Pago / Abatido</span>
                 <h3 id="resumoTotalPago" class="text-xl sm:text-2xl font-bold text-teal-400 mt-1">R$ 0,00</h3>
                 <div class="mt-2 text-xs text-slate-400 flex items-center gap-1.5">
-                    <i class="fa-solid fa-circle-check text-teal-400"></i> Abatido diretamente
+                    <span class="text-teal-400" role="img" aria-hidden="true">✅</span> Abatido diretamente
                 </div>
             </div>
 
@@ -95,7 +97,7 @@
                 <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Retiradas p/ Outra Ocasião</span>
                 <h3 id="resumoTotalRetiradas" class="text-xl sm:text-2xl font-bold text-rose-400 mt-1">R$ 0,00</h3>
                 <div class="mt-2 text-xs text-slate-400 flex items-center gap-1.5">
-                    <i class="fa-solid fa-triangle-exclamation text-rose-400"></i> Pendência externa / Caixa
+                    <span class="text-rose-400" role="img" aria-hidden="true">⚠️</span> Pendência externa / Caixa
                 </div>
             </div>
         </div>
@@ -111,8 +113,12 @@
                         <span class="text-[10px] text-slate-400 uppercase tracking-wider">Total a Separar por Dia</span>
                         <span id="resumoTotalSepararDia" class="text-xs font-bold text-amber-400">R$ 0,00</span>
                     </div>
+                    <label class="flex items-center gap-2 text-[11px] text-slate-400 whitespace-nowrap cursor-pointer select-none">
+                        <input type="checkbox" id="checkMostrarOcultas" onchange="renderizar()" class="accent-indigo-500 w-3.5 h-3.5 cursor-pointer">
+                        Mostrar ocultas
+                    </label>
                     <div class="relative flex-1 sm:w-64">
-                        <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs" role="img" aria-hidden="true">🔍</span>
                         <input type="text" id="filtroBusca" oninput="renderizar()" placeholder="Buscar conta..." class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
                     </div>
                 </div>
@@ -224,7 +230,7 @@
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
             <div class="p-5 border-b border-slate-800 flex justify-between items-center">
                 <h3 id="modalContaTitulo" class="font-bold text-white text-base">Nova Conta / Dívida</h3>
-                <button onclick="fecharModalConta()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="fecharModalConta()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">✕</span></button>
             </div>
             <form id="formConta" onsubmit="salvarConta(event)" class="p-6 space-y-4">
                 <input type="hidden" id="contaEditId">
@@ -258,7 +264,7 @@
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
             <div class="p-5 border-b border-slate-800 flex justify-between items-center">
                 <h3 class="font-bold text-white text-base">Separar Dinheiro (Guardar em Caixa)</h3>
-                <button onclick="fecharModalAporte()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="fecharModalAporte()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">✕</span></button>
             </div>
             <form id="formAporte" onsubmit="salvarAporte(event)" class="p-6 space-y-4">
                 <div>
@@ -292,7 +298,7 @@
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
             <div class="p-5 border-b border-slate-800 flex justify-between items-center">
                 <h3 class="font-bold text-white text-base">Efetivar Dinheiro Guardado em Já Pago</h3>
-                <button onclick="fecharModalConverter()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="fecharModalConverter()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">✕</span></button>
             </div>
             <form id="formConverter" onsubmit="salvarConversaoGuardado(event)" class="p-6 space-y-4">
                 <div>
@@ -321,7 +327,7 @@
                 <!-- Janela / Caixa Informativa de Expectativa (Preview) -->
                 <div class="bg-indigo-950/40 border border-indigo-500/30 p-3 rounded-xl text-xs space-y-1">
                     <div class="flex items-center gap-1.5 text-indigo-300 font-semibold mb-1">
-                        <i class="fa-solid fa-calculator"></i> Expectativa / Projeção de Expectativa:
+                        <span role="img" aria-hidden="true">🧮</span> Expectativa / Projeção de Expectativa:
                     </div>
                     <div class="flex justify-between items-center text-slate-300">
                         <span>Novo Dinheiro Guardado Restante:</span>
@@ -352,27 +358,81 @@
         </div>
     </div>
 
+    <!-- Modal Transferir Dinheiro Guardado entre Contas -->
+    <div id="modalTransferir" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
+            <div class="p-5 border-b border-slate-800 flex justify-between items-center">
+                <h3 class="font-bold text-white text-base">Transferir Dinheiro Guardado</h3>
+                <button onclick="fecharModalTransferir()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">✕</span></button>
+            </div>
+            <form id="formTransferir" onsubmit="salvarTransferencia(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Conta de Origem (de onde sai o guardado)</label>
+                    <select id="transferirOrigemId" onchange="atualizarInfoTransferencia()" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        <!-- Preenchido via JS -->
+                    </select>
+                </div>
+
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs flex justify-between items-center">
+                    <span class="text-slate-400">Dinheiro Guardado Disponível na Origem:</span>
+                    <span id="infoGuardadoOrigem" class="font-bold text-emerald-400">R$ 0,00</span>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Conta de Destino (para onde vai o guardado)</label>
+                    <select id="transferirDestinoId" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        <!-- Preenchido via JS -->
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Valor a Transferir (R$)</label>
+                    <input type="number" step="0.01" id="transferirValor" required placeholder="0.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Data</label>
+                    <input type="date" id="transferirData" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Motivo / Descrição</label>
+                    <input type="text" id="transferirMotivo" required placeholder="Ex: Reservei p/ Rafael mas preciso usar no aluguel" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                </div>
+
+                <p class="text-[10px] text-slate-400 italic">O valor sai do "Já Guardado" da origem e entra direto no "Já Guardado" do destino, sem precisar retirar e separar de novo.</p>
+
+                <div class="pt-4 flex justify-end gap-3 border-t border-slate-800">
+                    <button type="button" onclick="fecharModalTransferir()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs font-medium transition-colors cursor-pointer">Cancelar</button>
+                    <button type="submit" class="bg-violet-600 hover:bg-violet-500 text-white px-5 py-2.5 rounded-xl text-xs font-medium shadow-lg shadow-violet-600/25 transition-all cursor-pointer">Confirmar Transferência</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Modal Registrar Saída / Pagamento / Retirada -->
     <div id="modalSaida" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
             <div class="p-5 border-b border-slate-800 flex justify-between items-center">
                 <h3 class="font-bold text-white text-base">Registrar Saída / Pagamento / Retirada</h3>
-                <button onclick="fecharModalSaida()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="fecharModalSaida()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">✕</span></button>
             </div>
             <form id="formSaida" onsubmit="salvarSaida(event)" class="p-6 space-y-4">
                 <div>
                     <label class="block text-xs font-medium text-slate-300 mb-1">Tipo de Saída</label>
                     <select id="saidaTipo" onchange="atualizarCamposSaida()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
-                        <option value="pagamento">Pagamento Direto (Abate a dívida do credor)</option>
-                        <option value="retirada">Retirada para Outra Ocasião (Gera pendência/dívida extra no caixa)</option>
+                        <option value="pagamento">Pagamento Direto (abate a dívida de uma conta fixa)</option>
+                        <option value="retirada">Retirada p/ Gasto Sem Conta Fixa (urgência, imprevisto...)</option>
                     </select>
+                    <p id="saidaTipoAjuda" class="text-[10px] text-slate-400 mt-1"></p>
                 </div>
 
                 <div id="containerContaSaida">
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Conta Relacionada</label>
-                    <select id="saidaContaId" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                    <label id="labelContaSaida" class="block text-xs font-medium text-slate-300 mb-1">Conta Relacionada</label>
+                    <select id="saidaContaId" onchange="atualizarInfoGuardadoSaida()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
                         <!-- Preenchido via JS -->
                     </select>
+                    <p id="infoGuardadoSaidaTexto" class="text-[10px] text-amber-400 mt-1 hidden"></p>
                 </div>
 
                 <div>
@@ -402,11 +462,26 @@
     <div id="modalMensagem" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl p-6 text-center space-y-4">
             <div id="msgIcon" class="w-12 h-12 rounded-full mx-auto flex items-center justify-center text-xl bg-indigo-500/10 text-indigo-400">
-                <i class="fa-solid fa-info"></i>
+                <span role="img" aria-hidden="true">ℹ️</span>
             </div>
             <h3 id="msgTitulo" class="font-bold text-white text-base">Aviso</h3>
             <p id="msgTexto" class="text-xs text-slate-300">Mensagem aqui...</p>
             <button onclick="fecharMensagem()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer">Entendido</button>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação (substitui window.confirm, que não funciona dentro do artifact) -->
+    <div id="modalConfirmar" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-[60] flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl p-6 text-center space-y-4">
+            <div class="w-12 h-12 rounded-full mx-auto flex items-center justify-center text-xl bg-rose-500/10 text-rose-400">
+                <span role="img" aria-hidden="true">⚠️</span>
+            </div>
+            <h3 id="confirmTitulo" class="font-bold text-white text-base">Confirmar ação</h3>
+            <p id="confirmTexto" class="text-xs text-slate-300">Tem certeza?</p>
+            <div class="flex gap-3">
+                <button onclick="fecharConfirmacao()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer">Cancelar</button>
+                <button id="confirmBotaoOk" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer">Confirmar</button>
+            </div>
         </div>
     </div>
 
@@ -442,16 +517,31 @@
             const iconDiv = document.getElementById('msgIcon');
             if (tipo === 'success') {
                 iconDiv.className = "w-12 h-12 rounded-full mx-auto flex items-center justify-center text-xl bg-emerald-500/10 text-emerald-400";
-                iconDiv.innerHTML = '<i class="fa-solid fa-check"></i>';
+                iconDiv.innerHTML = '<span role="img" aria-hidden="true">✅</span>';
             } else {
                 iconDiv.className = "w-12 h-12 rounded-full mx-auto flex items-center justify-center text-xl bg-indigo-500/10 text-indigo-400";
-                iconDiv.innerHTML = '<i class="fa-solid fa-info"></i>';
+                iconDiv.innerHTML = '<span role="img" aria-hidden="true">ℹ️</span>';
             }
             document.getElementById('modalMensagem').classList.remove('hidden');
         }
 
         function fecharMensagem() {
             document.getElementById('modalMensagem').classList.add('hidden');
+        }
+
+        function mostrarConfirmacao(titulo, texto, callback) {
+            document.getElementById('confirmTitulo').innerText = titulo;
+            document.getElementById('confirmTexto').innerText = texto;
+            const btnOk = document.getElementById('confirmBotaoOk');
+            btnOk.onclick = function () {
+                fecharConfirmacao();
+                callback();
+            };
+            document.getElementById('modalConfirmar').classList.remove('hidden');
+        }
+
+        function fecharConfirmacao() {
+            document.getElementById('modalConfirmar').classList.add('hidden');
         }
 
         // Extrai todos os dias numéricos de uma string (ex: "05 e 20" -> [5, 20])
@@ -494,7 +584,11 @@
                 .reduce((acc, curr) => acc + curr.valor, 0);
 
             const totalConvertido = historicoSaidas
-                .filter(s => s.contaId === contaId && s.tipo === 'pagamento' && s.convertidoDeGuardado)
+                .filter(s => s.contaId === contaId && (
+                    (s.tipo === 'pagamento' && s.convertidoDeGuardado) ||
+                    s.tipo === 'transferencia' ||
+                    s.tipo === 'retirada'
+                ))
                 .reduce((acc, curr) => acc + curr.valor, 0);
 
             return Math.max(0, totalAportado - totalConvertido);
@@ -525,15 +619,24 @@
             let somaTotalRetiradas = calcularRetiradas();
             let somaTotalSepararDiaGeral = 0;
 
+            const mostrarOcultas = document.getElementById('checkMostrarOcultas').checked;
+
             contasOrdenadas.forEach(conta => {
                 if (busca && !conta.nome.toLowerCase().includes(busca)) return;
 
-                somaTotalGeral += conta.total;
+                // Conta oculta: só aparece na tabela se "Mostrar ocultas" estiver marcado,
+                // e NUNCA entra nos totais/somas (incluindo Separar por Dia).
+                if (conta.oculta) {
+                    if (!mostrarOcultas) return;
+                } else {
+                    somaTotalGeral += conta.total;
+                }
                 const guardado = calcularGuardadoLiquido(conta.id);
-                somaTotalGuardado += guardado;
-
                 const pagoDireto = calcularPagoDireto(conta.id);
-                somaTotalPago += pagoDireto;
+                if (!conta.oculta) {
+                    somaTotalGuardado += guardado;
+                    somaTotalPago += pagoDireto;
+                }
 
                 const diasArr = extrairDias(conta.diaPagamento);
                 const qtdDatas = Math.max(1, diasArr.length);
@@ -554,7 +657,9 @@
                 
                 const diasCalculo = Math.max(1, diasFaltam);
                 const separarPorDia = faltaPagar > 0 ? (faltaPagar / diasCalculo) : 0;
-                somaTotalSepararDiaGeral += separarPorDia;
+                if (!conta.oculta) {
+                    somaTotalSepararDiaGeral += separarPorDia;
+                }
 
                 let statusHtml = '';
                 if (faltaPagar === 0) {
@@ -568,10 +673,17 @@
                 }
 
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-800/40 transition-colors";
+                tr.className = conta.oculta
+                    ? "hover:bg-slate-800/40 transition-colors opacity-40"
+                    : "hover:bg-slate-800/40 transition-colors";
+                const nomeExibido = conta.oculta
+                    ? `${conta.nome} <span class="ml-1.5 align-middle text-[9px] normal-case font-normal px-1.5 py-0.5 rounded-full bg-slate-700 text-slate-300"><span class="mr-1" role="img" aria-hidden="true">🙈</span>Oculta</span>`
+                    : conta.nome;
+                const btnOcultarIcon = conta.oculta ? '👁️' : '🙈';
+                const btnOcultarTitulo = conta.oculta ? 'Reexibir Conta' : 'Ocultar Conta';
                 tr.innerHTML = `
                     <td class="p-3.5 font-medium"><span class="w-6 h-6 rounded-lg bg-indigo-600/20 text-indigo-400 font-bold inline-flex items-center justify-center text-xs border border-indigo-500/30">${conta.prioridade}</span></td>
-                    <td class="p-3.5 font-semibold text-white uppercase">${conta.nome}</td>
+                    <td class="p-3.5 font-semibold text-white uppercase">${nomeExibido}</td>
                     <td class="p-3.5 text-slate-300 font-medium">${conta.diaPagamento || '-'}</td>
                     <td class="p-3.5 text-right font-medium text-white">${formatarMoeda(conta.total)}</td>
                     <td class="p-3.5 text-center font-bold text-indigo-400">${infoVenc.texto}</td>
@@ -581,11 +693,12 @@
                     <td class="p-3.5 text-right font-bold text-amber-400">${formatarMoeda(separarPorDia)}</td>
                     <td class="p-3.5 text-center">${statusHtml}</td>
                     <td class="p-3.5 text-right space-x-1 whitespace-nowrap">
-                        <button onclick="abrirModalAporteParaConta('${conta.id}')" title="Separar Dinheiro" class="text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer p-1"><i class="fa-solid fa-coins"></i></button>
-                        <button onclick="abrirModalConverterParaConta('${conta.id}')" title="Efetivar Guardado em Pago" class="text-slate-400 hover:text-teal-400 transition-colors cursor-pointer p-1"><i class="fa-solid fa-right-left"></i></button>
-                        <button onclick="abrirModalSaidaParaConta('${conta.id}')" title="Registrar Saída / Vale" class="text-slate-400 hover:text-rose-400 transition-colors cursor-pointer p-1"><i class="fa-solid fa-arrow-up-from-bracket"></i></button>
-                        <button onclick="editarConta('${conta.id}')" title="Editar Conta" class="text-slate-400 hover:text-indigo-400 transition-colors cursor-pointer p-1"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button onclick="excluirConta('${conta.id}')" title="Excluir Conta" class="text-slate-400 hover:text-rose-400 transition-colors cursor-pointer p-1"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="toggleOcultarConta('${conta.id}')" title="${btnOcultarTitulo}" class="text-slate-400 hover:text-amber-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">${btnOcultarIcon}</span></button>
+                        <button onclick="abrirModalAporteParaConta('${conta.id}')" title="Separar Dinheiro" class="text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">🪙</span></button>
+                        <button onclick="abrirModalConverterParaConta('${conta.id}')" title="Efetivar Guardado em Pago" class="text-slate-400 hover:text-teal-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">🔁</span></button>
+                        <button onclick="abrirModalSaidaParaConta('${conta.id}')" title="Registrar Saída / Vale" class="text-slate-400 hover:text-rose-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">📤</span></button>
+                        <button onclick="editarConta('${conta.id}')" title="Editar Conta" class="text-slate-400 hover:text-indigo-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">✏️</span></button>
+                        <button onclick="excluirConta('${conta.id}')" title="Excluir Conta" class="text-slate-400 hover:text-rose-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">🗑️</span></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -618,7 +731,7 @@
                     <td class="p-3 text-slate-300">${aporte.motivo}</td>
                     <td class="p-3 text-right font-bold text-emerald-400">${formatarMoeda(aporte.valor)}</td>
                     <td class="p-3 text-center">
-                        <button onclick="excluirAporte('${aporte.id}')" title="Excluir Aporte" class="text-slate-500 hover:text-rose-400 transition-colors cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="excluirAporte('${aporte.id}')" title="Excluir Aporte" class="text-slate-500 hover:text-rose-400 transition-colors cursor-pointer"><span role="img" aria-hidden="true">🗑️</span></button>
                     </td>
                 `;
                 tbodyAportes.appendChild(tr);
@@ -632,9 +745,13 @@
             saidasOrdenadas.forEach(saida => {
                 const conta = contas.find(c => c.id === saida.contaId);
                 const nomeConta = conta ? conta.nome : 'Outra Ocasião / Caixa';
-                const tipoBadge = saida.tipo === 'pagamento' 
-                    ? '<span class="text-teal-400 font-semibold">Pagamento Direto</span>' 
-                    : '<span class="text-rose-400 font-semibold">Retirada Caixa</span>';
+                const tipoBadge = saida.tipo === 'pagamento'
+                    ? '<span class="text-teal-400 font-semibold">Pagamento Direto</span>'
+                    : saida.tipo === 'transferencia'
+                        ? '<span class="text-violet-400 font-semibold">Transferência (saiu)</span>'
+                        : saida.contaId
+                            ? '<span class="text-amber-400 font-semibold">Retirada (do Guardado)</span>'
+                            : '<span class="text-rose-400 font-semibold">Retirada (Caixa/Externa)</span>';
 
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-800/40 transition-colors";
@@ -647,7 +764,7 @@
                     <td class="p-3 text-slate-300">${saida.motivo}</td>
                     <td class="p-3 text-right font-bold text-rose-400">${formatarMoeda(saida.valor)}</td>
                     <td class="p-3 text-center">
-                        <button onclick="excluirSaida('${saida.id}')" title="Excluir Saída" class="text-slate-500 hover:text-rose-400 transition-colors cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="excluirSaida('${saida.id}')" title="Excluir Saída" class="text-slate-500 hover:text-rose-400 transition-colors cursor-pointer"><span role="img" aria-hidden="true">🗑️</span></button>
                     </td>
                 `;
                 tbodySaidas.appendChild(tr);
@@ -726,15 +843,34 @@
             mostrarMensagem("Sucesso", "Conta salva com sucesso!", "success");
         }
 
+        function toggleOcultarConta(id) {
+            const conta = contas.find(c => c.id === id);
+            if (!conta) return;
+            conta.oculta = !conta.oculta;
+            salvarNoStorage();
+            renderizar();
+            mostrarMensagem(
+                conta.oculta ? "Conta Ocultada" : "Conta Reexibida",
+                conta.oculta
+                    ? "Esta conta não entra mais nos totais e no cálculo de 'Separar por Dia'. Marque 'Mostrar ocultas' para vê-la na lista, ou clique no olho novamente para reexibi-la."
+                    : "Esta conta voltou a contar nos totais e no cálculo de 'Separar por Dia'.",
+                "success"
+            );
+        }
+
         function excluirConta(id) {
-            if (confirm("Deseja realmente excluir esta conta e seus históricos associados?")) {
-                contas = contas.filter(c => c.id !== id);
-                historicoAportes = historicoAportes.filter(a => a.contaId !== id);
-                historicoSaidas = historicoSaidas.filter(s => s.contaId !== id);
-                salvarNoStorage();
-                renderizar();
-                mostrarMensagem("Excluído", "Conta removida com sucesso.", "success");
-            }
+            mostrarConfirmacao(
+                "Excluir Conta",
+                "Deseja realmente excluir esta conta e seus históricos associados? Essa ação não pode ser desfeita.",
+                function () {
+                    contas = contas.filter(c => c.id !== id);
+                    historicoAportes = historicoAportes.filter(a => a.contaId !== id);
+                    historicoSaidas = historicoSaidas.filter(s => s.contaId !== id);
+                    salvarNoStorage();
+                    renderizar();
+                    mostrarMensagem("Excluído", "Conta removida com sucesso.", "success");
+                }
+            );
         }
 
         function abrirModalAporteGeral() {
@@ -882,6 +1018,78 @@
             mostrarMensagem("Sucesso", "Dinheiro guardado efetivado como pago e abatido da dívida!", "success");
         }
 
+        function abrirModalTransferir() {
+            if (contas.length < 2) {
+                mostrarMensagem("Atenção", "Cadastre pelo menos duas contas para transferir dinheiro guardado entre elas.", "info");
+                return;
+            }
+            popularSelectContas('transferirOrigemId');
+            popularSelectContas('transferirDestinoId');
+            document.getElementById('formTransferir').reset();
+            document.getElementById('transferirData').value = new Date().toISOString().split('T')[0];
+            atualizarInfoTransferencia();
+            document.getElementById('modalTransferir').classList.remove('hidden');
+        }
+
+        function fecharModalTransferir() {
+            document.getElementById('modalTransferir').classList.add('hidden');
+        }
+
+        function atualizarInfoTransferencia() {
+            const origemId = document.getElementById('transferirOrigemId').value;
+            const guardado = calcularGuardadoLiquido(origemId);
+            document.getElementById('infoGuardadoOrigem').innerText = formatarMoeda(guardado);
+            document.getElementById('transferirValor').max = guardado;
+        }
+
+        function salvarTransferencia(event) {
+            event.preventDefault();
+            const origemId = document.getElementById('transferirOrigemId').value;
+            const destinoId = document.getElementById('transferirDestinoId').value;
+            const valor = parseFloat(document.getElementById('transferirValor').value);
+            const data = document.getElementById('transferirData').value;
+            const motivo = document.getElementById('transferirMotivo').value.trim();
+
+            if (origemId === destinoId) {
+                mostrarMensagem("Erro", "A conta de origem e a conta de destino precisam ser diferentes.", "info");
+                return;
+            }
+
+            const guardadoOrigem = calcularGuardadoLiquido(origemId);
+            if (valor > guardadoOrigem) {
+                mostrarMensagem("Erro", "O valor a transferir não pode ser maior que o dinheiro guardado disponível na conta de origem.", "info");
+                return;
+            }
+
+            const nomeOrigem = (contas.find(c => c.id === origemId) || {}).nome || 'Conta';
+            const nomeDestino = (contas.find(c => c.id === destinoId) || {}).nome || 'Conta';
+
+            // Sai do guardado da origem (não conta como pago nem como retirada)
+            historicoSaidas.push({
+                id: Date.now().toString() + '-t1',
+                contaId: origemId,
+                tipo: 'transferencia',
+                valor: valor,
+                data: data,
+                motivo: `${motivo} (transferido para ${nomeDestino.toUpperCase()})`,
+                convertidoDeGuardado: false
+            });
+
+            // Entra direto no guardado do destino, sem passar por "separar dinheiro" de novo
+            historicoAportes.push({
+                id: Date.now().toString() + '-t2',
+                contaId: destinoId,
+                valor: valor,
+                data: data,
+                motivo: `${motivo} (transferido de ${nomeOrigem.toUpperCase()})`
+            });
+
+            salvarNoStorage();
+            fecharModalTransferir();
+            renderizar();
+            mostrarMensagem("Sucesso", `Transferência de ${formatarMoeda(valor)} realizada de ${nomeOrigem.toUpperCase()} para ${nomeDestino.toUpperCase()}!`, "success");
+        }
+
         function abrirModalSaida() {
             if (contas.length === 0) {
                 mostrarMensagem("Atenção", "Cadastre pelo menos uma conta.", "info");
@@ -911,21 +1119,66 @@
 
         function atualizarCamposSaida() {
             const tipo = document.getElementById('saidaTipo').value;
-            const containerConta = document.getElementById('containerContaSaida');
+            const label = document.getElementById('labelContaSaida');
+            const ajuda = document.getElementById('saidaTipoAjuda');
+            const select = document.getElementById('saidaContaId');
+            let optNenhuma = document.getElementById('optContaNenhuma');
+
             if (tipo === 'retirada') {
-                containerConta.style.display = 'none';
+                label.innerText = 'Abater do Dinheiro Guardado de (opcional)';
+                ajuda.innerText = 'Use quando o dinheiro sair de uma conta que você já tinha guardado, mas o gasto não é da dívida fixa dela (ex: emergência). Se não veio de nenhuma conta guardada, deixe em "Nenhuma".';
+                if (!optNenhuma) {
+                    optNenhuma = document.createElement('option');
+                    optNenhuma.id = 'optContaNenhuma';
+                    optNenhuma.value = '';
+                    optNenhuma.text = 'Nenhuma (dinheiro novo / fora do sistema)';
+                    select.insertBefore(optNenhuma, select.firstChild);
+                    select.value = '';
+                }
             } else {
-                containerConta.style.display = 'block';
+                label.innerText = 'Conta Relacionada';
+                ajuda.innerText = 'O valor será abatido diretamente da dívida desta conta fixa.';
+                if (optNenhuma) {
+                    optNenhuma.remove();
+                    if (select.options.length > 0) select.selectedIndex = 0;
+                }
+            }
+            atualizarInfoGuardadoSaida();
+        }
+
+        function atualizarInfoGuardadoSaida() {
+            const tipo = document.getElementById('saidaTipo').value;
+            const contaId = document.getElementById('saidaContaId').value;
+            const info = document.getElementById('infoGuardadoSaidaTexto');
+            if (tipo === 'retirada' && contaId) {
+                const guardado = calcularGuardadoLiquido(contaId);
+                info.innerText = `Guardado disponível nesta conta: ${formatarMoeda(guardado)} — este valor será descontado do "Já Guardado" dela.`;
+                info.classList.remove('hidden');
+            } else {
+                info.classList.add('hidden');
             }
         }
 
         function salvarSaida(event) {
             event.preventDefault();
             const tipo = document.getElementById('saidaTipo').value;
-            const contaId = tipo === 'retirada' ? '' : document.getElementById('saidaContaId').value;
+            const contaId = document.getElementById('saidaContaId').value;
             const valor = parseFloat(document.getElementById('saidaValor').value);
             const data = document.getElementById('saidaData').value;
             const motivo = document.getElementById('saidaMotivo').value.trim();
+
+            if (tipo === 'pagamento' && !contaId) {
+                mostrarMensagem("Atenção", "Selecione a conta relacionada a este pagamento.", "info");
+                return;
+            }
+
+            if (tipo === 'retirada' && contaId) {
+                const guardado = calcularGuardadoLiquido(contaId);
+                if (valor > guardado) {
+                    mostrarMensagem("Erro", "O valor da retirada não pode ser maior que o dinheiro guardado disponível nesta conta.", "info");
+                    return;
+                }
+            }
 
             const novaSaida = {
                 id: Date.now().toString(),
@@ -954,22 +1207,32 @@
         // --- ATUALIZE AQUI NO FINAL DO CÓDIGO ---
         async function carregarDadosDoSupabase() {
             try {
-                const { data: dContas } = await supabase.from('financas_contas').select('*');
-                if (dContas) contas = dContas;
+                const { data: dContas, error: eContas } = await supabase.from('financas_contas').select('*');
+                if (eContas) throw eContas;
+                if (dContas && dContas.length > 0) contas = dContas;
 
-                const { data: dAportes } = await supabase.from('financas_aportes').select('*');
+                const { data: dAportes, error: eAportes } = await supabase.from('financas_aportes').select('*');
+                if (eAportes) throw eAportes;
                 if (dAportes) historicoAportes = dAportes;
 
-                const { data: dSaidas } = await supabase.from('financas_saidas').select('*');
+                const { data: dSaidas, error: eSaidas } = await supabase.from('financas_saidas').select('*');
+                if (eSaidas) throw eSaidas;
                 if (dSaidas) historicoSaidas = dSaidas;
 
+                salvarNoStorage();
                 renderizar();
             } catch (err) {
-                console.error("Erro ao carregar do Supabase:", err);
+                // Se o Supabase falhar (ex: URL/chave não configuradas), os dados locais
+                // (localStorage) já foram exibidos por renderizar() no window.onload abaixo,
+                // então o app continua funcionando normalmente mesmo sem a sincronização.
+                console.error("Erro ao carregar do Supabase — usando apenas os dados locais:", err);
             }
         }
 
         window.onload = function() {
+            // Mostra os dados salvos localmente IMEDIATAMENTE, sem depender do Supabase.
+            // Isso evita a tela "zerada" caso a sincronização com o Supabase falhe ou demore.
+            renderizar();
             carregarDadosDoSupabase();
         };
     </script>
