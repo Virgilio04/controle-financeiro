@@ -586,6 +586,7 @@
                         <button onclick="abrirModalSaidaParaConta('${conta.id}')" title="Registrar Saída / Vale" class="text-slate-400 hover:text-rose-400 transition-colors cursor-pointer p-1"><i class="fa-solid fa-arrow-up-from-bracket"></i></button>
                         <button onclick="editarConta('${conta.id}')" title="Editar Conta" class="text-slate-400 hover:text-indigo-400 transition-colors cursor-pointer p-1"><i class="fa-solid fa-pen-to-square"></i></button>
                         <button onclick="excluirConta('${conta.id}')" title="Excluir Conta" class="text-slate-400 hover:text-rose-400 transition-colors cursor-pointer p-1"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="ocultarConta('${conta.id}')">Ocultar</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -736,6 +737,35 @@
                 mostrarMensagem("Excluído", "Conta removida com sucesso.", "success");
             }
         }
+
+        async function ocultarConta(id) {
+    // 1. Pergunta se você tem certeza
+    let confirmacao = confirm("Tem certeza que deseja ocultar esta conta?");
+    
+    // Se você clicar em 'Cancelar', ele para tudo aqui
+    if (confirmacao === false) {
+        return; 
+    }
+    
+    // 2. Vai no Supabase e cola a etiqueta "oculta = true"
+    try {
+        const { error } = await supabase
+            .from('financas_contas')
+            .update({ oculta: true })
+            .eq('id', id);
+
+        if (error) {
+            alert("Deu um erro no Supabase!");
+            return;
+        }
+        
+        // 3. Atualiza a tela para a conta sumir na hora
+        carregarDadosDoSupabase();
+
+    } catch (erro) {
+        alert("Algo deu errado na conexão.");
+    }
+}
 
         function abrirModalAporteGeral() {
             if (contas.length === 0) {
