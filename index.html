@@ -513,6 +513,7 @@
         }
 
         function renderizar() {
+            const contasOcultas = JSON.parse(localStorage.getItem('contasOcultas') || '[]');
             const busca = document.getElementById('filtroBusca').value.toLowerCase();
             const tbody = document.getElementById('tabelaContasBody');
             tbody.innerHTML = '';
@@ -553,8 +554,13 @@
                 const diasFaltam = infoVenc.dias;
                 
                 const diasCalculo = Math.max(1, diasFaltam);
-                const separarPorDia = faltaPagar > 0 ? (faltaPagar / diasCalculo) : 0;
-                somaTotalSepararDiaGeral += separarPorDia;
+const separarPorDia = faltaPagar > 0 ? (faltaPagar / diasCalculo) : 0;
+
+// Só soma no total geral do cabeçalho se a conta NÃO estiver em stand-by
+if (!isOculta) {
+    somaTotalSepararDiaGeral += separarPorDia;
+}
+                
 
                 let statusHtml = '';
                 if (faltaPagar === 0) {
@@ -659,6 +665,7 @@
             const select = document.getElementById(elementId);
             select.innerHTML = '';
             contas.forEach(c => {
+                const isOculta = contasOcultas.includes(c.id);
                 const opt = document.createElement('option');
                 opt.value = c.id;
                 opt.text = c.nome.toUpperCase();
@@ -739,21 +746,21 @@
         }
 
         function ocultarConta(id) {
-    if (!confirm("Deseja colocar esta conta em stand-by?")) return;
-
-    // 1. Busca a lista atual no navegador (ou cria uma vazia)
     let ocultas = JSON.parse(localStorage.getItem('contasOcultas') || '[]');
 
-    // 2. Adiciona o ID da conta se ele ainda não estiver lá
-    if (!ocultas.includes(id)) {
+    if (ocultas.includes(id)) {
+        // Se já está oculta, remove da lista (Reativa a conta)
+        ocultas = ocultas.filter(itemId => itemId !== id);
+    } else {
+        // Se não está oculta, adiciona na lista (Coloca em Stand-by)
         ocultas.push(id);
     }
 
-    // 3. Salva de volta no navegador
+    // Salva a nova lista no navegador
     localStorage.setItem('contasOcultas', JSON.stringify(ocultas));
-
-    // 4. Recarrega a tela para sumir com a conta
-    carregarDadosDoSupabase();
+    
+    // Atualiza a tela imediatamente
+    renderizar();
 }
 
         function abrirModalAporteGeral() {
