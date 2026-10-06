@@ -262,6 +262,18 @@
                     <label class="block text-xs font-medium text-slate-300 mb-1">Valor Total no Mês (R$)</label>
                     <input type="number" step="0.01" id="contaTotal" required placeholder="Ex: 2000.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
                 </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Recorrência</label>
+                    <select id="contaRecorrencia" onchange="atualizarCampoParcelas()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        <option value="indeterminada">Mensal / Recorrente (sem previsão de acabar)</option>
+                        <option value="parcelas">Número fixo de parcelas (empréstimo, parcelamento...)</option>
+                    </select>
+                </div>
+                <div id="containerParcelas" class="hidden">
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Quantidade de Parcelas</label>
+                    <input type="number" min="1" step="1" id="contaTotalParcelas" placeholder="Ex: 4" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                    <p class="text-[10px] text-slate-400 mt-1">Depois de pagar essa quantidade de vezes, a conta para de reiniciar e fica marcada como concluída.</p>
+                </div>
                 <div class="pt-4 flex justify-end gap-3 border-t border-slate-800">
                     <button type="button" onclick="fecharModalConta()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs font-medium transition-colors cursor-pointer">Cancelar</button>
                     <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-xl text-xs font-medium shadow-lg shadow-indigo-600/25 transition-all cursor-pointer">Salvar Conta</button>
@@ -594,13 +606,66 @@
             return { dias: Math.max(1, menorDiff === 999 ? 1 : menorDiff), texto: proximaDataStr };
         }
 
+        // Formata uma Date em 'YYYY-MM-DD' (mesmo formato salvo pelos campos <input type="date">)
+        function formatarDataISO(d) {
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const dia = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${dia}`;
+        }
+
+        // Conta recorrente: a cada vencimento que chega, o ciclo reinicia automaticamente.
+        // Retorna a data (YYYY-MM-DD) em que o ciclo ATUAL começou, ou seja, o dia seguinte
+        // ao vencimento anterior. Pagamentos feitos a partir dessa data (inclusive no próprio
+        // dia do vencimento, permitindo pagar adiantado) contam para o ciclo atual; tudo que
+        // foi guardado/pago antes disso pertence a um ciclo já encerrado e não conta mais.
+        function calcularInicioCicloAtual(diaPagamentoStr) {
+            const diasArr = [...new Set(extrairDias(diaPagamentoStr))].sort((a, b) => a - b);
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
+
+            const candidatos = [];
+            for (let offset = -2; offset <= 2; offset++) {
+                diasArr.forEach(dia => {
+                    const d = new Date(hoje.getFullYear(), hoje.getMonth() + offset, dia);
+                    d.setHours(0, 0, 0, 0);
+                    candidatos.push(d);
+                });
+            }
+            candidatos.sort((a, b) => a - b);
+
+            const proximos = candidatos.filter(d => d >= hoje);
+            const proximoVenc = proximos.length > 0 ? proximos[0] : candidatos[candidatos.length - 1];
+
+            const anteriores = candidatos.filter(d => d < proximoVenc);
+            if (anteriores.length === 0) return null; // sem histórico suficiente pra definir início, não filtra
+
+            const anteriorVenc = anteriores[anteriores.length - 1];
+            const inicioCiclo = new Date(anteriorVenc);
+            inicioCiclo.setDate(inicioCiclo.getDate() + 1);
+            return formatarDataISO(inicioCiclo);
+        }
+
+        // Início do ciclo que realmente vale para os cálculos: o automático (vencimento)
+        // ou, se a conta foi reiniciada manualmente (pagou tudo antes do tempo) e isso for
+        // mais recente, a data desse reinício manual — o que for mais recente vence.
+        function calcularInicioCicloEfetivo(conta) {
+            const inicioAuto = calcularInicioCicloAtual(conta.diaPagamento);
+            const inicioManual = conta.inicioCicloManual || null;
+            if (inicioAuto && inicioManual) return inicioAuto > inicioManual ? inicioAuto : inicioManual;
+            return inicioAuto || inicioManual || null;
+        }
+
         function calcularGuardadoLiquido(contaId) {
+            const conta = contas.find(c => c.id === contaId);
+            const inicioCiclo = conta ? calcularInicioCicloEfetivo(conta) : null;
+
             const totalAportado = historicoAportes
-                .filter(a => a.contaId === contaId)
+                .filter(a => a.contaId === contaId && (!inicioCiclo || a.data >= inicioCiclo))
                 .reduce((acc, curr) => acc + curr.valor, 0);
 
             const totalConvertido = historicoSaidas
-                .filter(s => s.contaId === contaId && (
+                .filter(s => s.contaId === contaId && (!inicioCiclo || s.data >= inicioCiclo) && (
                     (s.tipo === 'pagamento' && s.convertidoDeGuardado) ||
                     s.tipo === 'transferencia' ||
                     s.tipo === 'retirada'
@@ -611,9 +676,34 @@
         }
 
         function calcularPagoDireto(contaId) {
+            const conta = contas.find(c => c.id === contaId);
+            const inicioCiclo = conta ? calcularInicioCicloEfetivo(conta) : null;
+
+            return historicoSaidas
+                .filter(s => s.contaId === contaId && s.tipo === 'pagamento' && (!inicioCiclo || s.data >= inicioCiclo))
+                .reduce((acc, curr) => acc + curr.valor, 0);
+        }
+
+        // Soma TODO o histórico de pagamentos diretos de uma conta (sem filtrar por ciclo),
+        // usado para contar quantas parcelas já foram pagas em contas com recorrência limitada.
+        function calcularPagoTotalAllTime(contaId) {
             return historicoSaidas
                 .filter(s => s.contaId === contaId && s.tipo === 'pagamento')
                 .reduce((acc, curr) => acc + curr.valor, 0);
+        }
+
+        // Para contas com recorrência de "parcelas", retorna {pagas, total} e se já concluiu.
+        function calcularStatusParcelas(conta, valorPorData) {
+            if (conta.recorrencia !== 'parcelas' || !conta.totalParcelas) return null;
+            const pagoTotalAllTime = calcularPagoTotalAllTime(conta.id);
+            const parcelasPagas = valorPorData > 0
+                ? Math.min(conta.totalParcelas, Math.floor((pagoTotalAllTime / valorPorData) + 1e-9))
+                : 0;
+            return {
+                pagas: parcelasPagas,
+                total: conta.totalParcelas,
+                concluida: parcelasPagas >= conta.totalParcelas
+            };
         }
 
         function calcularRetiradas() {
@@ -643,42 +733,47 @@
 
                 // Conta oculta: só aparece na tabela se "Mostrar ocultas" estiver marcado,
                 // e NUNCA entra nos totais/somas (incluindo Separar por Dia).
-                if (conta.oculta) {
-                    if (!mostrarOcultas) return;
-                } else {
-                    somaTotalGeral += conta.total;
-                }
-                const guardado = calcularGuardadoLiquido(conta.id);
-                const pagoDireto = calcularPagoDireto(conta.id);
-                if (!conta.oculta) {
-                    somaTotalGuardado += guardado;
-                    somaTotalPago += pagoDireto;
-                }
+                const incluirNosTotais = !conta.oculta;
+                if (conta.oculta && !mostrarOcultas) return;
 
                 const diasArr = extrairDias(conta.diaPagamento);
                 const qtdDatas = Math.max(1, diasArr.length);
                 const valorPorData = conta.total / qtdDatas;
 
-                const totalAbatidoOuPago = pagoDireto + guardado;
+                // Conta com número fixo de parcelas: depois de pagar a quantidade combinada,
+                // ela para de reiniciar e fica marcada como concluída (não entra mais nos totais).
+                const parcelasInfo = calcularStatusParcelas(conta, valorPorData);
+                const concluida = !!(parcelasInfo && parcelasInfo.concluida);
+
+                const guardado = calcularGuardadoLiquido(conta.id);
+                const pagoDireto = calcularPagoDireto(conta.id);
 
                 let faltaPagar = 0;
-                if (totalAbatidoOuPago < valorPorData) {
-                    faltaPagar = valorPorData - totalAbatidoOuPago;
-                } else {
-                    const restanteGlobal = Math.max(0, conta.total - totalAbatidoOuPago);
-                    faltaPagar = Math.min(valorPorData, restanteGlobal);
+                let separarPorDia = 0;
+                let infoVenc = { dias: 1, texto: '-' };
+                let diasFaltam = 1;
+
+                if (!concluida) {
+                    // guardado e pagoDireto já são do ciclo (vencimento) atual — assim que o
+                    // vencimento passa, o ciclo reinicia sozinho e a conta volta a pedir pagamento.
+                    const totalAbatidoOuPago = pagoDireto + guardado;
+                    faltaPagar = Math.max(0, valorPorData - totalAbatidoOuPago);
+
+                    infoVenc = calcularProximoVencimento(conta.diaPagamento);
+                    diasFaltam = infoVenc.dias;
+
+                    const diasCalculo = Math.max(1, diasFaltam);
+                    separarPorDia = faltaPagar > 0 ? (faltaPagar / diasCalculo) : 0;
                 }
 
-                const infoVenc = calcularProximoVencimento(conta.diaPagamento);
-                const diasFaltam = infoVenc.dias;
-
-                const diasCalculo = Math.max(1, diasFaltam);
-                const separarPorDia = faltaPagar > 0 ? (faltaPagar / diasCalculo) : 0;
-                if (!conta.oculta) {
+                if (incluirNosTotais && !concluida) {
+                    somaTotalGeral += conta.total;
+                    somaTotalGuardado += guardado;
+                    somaTotalPago += pagoDireto;
                     somaTotalSepararDiaGeral += separarPorDia;
                 }
 
-                linhas.push({ conta, guardado, pagoDireto, faltaPagar, infoVenc, diasFaltam, separarPorDia });
+                linhas.push({ conta, guardado, pagoDireto, faltaPagar, infoVenc, diasFaltam, separarPorDia, parcelasInfo, concluida });
             });
 
             // 2) Ordena conforme o filtro escolhido pelo usuário
@@ -693,9 +788,11 @@
             linhas.sort(comparadores[ordenarPor] || comparadores.prioridade);
 
             // 3) Monta as linhas da tabela já na ordem escolhida
-            linhas.forEach(({ conta, guardado, pagoDireto, faltaPagar, infoVenc, separarPorDia }) => {
+            linhas.forEach(({ conta, guardado, pagoDireto, faltaPagar, infoVenc, separarPorDia, parcelasInfo, concluida }) => {
                 let statusHtml = '';
-                if (faltaPagar === 0) {
+                if (concluida) {
+                    statusHtml = '<span class="px-2.5 py-1 rounded-full bg-violet-500/10 text-violet-400 border border-violet-500/20 text-[10px] font-semibold">Concluída</span>';
+                } else if (faltaPagar === 0) {
                     statusHtml = '<span class="px-2.5 py-1 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20 text-[10px] font-semibold">Quitado</span>';
                 } else if (infoVenc.dias <= 3) {
                     statusHtml = '<span class="px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 text-[10px] font-semibold animate-pulse">Crítico / Vencendo</span>';
@@ -706,12 +803,15 @@
                 }
 
                 const tr = document.createElement('tr');
-                tr.className = conta.oculta
+                tr.className = (conta.oculta || concluida)
                     ? "hover:bg-slate-800/40 transition-colors opacity-40"
                     : "hover:bg-slate-800/40 transition-colors";
-                const nomeExibido = conta.oculta
+                const badgeParcelas = parcelasInfo
+                    ? ` <span class="ml-1.5 align-middle text-[9px] normal-case font-normal px-1.5 py-0.5 rounded-full bg-violet-500/10 text-violet-300 border border-violet-500/20">Parcela ${Math.min(parcelasInfo.pagas + (concluida ? 0 : 1), parcelasInfo.total)}/${parcelasInfo.total}</span>`
+                    : '';
+                const nomeExibido = (conta.oculta
                     ? `${conta.nome} <span class="ml-1.5 align-middle text-[9px] normal-case font-normal px-1.5 py-0.5 rounded-full bg-slate-700 text-slate-300"><span class="mr-1" role="img" aria-hidden="true">🙈</span>Oculta</span>`
-                    : conta.nome;
+                    : conta.nome) + badgeParcelas;
                 const btnOcultarIcon = conta.oculta ? '👁️' : '🙈';
                 const btnOcultarTitulo = conta.oculta ? 'Reexibir Conta' : 'Ocultar Conta';
                 tr.innerHTML = `
@@ -726,6 +826,7 @@
                     <td class="p-3.5 text-right font-bold text-amber-400">${formatarMoeda(separarPorDia)}</td>
                     <td class="p-3.5 text-center">${statusHtml}</td>
                     <td class="p-3.5 text-right space-x-1 whitespace-nowrap">
+                        <button onclick="reiniciarCicloConta('${conta.id}')" title="Reiniciar Conta (quitou antes do tempo)" class="text-slate-400 hover:text-violet-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">🔄</span></button>
                         <button onclick="toggleOcultarConta('${conta.id}')" title="${btnOcultarTitulo}" class="text-slate-400 hover:text-amber-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">${btnOcultarIcon}</span></button>
                         <button onclick="abrirModalAporteParaConta('${conta.id}')" title="Separar Dinheiro" class="text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">🪙</span></button>
                         <button onclick="abrirModalConverterParaConta('${conta.id}')" title="Efetivar Guardado em Pago" class="text-slate-400 hover:text-teal-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">🔁</span></button>
@@ -757,20 +858,17 @@
             contas.forEach(conta => {
                 if (conta.oculta) return;
 
-                const guardado = calcularGuardadoLiquido(conta.id);
-                const pagoDireto = calcularPagoDireto(conta.id);
                 const diasArr = extrairDias(conta.diaPagamento);
                 const qtdDatas = Math.max(1, diasArr.length);
                 const valorPorData = conta.total / qtdDatas;
-                const totalAbatidoOuPago = pagoDireto + guardado;
 
-                let faltaPagar = 0;
-                if (totalAbatidoOuPago < valorPorData) {
-                    faltaPagar = valorPorData - totalAbatidoOuPago;
-                } else {
-                    const restanteGlobal = Math.max(0, conta.total - totalAbatidoOuPago);
-                    faltaPagar = Math.min(valorPorData, restanteGlobal);
-                }
+                const parcelasInfo = calcularStatusParcelas(conta, valorPorData);
+                if (parcelasInfo && parcelasInfo.concluida) return; // parcelamento já quitado, nem entra no resumo
+
+                const guardado = calcularGuardadoLiquido(conta.id);
+                const pagoDireto = calcularPagoDireto(conta.id);
+                const totalAbatidoOuPago = pagoDireto + guardado;
+                const faltaPagar = Math.max(0, valorPorData - totalAbatidoOuPago);
 
                 const infoVenc = calcularProximoVencimento(conta.diaPagamento);
                 const diasFaltam = infoVenc.dias;
@@ -894,11 +992,23 @@
             });
         }
 
+        function atualizarCampoParcelas() {
+            const tipo = document.getElementById('contaRecorrencia').value;
+            const container = document.getElementById('containerParcelas');
+            if (tipo === 'parcelas') {
+                container.classList.remove('hidden');
+            } else {
+                container.classList.add('hidden');
+            }
+        }
+
         function abrirModalAdicionar() {
             document.getElementById('modalContaTitulo').innerText = "Nova Conta / Dívida";
             document.getElementById('formConta').reset();
             document.getElementById('contaEditId').value = '';
             document.getElementById('contaPrioridade').value = contas.length + 1;
+            document.getElementById('contaRecorrencia').value = 'indeterminada';
+            atualizarCampoParcelas();
             document.getElementById('modalConta').classList.remove('hidden');
         }
 
@@ -911,6 +1021,9 @@
             document.getElementById('contaPrioridade').value = conta.prioridade;
             document.getElementById('contaDiaPagamento').value = conta.diaPagamento;
             document.getElementById('contaTotal').value = conta.total;
+            document.getElementById('contaRecorrencia').value = conta.recorrencia === 'parcelas' ? 'parcelas' : 'indeterminada';
+            document.getElementById('contaTotalParcelas').value = conta.totalParcelas || '';
+            atualizarCampoParcelas();
             document.getElementById('modalConta').classList.remove('hidden');
         }
 
@@ -925,6 +1038,10 @@
             const prioridade = parseInt(document.getElementById('contaPrioridade').value);
             const diaPagamento = document.getElementById('contaDiaPagamento').value.trim();
             const total = parseFloat(document.getElementById('contaTotal').value);
+            const recorrencia = document.getElementById('contaRecorrencia').value;
+            const totalParcelas = recorrencia === 'parcelas'
+                ? Math.max(1, parseInt(document.getElementById('contaTotalParcelas').value) || 1)
+                : null;
 
             if (editId) {
                 const conta = contas.find(c => c.id === editId);
@@ -933,6 +1050,8 @@
                     conta.prioridade = prioridade;
                     conta.diaPagamento = diaPagamento;
                     conta.total = total;
+                    conta.recorrencia = recorrencia;
+                    conta.totalParcelas = totalParcelas;
                 }
             } else {
                 const nova = {
@@ -940,7 +1059,9 @@
                     nome,
                     prioridade,
                     diaPagamento,
-                    total
+                    total,
+                    recorrencia,
+                    totalParcelas
                 };
                 contas.push(nova);
             }
@@ -949,6 +1070,23 @@
             fecharModalConta();
             renderizar();
             mostrarMensagem("Sucesso", "Conta salva com sucesso!", "success");
+        }
+
+        // Reinicia manualmente o ciclo de uma conta (ex: pagou tudo de uma vez antes do
+        // vencimento) para já voltar a pedir separação de dinheiro desde hoje.
+        function reiniciarCicloConta(id) {
+            const conta = contas.find(c => c.id === id);
+            if (!conta) return;
+            mostrarConfirmacao(
+                "Reiniciar Conta",
+                `Isso vai fazer "${conta.nome.toUpperCase()}" voltar a pedir separação de dinheiro a partir de hoje, mesmo já tendo sido quitada antes do vencimento. O histórico de pagamentos não é apagado. Deseja continuar?`,
+                function () {
+                    conta.inicioCicloManual = formatarDataISO(new Date());
+                    salvarNoStorage();
+                    renderizar();
+                    mostrarMensagem("Reiniciado", `"${conta.nome.toUpperCase()}" foi reiniciada e já está pedindo separação de dinheiro de novo.`, "success");
+                }
+            );
         }
 
         function toggleOcultarConta(id) {
