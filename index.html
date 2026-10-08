@@ -40,6 +40,13 @@
                 <h1 class="font-bold text-lg sm:text-xl text-white tracking-tight">Finanças Inteligentes</h1>
             </div>
             <p class="text-xs text-slate-400 mt-0.5">Controle por quinzenas com divisão automática de valores por data</p>
+            <div class="mt-2 inline-flex items-center gap-2 bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5">
+                <span role="img" aria-hidden="true">📅</span>
+                <div class="leading-tight">
+                    <div id="headerDiaSemana" class="text-[10px] text-slate-400 uppercase tracking-wider"></div>
+                    <div id="headerDataHoje" class="text-xs font-semibold text-white"></div>
+                </div>
+            </div>
         </div>
 
         <div class="flex flex-wrap items-center gap-2.5">
@@ -290,9 +297,19 @@
                 <button onclick="fecharModalAporte()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">✕</span></button>
             </div>
             <form id="formAporte" onsubmit="salvarAporte(event)" class="p-6 space-y-4">
+                <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-xs space-y-1.5">
+                    <div class="flex justify-between items-center">
+                        <span class="text-amber-200/80">Total a separar hoje (todas as contas):</span>
+                        <span id="aporteInfoTotalDia" class="font-bold text-amber-400">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-amber-200/80">Só a conta selecionada:</span>
+                        <span id="aporteInfoContaDia" class="font-bold text-amber-300">R$ 0,00</span>
+                    </div>
+                </div>
                 <div>
                     <label class="block text-xs font-medium text-slate-300 mb-1">Selecione a Conta</label>
-                    <select id="aporteContaId" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                    <select id="aporteContaId" onchange="atualizarInfoSepararDia()" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
                         <!-- Preenchido via JS -->
                     </select>
                 </div>
@@ -1122,6 +1139,24 @@
             );
         }
 
+        // Quanto precisa separar HOJE para uma conta (mesma regra da coluna "Separar / Dia")
+        function calcularSepararPorDiaConta(contaId) {
+            const conta = contas.find(c => c.id === contaId);
+            if (!conta || conta.oculta) return 0;
+            const valorPorData = conta.total / Math.max(1, extrairDias(conta.diaPagamento).length);
+            const parcelasInfo = calcularStatusParcelas(conta, valorPorData);
+            if (parcelasInfo && parcelasInfo.concluida) return 0;
+            const faltaPagar = Math.max(0, valorPorData - (calcularPagoDireto(conta.id) + calcularGuardadoLiquido(conta.id)));
+            const dias = Math.max(1, calcularProximoVencimento(conta.diaPagamento).dias);
+            return faltaPagar > 0 ? faltaPagar / dias : 0;
+        }
+
+        function atualizarInfoSepararDia() {
+            const contaId = document.getElementById('aporteContaId').value;
+            document.getElementById('aporteInfoTotalDia').innerText = formatarMoeda(totalSepararDiaGlobal);
+            document.getElementById('aporteInfoContaDia').innerText = formatarMoeda(calcularSepararPorDiaConta(contaId));
+        }
+
         function abrirModalAporteGeral() {
             if (contas.length === 0) {
                 mostrarMensagem("Atenção", "Cadastre pelo menos uma conta antes de separar dinheiro.", "info");
@@ -1132,15 +1167,18 @@
             document.getElementById('aporteData').value = new Date().toISOString().split('T')[0];
             document.getElementById('aporteMotivo').value = "Separação de valor";
             document.getElementById('cardFolegoAporte').classList.add('hidden');
+            atualizarInfoSepararDia();
             document.getElementById('modalAporte').classList.remove('hidden');
         }
 
         function abrirModalAporteParaConta(contaId) {
             popularSelectContas('aporteContaId', contaId);
             document.getElementById('formAporte').reset();
+            document.getElementById('aporteContaId').value = contaId; // reset() volta pra 1ª opção, então reaplica
             document.getElementById('aporteData').value = new Date().toISOString().split('T')[0];
             document.getElementById('aporteMotivo').value = "Separação de valor";
             document.getElementById('cardFolegoAporte').classList.add('hidden');
+            atualizarInfoSepararDia();
             document.getElementById('modalAporte').classList.remove('hidden');
         }
 
@@ -1229,6 +1267,7 @@
         function abrirModalConverterParaConta(contaId) {
             popularSelectContas('converterContaId', contaId);
             document.getElementById('formConverter').reset();
+            document.getElementById('converterContaId').value = contaId; // reset() volta pra 1ª opção, então reaplica
             document.getElementById('converterData').value = new Date().toISOString().split('T')[0];
             document.getElementById('converterMotivo').value = "Pagamento efetivado usando o dinheiro guardado";
             atualizarInfoGuardadoConta();
@@ -1516,7 +1555,21 @@
             }
         }
 
+        let _ultimaDataExibida = '';
+        function atualizarDataHeader() {
+            const agora = new Date();
+            const diaSemana = agora.toLocaleDateString('pt-BR', { weekday: 'long' });
+            const dataLonga = agora.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+            document.getElementById('headerDiaSemana').innerText = diaSemana;
+            document.getElementById('headerDataHoje').innerText = dataLonga;
+            // Se o dia virou com a página aberta, recalcula vencimentos e ciclos
+            if (_ultimaDataExibida && _ultimaDataExibida !== dataLonga) renderizar();
+            _ultimaDataExibida = dataLonga;
+        }
+
         window.onload = function() {
+            atualizarDataHeader();
+            setInterval(atualizarDataHeader, 60000);
             // Mostra os dados salvos localmente IMEDIATAMENTE, sem depender do Supabase.
             // Isso evita a tela "zerada" caso a sincronização com o Supabase falhe ou demore.
             renderizar();
