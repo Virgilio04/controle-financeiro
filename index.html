@@ -646,26 +646,28 @@
             return formatarDataISO(inicioCiclo);
         }
 
-        // Início do ciclo que realmente vale para os cálculos: o automático (vencimento)
-        // ou, se a conta foi reiniciada manualmente (pagou tudo antes do tempo) e isso for
-        // mais recente, a data desse reinício manual — o que for mais recente vence.
-        function calcularInicioCicloEfetivo(conta) {
-            const inicioAuto = calcularInicioCicloAtual(conta.diaPagamento);
-            const inicioManual = conta.inicioCicloManual || null;
-            if (inicioAuto && inicioManual) return inicioAuto > inicioManual ? inicioAuto : inicioManual;
-            return inicioAuto || inicioManual || null;
+        // Um registro (aporte/saída) só conta para o ciclo atual se passar nos dois filtros:
+        // 1) data do registro dentro do ciclo de vencimento automático (se houver um definido);
+        // 2) se a conta foi reiniciada manualmente, o registro precisa ter sido criado DEPOIS
+        //    do clique em "Reiniciar" — comparamos pelo timestamp do id (preciso até o milissegundo),
+        //    não pela data do calendário, pra zerar de verdade mesmo pagamentos feitos no mesmo dia.
+        function registroContaNoCiclo(registro, inicioCicloData, resetTimestamp) {
+            if (inicioCicloData && registro.data < inicioCicloData) return false;
+            if (resetTimestamp && parseInt(registro.id, 10) < resetTimestamp) return false;
+            return true;
         }
 
         function calcularGuardadoLiquido(contaId) {
             const conta = contas.find(c => c.id === contaId);
-            const inicioCiclo = conta ? calcularInicioCicloEfetivo(conta) : null;
+            const inicioCiclo = conta ? calcularInicioCicloAtual(conta.diaPagamento) : null;
+            const resetTimestamp = conta ? (conta.cicloResetTimestamp || null) : null;
 
             const totalAportado = historicoAportes
-                .filter(a => a.contaId === contaId && (!inicioCiclo || a.data >= inicioCiclo))
+                .filter(a => a.contaId === contaId && registroContaNoCiclo(a, inicioCiclo, resetTimestamp))
                 .reduce((acc, curr) => acc + curr.valor, 0);
 
             const totalConvertido = historicoSaidas
-                .filter(s => s.contaId === contaId && (!inicioCiclo || s.data >= inicioCiclo) && (
+                .filter(s => s.contaId === contaId && registroContaNoCiclo(s, inicioCiclo, resetTimestamp) && (
                     (s.tipo === 'pagamento' && s.convertidoDeGuardado) ||
                     s.tipo === 'transferencia' ||
                     s.tipo === 'retirada'
@@ -677,10 +679,11 @@
 
         function calcularPagoDireto(contaId) {
             const conta = contas.find(c => c.id === contaId);
-            const inicioCiclo = conta ? calcularInicioCicloEfetivo(conta) : null;
+            const inicioCiclo = conta ? calcularInicioCicloAtual(conta.diaPagamento) : null;
+            const resetTimestamp = conta ? (conta.cicloResetTimestamp || null) : null;
 
             return historicoSaidas
-                .filter(s => s.contaId === contaId && s.tipo === 'pagamento' && (!inicioCiclo || s.data >= inicioCiclo))
+                .filter(s => s.contaId === contaId && s.tipo === 'pagamento' && registroContaNoCiclo(s, inicioCiclo, resetTimestamp))
                 .reduce((acc, curr) => acc + curr.valor, 0);
         }
 
@@ -1081,10 +1084,10 @@
                 "Reiniciar Conta",
                 `Isso vai fazer "${conta.nome.toUpperCase()}" voltar a pedir separação de dinheiro a partir de hoje, mesmo já tendo sido quitada antes do vencimento. O histórico de pagamentos não é apagado. Deseja continuar?`,
                 function () {
-                    conta.inicioCicloManual = formatarDataISO(new Date());
+                    conta.cicloResetTimestamp = Date.now();
                     salvarNoStorage();
                     renderizar();
-                    mostrarMensagem("Reiniciado", `"${conta.nome.toUpperCase()}" foi reiniciada e já está pedindo separação de dinheiro de novo.`, "success");
+                    mostrarMensagem("Reiniciado", `"${conta.nome.toUpperCase()}" foi reiniciada: Já Guardado e Falta Pagar voltaram do zero, como uma conta nova — mantendo o mesmo dia de vencimento e valor total.`, "success");
                 }
             );
         }
