@@ -502,6 +502,34 @@
         </div>
     </div>
 
+    <!-- Modal Reajustar Guardado / Pago -->
+    <div id="modalAjuste" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
+            <div class="p-5 border-b border-slate-800 flex justify-between items-center">
+                <h3 id="ajusteTitulo" class="font-bold text-white text-base">Reajustar Valores</h3>
+                <button onclick="fecharModalAjuste()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">✕</span></button>
+            </div>
+            <form onsubmit="salvarAjuste(event)" class="p-6 space-y-4">
+                <input type="hidden" id="ajusteContaId">
+                <p class="text-[11px] text-slate-400">Digite o valor que está correto AGORA. O sistema calcula a diferença e registra um "Ajuste Manual" no histórico — sem precisar lançar cada retirada.</p>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Já Guardado (R$)</label>
+                    <input type="number" step="0.01" min="0" id="ajusteGuardado" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                    <p id="ajusteGuardadoAtual" class="text-[10px] text-slate-400 mt-1"></p>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Já Pago (R$)</label>
+                    <input type="number" step="0.01" min="0" id="ajustePago" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                    <p id="ajustePagoAtual" class="text-[10px] text-slate-400 mt-1"></p>
+                </div>
+                <div class="pt-4 flex justify-end gap-3 border-t border-slate-800">
+                    <button type="button" onclick="fecharModalAjuste()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs font-medium transition-colors cursor-pointer">Cancelar</button>
+                    <button type="submit" class="bg-sky-600 hover:bg-sky-500 text-white px-5 py-2.5 rounded-xl text-xs font-medium shadow-lg shadow-sky-600/25 transition-all cursor-pointer">Salvar Ajuste</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Modal de Mensagem / Alerta Customizado -->
     <div id="modalMensagem" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl p-6 text-center space-y-4">
@@ -687,7 +715,8 @@
                 .filter(s => s.contaId === contaId && registroContaNoCiclo(s, inicioCiclo, resetTimestamp) && (
                     (s.tipo === 'pagamento' && s.convertidoDeGuardado) ||
                     s.tipo === 'transferencia' ||
-                    s.tipo === 'retirada'
+                    s.tipo === 'retirada' ||
+                    s.tipo === 'ajuste'
                 ))
                 .reduce((acc, curr) => acc + curr.valor, 0);
 
@@ -851,6 +880,7 @@
                         <button onclick="abrirModalAporteParaConta('${conta.id}')" title="Separar Dinheiro" class="text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">🪙</span></button>
                         <button onclick="abrirModalConverterParaConta('${conta.id}')" title="Efetivar Guardado em Pago" class="text-slate-400 hover:text-teal-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">🔁</span></button>
                         <button onclick="abrirModalSaidaParaConta('${conta.id}')" title="Registrar Saída / Vale" class="text-slate-400 hover:text-rose-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">📤</span></button>
+                        <button onclick="abrirModalAjuste('${conta.id}')" title="Reajustar Já Guardado / Já Pago" class="text-slate-400 hover:text-sky-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">🛠️</span></button>
                         <button onclick="editarConta('${conta.id}')" title="Editar Conta" class="text-slate-400 hover:text-indigo-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">✏️</span></button>
                         <button onclick="excluirConta('${conta.id}')" title="Excluir Conta" class="text-slate-400 hover:text-rose-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">🗑️</span></button>
                     </td>
@@ -972,7 +1002,9 @@
             saidasOrdenadas.forEach(saida => {
                 const conta = contas.find(c => c.id === saida.contaId);
                 const nomeConta = conta ? conta.nome : 'Outra Ocasião / Caixa';
-                const tipoBadge = saida.tipo === 'pagamento'
+                const tipoBadge = (saida.tipo === 'ajuste' || saida.ajusteManual)
+                    ? '<span class="text-sky-400 font-semibold">Ajuste Manual</span>'
+                    : saida.tipo === 'pagamento'
                     ? '<span class="text-teal-400 font-semibold">Pagamento Direto</span>'
                     : saida.tipo === 'transferencia'
                         ? '<span class="text-violet-400 font-semibold">Transferência (saiu)</span>'
@@ -1107,6 +1139,54 @@
                     mostrarMensagem("Reiniciado", `"${conta.nome.toUpperCase()}" foi reiniciada: Já Guardado e Falta Pagar voltaram do zero, como uma conta nova — mantendo o mesmo dia de vencimento e valor total.`, "success");
                 }
             );
+        }
+
+        function abrirModalAjuste(contaId) {
+            const conta = contas.find(c => c.id === contaId);
+            if (!conta) return;
+            const guardado = calcularGuardadoLiquido(contaId);
+            const pago = calcularPagoDireto(contaId);
+            document.getElementById('ajusteTitulo').innerText = `Reajustar: ${conta.nome.toUpperCase()}`;
+            document.getElementById('ajusteContaId').value = contaId;
+            document.getElementById('ajusteGuardado').value = guardado.toFixed(2);
+            document.getElementById('ajustePago').value = pago.toFixed(2);
+            document.getElementById('ajusteGuardadoAtual').innerText = `Valor atual: ${formatarMoeda(guardado)}`;
+            document.getElementById('ajustePagoAtual').innerText = `Valor atual: ${formatarMoeda(pago)}`;
+            document.getElementById('modalAjuste').classList.remove('hidden');
+        }
+
+        function fecharModalAjuste() {
+            document.getElementById('modalAjuste').classList.add('hidden');
+        }
+
+        // Registra só a diferença como "Ajuste Manual", mantendo o histórico e os cálculos consistentes
+        function salvarAjuste(event) {
+            event.preventDefault();
+            const contaId = document.getElementById('ajusteContaId').value;
+            const novoGuardado = parseFloat(document.getElementById('ajusteGuardado').value);
+            const novoPago = parseFloat(document.getElementById('ajustePago').value);
+            if (isNaN(novoGuardado) || isNaN(novoPago) || novoGuardado < 0 || novoPago < 0) {
+                mostrarMensagem("Erro", "Informe valores válidos (zero ou maiores).", "info");
+                return;
+            }
+            const data = new Date().toISOString().split('T')[0];
+            const base = Date.now();
+            const deltaGuardado = Math.round((novoGuardado - calcularGuardadoLiquido(contaId)) * 100) / 100;
+            const deltaPago = Math.round((novoPago - calcularPagoDireto(contaId)) * 100) / 100;
+
+            if (deltaGuardado > 0) {
+                historicoAportes.push({ id: base + '-a1', contaId, valor: deltaGuardado, data, motivo: 'Ajuste manual do valor guardado' });
+            } else if (deltaGuardado < 0) {
+                historicoSaidas.push({ id: base + '-a2', contaId, tipo: 'ajuste', valor: -deltaGuardado, data, motivo: 'Ajuste manual do valor guardado', convertidoDeGuardado: false, ajusteManual: true });
+            }
+            if (deltaPago !== 0) {
+                historicoSaidas.push({ id: base + '-a3', contaId, tipo: 'pagamento', valor: deltaPago, data, motivo: 'Ajuste manual do valor pago', convertidoDeGuardado: false, ajusteManual: true });
+            }
+
+            salvarNoStorage();
+            fecharModalAjuste();
+            renderizar();
+            mostrarMensagem("Ajustado", (deltaGuardado === 0 && deltaPago === 0) ? "Nada mudou: os valores já estavam iguais." : "Valores reajustados e registrados como Ajuste Manual no histórico.", "success");
         }
 
         function toggleOcultarConta(id) {
