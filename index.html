@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle Financeiro Inteligente</title>
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%B0%3C/text%3E%3C/svg%3E">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -68,10 +71,26 @@
             <button onclick="enviarResumoWhatsApp()" class="bg-[#25D366] hover:bg-[#20bd5a] text-white px-3.5 py-2 rounded-xl text-xs font-medium shadow-lg shadow-[#25D366]/25 transition-all flex items-center gap-2 cursor-pointer">
                 <span role="img" aria-hidden="true">📲</span> Resumo Rápido (WhatsApp)
             </button>
+            <button onclick="abrirModalBackup()" class="bg-slate-700 hover:bg-slate-600 text-white px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-2 cursor-pointer">
+                <span role="img" aria-hidden="true">💾</span> Backup
+            </button>
+            <button id="statusSync" onclick="salvarNoStorage()" title="Estado da sincronização" class="bg-slate-800 text-slate-300 px-3 py-2 rounded-xl text-[11px] font-medium cursor-pointer">☁️ ...</button>
+            <div class="flex items-center gap-2 text-[11px] text-slate-400">
+                <span id="headerUsuario" class="max-w-[160px] truncate"></span>
+                <button onclick="sair()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-2 rounded-xl text-xs font-medium cursor-pointer">Sair</button>
+            </div>
         </div>
     </header>
 
     <main class="flex-1 overflow-y-auto p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-6">
+
+        <div id="abasPerfil" class="flex flex-wrap gap-2">
+            <button id="aba-empresarial" onclick="trocarPerfil('empresarial')"><span role="img" aria-hidden="true">🏢</span> Empresarial</button>
+            <button id="aba-pessoal" onclick="trocarPerfil('pessoal')"><span role="img" aria-hidden="true">🏠</span> Pessoal</button>
+            <button id="aba-geral" onclick="trocarPerfil('geral')"><span role="img" aria-hidden="true">📊</span> Geral (montante + gráficos)</button>
+        </div>
+
+        <div id="painelContas" class="space-y-6">
 
         <!-- Cards de Resumo Geral -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -112,6 +131,8 @@
             </div>
         </div>
 
+        <div id="painelPrevisao" class="hidden"></div>
+
         <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
             <div class="p-4 sm:p-5 border-b border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <div>
@@ -126,6 +147,10 @@
                     <label class="flex items-center gap-2 text-[11px] text-slate-400 whitespace-nowrap cursor-pointer select-none">
                         <input type="checkbox" id="checkMostrarOcultas" onchange="renderizar()" class="accent-indigo-500 w-3.5 h-3.5 cursor-pointer">
                         Mostrar ocultas
+                    </label>
+                    <label class="flex items-center gap-2 text-[11px] text-slate-400 whitespace-nowrap cursor-pointer select-none">
+                        <input type="checkbox" id="checkEsconderQuitadas" onchange="renderizar()" class="accent-indigo-500 w-3.5 h-3.5 cursor-pointer">
+                        Esconder quitadas
                     </label>
                     <select id="ordenarPor" onchange="renderizar()" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500 cursor-pointer">
                         <option value="prioridade">Ordenar: Prioridade</option>
@@ -225,23 +250,18 @@
             </div>
         </div>
 
+        </div>
+        <div id="painelGeral" class="hidden space-y-6"></div>
     </main>
 
-    <!-- INÍCIO DA INTEGRAÇÃO COM O SUPABASE -->
-    <!-- 1. Carrega a biblioteca oficial do Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- 2. Inicializa o cliente do Supabase com suas chaves -->
+    <!-- Supabase: biblioteca (versão fixa) e cliente -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
     <script>
-        const SUPABASE_URL = 'sb_publishable_1xc_TQ14g4RIoTf5dGVkLQ_QUOVjFVm';      // Cole sua URL do Supabase aqui
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl5dnV5dHpzYnlvc2xsZmZicWZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxNzAyMTAsImV4cCI6MjEwNDc0NjIxMH0.foRNbqba4mLJulT8N3WMKWULXL2ATLNUR-ZSJdYgxEw';    // Cole sua chave anon do Supabase aqui
-        
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const SUPABASE_URL = 'https://tyahtemorjsgpyshoqnq.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5YWh0ZW1vcmpzZ3B5c2hvcW5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwMjI1NTcsImV4cCI6MjEwNzU5ODU1N30.d-VVC6HYYQj_9zfxOWXWtM8DvWEl6tMTzxvJQFuZdFE';
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     </script>
-    <!-- FIM DA INTEGRAÇÃO COM O SUPABASE -->
 
-</body>
-</html>
 
     <!-- Modal Adicionar / Editar Conta -->
     <div id="modalConta" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
@@ -257,17 +277,50 @@
                     <input type="text" id="contaNome" required placeholder="Ex: Rafael, Aluguel..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
                 </div>
                 <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Perfil</label>
+                    <select id="contaPerfil" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        <option value="empresarial">Empresarial</option>
+                        <option value="pessoal">Pessoal</option>
+                    </select>
+                </div>
+                <div>
                     <label class="block text-xs font-medium text-slate-300 mb-1">Prioridade (1 = Mais URGENTE / Alta)</label>
                     <input type="number" id="contaPrioridade" min="1" value="1" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
                 </div>
-                <div>
+                <div id="containerDiaPagamento">
                     <label class="block text-xs font-medium text-slate-300 mb-1">Dia(s) do Vencimento (Ex: 25 ou 05 e 20)</label>
                     <input type="text" id="contaDiaPagamento" required placeholder="Ex: 05 e 20" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
                     <p class="text-[10px] text-slate-400 mt-1">Separe múltiplos dias por vírgula ou "e" (ex: 05 e 20). O valor total será dividido igualmente entre as datas.</p>
                 </div>
                 <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Como é calculado o valor?</label>
+                    <select id="contaModoValor" onchange="atualizarCampoModoValor()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        <option value="fixo">Valor fixo no mês</option>
+                        <option value="diaria">Por dia trabalhado (diarista): muda conforme os dias do mês</option>
+                    </select>
+                </div>
+                <div id="containerTotalFixo">
                     <label class="block text-xs font-medium text-slate-300 mb-1">Valor Total no Mês (R$)</label>
                     <input type="number" step="0.01" id="contaTotal" required placeholder="Ex: 2000.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <div id="containerDiaria" class="hidden space-y-3">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Valor por dia trabalhado (R$)</label>
+                        <input type="number" step="0.01" min="0" id="contaValorDiaria" oninput="atualizarPreviaDiaria()" placeholder="Ex: 60.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Dias da semana em que trabalha</label>
+                        <div id="contaDiasSemana" class="flex flex-wrap gap-2">
+                            <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer"><input type="checkbox" value="1" checked onchange="atualizarPreviaDiaria()" class="accent-indigo-500"> Seg</label>
+                            <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer"><input type="checkbox" value="2" checked onchange="atualizarPreviaDiaria()" class="accent-indigo-500"> Ter</label>
+                            <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer"><input type="checkbox" value="3" checked onchange="atualizarPreviaDiaria()" class="accent-indigo-500"> Qua</label>
+                            <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer"><input type="checkbox" value="4" checked onchange="atualizarPreviaDiaria()" class="accent-indigo-500"> Qui</label>
+                            <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer"><input type="checkbox" value="5" checked onchange="atualizarPreviaDiaria()" class="accent-indigo-500"> Sex</label>
+                            <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer"><input type="checkbox" value="6" checked onchange="atualizarPreviaDiaria()" class="accent-indigo-500"> Sáb</label>
+                            <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer"><input type="checkbox" value="0" checked onchange="atualizarPreviaDiaria()" class="accent-indigo-500"> Dom</label>
+                        </div>
+                    </div>
+                    <p id="previaDiaria" class="text-[11px] text-amber-400"></p>
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-slate-300 mb-1">Recorrência</label>
@@ -299,7 +352,7 @@
             <form id="formAporte" onsubmit="salvarAporte(event)" class="p-6 space-y-4">
                 <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-xs space-y-1.5">
                     <div class="flex justify-between items-center">
-                        <span class="text-amber-200/80">Total a separar hoje (todas as contas):</span>
+                        <span class="text-amber-200/80">Total a separar hoje (aba atual):</span>
                         <span id="aporteInfoTotalDia" class="font-bold text-amber-400">R$ 0,00</span>
                     </div>
                     <div class="flex justify-between items-center">
@@ -502,6 +555,24 @@
         </div>
     </div>
 
+    <!-- Modal Backup (exportar / importar) -->
+    <div id="modalBackup" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
+            <div class="p-5 border-b border-slate-800 flex justify-between items-center">
+                <h3 class="font-bold text-white text-base">Backup dos Dados</h3>
+                <button onclick="fecharModalBackup()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">✕</span></button>
+            </div>
+            <div class="p-6 space-y-3">
+                <p class="text-[11px] text-slate-400">Exportar: clique em "Gerar backup", copie todo o texto e guarde (ou cole no outro lugar). Importar: cole o texto aqui e clique em "Importar" — isso substitui os dados atuais.</p>
+                <textarea id="backupTexto" rows="9" spellcheck="false" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-[11px] text-white font-mono focus:outline-none focus:border-indigo-500" placeholder="O backup aparece aqui, ou cole um backup para importar..."></textarea>
+                <div class="flex flex-wrap justify-end gap-3">
+                    <button type="button" onclick="gerarBackup()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2.5 rounded-xl text-xs font-medium transition-colors cursor-pointer">Gerar backup</button>
+                    <button type="button" onclick="importarBackup()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2.5 rounded-xl text-xs font-medium transition-colors cursor-pointer">Importar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Reajustar Guardado / Pago -->
     <div id="modalAjuste" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
@@ -542,6 +613,27 @@
         </div>
     </div>
 
+    <!-- Tela de Login -->
+    <div id="telaLogin" class="fixed inset-0 z-[100] bg-slate-950 flex items-center justify-center p-4">
+        <form onsubmit="entrar(event)" class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm p-6 space-y-4 shadow-2xl">
+            <div class="text-center space-y-1">
+                <div class="text-3xl" role="img" aria-hidden="true">💰</div>
+                <h1 class="font-bold text-white text-lg">Finanças Inteligentes</h1>
+                <p class="text-xs text-slate-400">Entre para acessar suas contas em qualquer aparelho</p>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">E-mail</label>
+                <input type="email" id="loginEmail" required autocomplete="username" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Senha</label>
+                <input type="password" id="loginSenha" required autocomplete="current-password" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+            </div>
+            <p id="loginErro" class="text-xs text-rose-400 hidden"></p>
+            <button id="loginBotao" type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer">Entrar</button>
+        </form>
+    </div>
+
     <!-- Modal de Confirmação (substitui window.confirm, que não funciona dentro do artifact) -->
     <div id="modalConfirmar" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-[60] flex items-center justify-center p-4 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl p-6 text-center space-y-4">
@@ -560,24 +652,365 @@
     <script>
         // Estado inicial da aplicação com suporte a quinzenas e divisão automática
         let totalSepararDiaGlobal = 0; // atualizado a cada renderizar(), usado no cálculo de "Dias de Fôlego"
-        let contas = JSON.parse(localStorage.getItem('fin_contas')) || [
-            { id: '1', nome: 'jose', prioridade: 1, diaPagamento: '25', total: 3000.00 },
-            { id: '2', nome: 'agiota', prioridade: 2, diaPagamento: '27', total: 2500.00 },
-            { id: '3', nome: 'aluguel', prioridade: 3, diaPagamento: '5', total: 2000.00 },
-            { id: '4', nome: 'rafael', prioridade: 4, diaPagamento: '05 e 20', total: 2000.00 },
-            { id: '5', nome: 'virgilio', prioridade: 5, diaPagamento: '05 e 20', total: 2200.00 },
-            { id: '6', nome: 'vinicius', prioridade: 6, diaPagamento: '05 e 20', total: 2200.00 },
-            { id: '7', nome: 'internet', prioridade: 7, diaPagamento: '10', total: 100.00 },
-            { id: '8', nome: 'sistema', prioridade: 8, diaPagamento: '5', total: 300.00 }
-        ];
+        // ================= DADOS NA NUVEM (Supabase) =================
+        const TABELAS = { contas: 'financas_contas', aportes: 'financas_aportes', saidas: 'financas_saidas' };
+        let contas = [];
+        let historicoAportes = [];
+        let historicoSaidas = [];
 
-        let historicoAportes = JSON.parse(localStorage.getItem('fin_aportes')) || [];
-        let historicoSaidas = JSON.parse(localStorage.getItem('fin_saidas')) || [];
+        let usuarioAtual = null;
+        let ultimoSync = { contas: new Map(), aportes: new Map(), saidas: new Map() }; // id -> json canônico já salvo
+        let filaSync = Promise.resolve();
+        let syncTimer = null;
+        let syncPendente = false;
+        let sincronizando = false;
+        let recarregarDepois = false;
+        let canalRealtime = null;
+        let timerRecarregar = null;
 
+        function listaPorChave(chave) {
+            return chave === 'contas' ? contas : (chave === 'aportes' ? historicoAportes : historicoSaidas);
+        }
+
+        // JSON com chaves ordenadas (o jsonb do banco reordena as chaves)
+        function canon(v) {
+            if (Array.isArray(v)) return '[' + v.map(canon).join(',') + ']';
+            if (v && typeof v === 'object') {
+                return '{' + Object.keys(v).filter(k => v[k] !== undefined).sort()
+                    .map(k => JSON.stringify(k) + ':' + canon(v[k])).join(',') + '}';
+            }
+            return JSON.stringify(v);
+        }
+
+        function ordenarPorId(arr) {
+            return [...arr].sort((a, b) => {
+                const na = parseInt(a.id, 10) || 0, nb = parseInt(b.id, 10) || 0;
+                return na !== nb ? na - nb : String(a.id).localeCompare(String(b.id));
+            });
+        }
+
+        function definirStatusSync(estado) {
+            const el = document.getElementById('statusSync');
+            if (!el) return;
+            const mapa = {
+                ok:       ['☁️ Sincronizado', 'bg-slate-800 text-emerald-400'],
+                salvando: ['☁️ Salvando...', 'bg-slate-800 text-amber-400'],
+                erro:     ['⚠️ Erro ao salvar — toque p/ tentar de novo', 'bg-rose-900/40 text-rose-300'],
+                offline:  ['📴 Sem internet', 'bg-slate-800 text-slate-400']
+            };
+            const [texto, cls] = mapa[estado] || mapa.ok;
+            el.innerText = texto;
+            el.className = cls + ' px-3 py-2 rounded-xl text-[11px] font-medium cursor-pointer';
+        }
+
+        // Mantém o nome antigo: todas as telas já chamam salvarNoStorage() depois de mudar algo.
+        // Agora ela envia para a nuvem (com um pequeno atraso para agrupar mudanças seguidas).
         function salvarNoStorage() {
-            localStorage.setItem('fin_contas', JSON.stringify(contas));
-            localStorage.setItem('fin_aportes', JSON.stringify(historicoAportes));
-            localStorage.setItem('fin_saidas', JSON.stringify(historicoSaidas));
+            if (!usuarioAtual) return;
+            definirStatusSync(navigator.onLine ? 'salvando' : 'offline');
+            syncPendente = true;
+            clearTimeout(syncTimer);
+            syncTimer = setTimeout(() => {
+                syncPendente = false;
+                filaSync = filaSync.then(sincronizarComNuvem);
+            }, 400);
+        }
+
+        async function sincronizarComNuvem() {
+            if (!usuarioAtual) return;
+            sincronizando = true;
+            try {
+                for (const chave of Object.keys(TABELAS)) {
+                    const tabela = TABELAS[chave];
+                    const atual = new Map(listaPorChave(chave).map(item => [String(item.id), canon(item)]));
+                    const anterior = ultimoSync[chave];
+
+                    const upserts = [];
+                    atual.forEach((json, id) => {
+                        if (anterior.get(id) !== json) {
+                            const item = listaPorChave(chave).find(x => String(x.id) === id);
+                            upserts.push({ user_id: usuarioAtual.id, id, dados: JSON.parse(JSON.stringify(item)), updated_at: new Date().toISOString() });
+                        }
+                    });
+                    const remover = [...anterior.keys()].filter(id => !atual.has(id));
+
+                    if (upserts.length) {
+                        const { error } = await sb.from(tabela).upsert(upserts, { onConflict: 'user_id,id' });
+                        if (error) throw error;
+                    }
+                    if (remover.length) {
+                        const { error } = await sb.from(tabela).delete().in('id', remover);
+                        if (error) throw error;
+                    }
+                    ultimoSync[chave] = atual;
+                }
+                definirStatusSync('ok');
+            } catch (e) {
+                console.error('Erro ao sincronizar:', e);
+                definirStatusSync(navigator.onLine ? 'erro' : 'offline');
+            } finally {
+                sincronizando = false;
+                if (recarregarDepois && !syncPendente) {
+                    recarregarDepois = false;
+                    carregarDadosDaNuvem().catch(console.error);
+                }
+            }
+        }
+
+        async function carregarDadosDaNuvem(primeiraVez = false) {
+            const chaves = Object.keys(TABELAS);
+            const resultados = await Promise.all(chaves.map(c => sb.from(TABELAS[c]).select('id,dados')));
+            resultados.forEach(r => { if (r.error) throw r.error; });
+
+            const novas = {};
+            chaves.forEach((chave, i) => {
+                novas[chave] = ordenarPorId(resultados[i].data.map(r => Object.assign({}, r.dados, { id: r.id })));
+            });
+
+            const mudou = chaves.some(chave => canon(novas[chave]) !== canon(ordenarPorId(listaPorChave(chave))));
+            contas = novas.contas;
+            historicoAportes = novas.aportes;
+            historicoSaidas = novas.saidas;
+            chaves.forEach(chave => {
+                ultimoSync[chave] = new Map(novas[chave].map(item => [String(item.id), canon(item)]));
+            });
+
+            if (mudou || primeiraVez) renderizar();
+            definirStatusSync(navigator.onLine ? 'ok' : 'offline');
+        }
+
+        // Atualiza sozinho quando OUTRO aparelho muda alguma coisa
+        function aoReceberMudanca() {
+            clearTimeout(timerRecarregar);
+            timerRecarregar = setTimeout(() => {
+                if (syncPendente || sincronizando) { recarregarDepois = true; return; }
+                carregarDadosDaNuvem().catch(console.error);
+            }, 300);
+        }
+
+        function iniciarRealtime() {
+            if (canalRealtime) { sb.removeChannel(canalRealtime); canalRealtime = null; }
+            canalRealtime = sb.channel('financas-' + usuarioAtual.id);
+            Object.values(TABELAS).forEach(tabela => {
+                canalRealtime.on('postgres_changes', { event: '*', schema: 'public', table: tabela }, aoReceberMudanca);
+            });
+            canalRealtime.subscribe();
+        }
+
+        // ================= LOGIN =================
+        function mostrarLogin(msg) {
+            document.getElementById('telaLogin').classList.remove('hidden');
+            const erro = document.getElementById('loginErro');
+            if (msg) { erro.innerText = msg; erro.classList.remove('hidden'); } else { erro.classList.add('hidden'); }
+        }
+
+        async function entrar(event) {
+            event.preventDefault();
+            const botao = document.getElementById('loginBotao');
+            botao.disabled = true; botao.innerText = 'Entrando...';
+            const { error } = await sb.auth.signInWithPassword({
+                email: document.getElementById('loginEmail').value.trim(),
+                password: document.getElementById('loginSenha').value
+            });
+            botao.disabled = false; botao.innerText = 'Entrar';
+            if (error) mostrarLogin('E-mail ou senha incorretos.');
+            // se deu certo, o onAuthStateChange cuida do resto
+        }
+
+        async function sair() {
+            await sb.auth.signOut();
+        }
+
+        async function aplicarSessao(sessao) {
+            const novoId = sessao && sessao.user ? sessao.user.id : null;
+            if (novoId === (usuarioAtual ? usuarioAtual.id : null)) return; // nada mudou
+            if (!sessao) {
+                usuarioAtual = null;
+                if (canalRealtime) { sb.removeChannel(canalRealtime); canalRealtime = null; }
+                contas = []; historicoAportes = []; historicoSaidas = [];
+                ultimoSync = { contas: new Map(), aportes: new Map(), saidas: new Map() };
+                document.getElementById('loginSenha').value = '';
+                mostrarLogin();
+                return;
+            }
+            usuarioAtual = sessao.user;
+            document.getElementById('telaLogin').classList.add('hidden');
+            document.getElementById('headerUsuario').innerText = sessao.user.email || '';
+            try {
+                await carregarDadosDaNuvem(true);
+                iniciarRealtime();
+            } catch (e) {
+                console.error('Erro ao carregar dados:', e);
+                definirStatusSync('erro');
+                mostrarMensagem('Erro', 'Não consegui carregar seus dados. Verifique a internet e recarregue a página.', 'info');
+            }
+        }
+
+        async function iniciarApp() {
+            const { data } = await sb.auth.getSession();
+            await aplicarSessao(data.session);
+            if (!data.session) mostrarLogin();
+            sb.auth.onAuthStateChange((evento, sessao) => {
+                setTimeout(() => aplicarSessao(sessao), 0); // evita travar dentro do callback do Supabase
+            });
+            window.addEventListener('online', () => { if (usuarioAtual) salvarNoStorage(); });
+            window.addEventListener('offline', () => definirStatusSync('offline'));
+            document.addEventListener('visibilitychange', () => {
+                // voltou pro app (ex: abriu o celular de novo): busca o que mudou enquanto estava fora
+                if (document.visibilityState === 'visible' && usuarioAtual) aoReceberMudanca();
+            });
+        }
+
+
+        // ================= PERFIS: Empresarial / Pessoal / Geral =================
+        let perfilAtivo = (function () {
+            try {
+                const p = localStorage.getItem('fin_perfil');
+                return ['empresarial', 'pessoal', 'geral'].includes(p) ? p : 'empresarial';
+            } catch (e) { return 'empresarial'; }
+        })();
+        let ultimasLinhas = [];
+        const ROTULO_PERFIL = { empresarial: 'Empresarial', pessoal: 'Pessoal' };
+
+        function perfilDe(conta) { return conta && conta.perfil === 'pessoal' ? 'pessoal' : 'empresarial'; }
+        function perfilDeContaId(contaId) {
+            const c = contas.find(x => x.id === contaId);
+            return c ? perfilDe(c) : null;
+        }
+        function perfilDaSaida(s) {
+            if (s.contaId) return perfilDeContaId(s.contaId);
+            return s.perfil === 'pessoal' ? 'pessoal' : 'empresarial';
+        }
+        function esc(t) {
+            return String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+        }
+
+        function trocarPerfil(p) {
+            perfilAtivo = p;
+            try { localStorage.setItem('fin_perfil', p); } catch (e) {}
+            renderizar();
+        }
+
+        function atualizarAbas() {
+            ['empresarial', 'pessoal', 'geral'].forEach(p => {
+                const el = document.getElementById('aba-' + p);
+                if (!el) return;
+                el.className = 'px-4 py-2 rounded-xl text-xs font-semibold cursor-pointer transition-all ' +
+                    (p === perfilAtivo
+                        ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/25'
+                        : 'bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800');
+            });
+            document.getElementById('painelContas').classList.toggle('hidden', perfilAtivo === 'geral');
+            document.getElementById('painelGeral').classList.toggle('hidden', perfilAtivo !== 'geral');
+        }
+
+        function blocoBarras(itens, vazio) {
+            if (itens.length === 0) return `<p class="text-xs text-slate-500">${vazio}</p>`;
+            const total = itens.reduce((a, i) => a + i.valor, 0);
+            const max = Math.max(...itens.map(i => i.valor));
+            return itens.map(i => {
+                const cor = i.perfil === 'pessoal' ? 'bg-emerald-500' : 'bg-indigo-500';
+                const larg = max > 0 ? Math.max(2, (i.valor / max) * 100) : 0;
+                const pct = total > 0 ? Math.round((i.valor / total) * 100) : 0;
+                return `<div class="space-y-1">
+                    <div class="flex justify-between gap-3 text-xs">
+                        <span class="text-slate-200 uppercase font-medium truncate">${esc(i.nome)}</span>
+                        <span class="text-slate-400 whitespace-nowrap">${formatarMoeda(i.valor)} · ${pct}%</span>
+                    </div>
+                    <div class="h-2.5 rounded-full bg-slate-800 overflow-hidden"><div class="h-full rounded-full ${cor}" style="width:${larg}%"></div></div>
+                </div>`;
+            }).join('');
+        }
+
+        function renderizarGeral() {
+            const vazio = () => ({ sep: 0, total: 0, guard: 0, pago: 0, falta: 0, n: 0 });
+            const resumo = { empresarial: vazio(), pessoal: vazio() };
+            const compromissos = [];
+            ultimasLinhas.forEach(l => {
+                if (l.conta.oculta || l.concluida) return;
+                const p = perfilDe(l.conta);
+                const r = resumo[p];
+                r.sep += l.separarPorDia; r.total += l.conta.total; r.guard += l.guardado;
+                r.pago += l.pagoDireto; r.falta += l.faltaPagar; r.n++;
+                compromissos.push({ nome: l.conta.nome, valor: l.conta.total, perfil: p });
+            });
+            const soma = k => resumo.empresarial[k] + resumo.pessoal[k];
+            const retE = calcularRetiradas('empresarial'), retP = calcularRetiradas('pessoal');
+
+            const cartao = (titulo, r, ret, borda) => `
+                <div class="bg-slate-900 border ${borda} rounded-2xl p-4 sm:p-5 space-y-3">
+                    <div class="flex justify-between items-center"><h3 class="font-bold text-white text-sm">${titulo}</h3><span class="text-[10px] text-slate-400">${r.n} conta(s)</span></div>
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div><div class="text-slate-400">Separar por dia</div><div class="font-bold text-amber-400 text-base">${formatarMoeda(r.sep)}</div></div>
+                        <div><div class="text-slate-400">Compromisso mensal</div><div class="font-bold text-white text-base">${formatarMoeda(r.total)}</div></div>
+                        <div><div class="text-slate-400">Já guardado</div><div class="font-bold text-emerald-400">${formatarMoeda(r.guard)}</div></div>
+                        <div><div class="text-slate-400">Falta pagar</div><div class="font-bold text-rose-400">${formatarMoeda(r.falta)}</div></div>
+                        <div><div class="text-slate-400">Já pago</div><div class="font-bold text-teal-400">${formatarMoeda(r.pago)}</div></div>
+                        <div><div class="text-slate-400">Retiradas</div><div class="font-bold text-rose-300">${formatarMoeda(ret)}</div></div>
+                    </div>
+                </div>`;
+
+            const totalComp = soma('total');
+            const pctE = totalComp > 0 ? (resumo.empresarial.total / totalComp) * 100 : 0;
+
+            compromissos.sort((a, b) => b.valor - a.valor);
+            const topComp = compromissos.slice(0, 10);
+
+            // Saídas reais (pagamentos + retiradas) do mês atual, somadas por conta
+            const mes = formatarDataISO(new Date()).slice(0, 7);
+            const porConta = new Map();
+            historicoSaidas.forEach(s => {
+                if ((s.tipo !== 'pagamento' && s.tipo !== 'retirada') || s.ajusteManual || !(s.valor > 0)) return;
+                if (!String(s.data).startsWith(mes)) return;
+                const conta = contas.find(c => c.id === s.contaId);
+                const perfil = perfilDaSaida(s) || 'empresarial';
+                const chave = s.contaId ? 'c' + s.contaId : 'ext-' + perfil;
+                const nome = s.contaId ? (conta ? conta.nome : 'Conta removida') : `Retiradas fora de conta (${ROTULO_PERFIL[perfil]})`;
+                const atual = porConta.get(chave) || { nome, valor: 0, perfil };
+                atual.valor += s.valor;
+                porConta.set(chave, atual);
+            });
+            const saidasMes = [...porConta.values()].sort((a, b) => b.valor - a.valor).slice(0, 10);
+            const totalSaidasMes = [...porConta.values()].reduce((a, i) => a + i.valor, 0);
+
+            document.getElementById('painelGeral').innerHTML = `
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <div class="text-xs text-slate-400 uppercase tracking-wider">Total a separar por dia (Empresarial + Pessoal)</div>
+                        <div class="text-2xl font-bold text-amber-400">${formatarMoeda(soma('sep'))}</div>
+                    </div>
+                    <div class="text-right text-xs text-slate-400">
+                        <div>Compromisso mensal: <span class="font-bold text-white">${formatarMoeda(totalComp)}</span></div>
+                        <div>Falta pagar: <span class="font-bold text-rose-400">${formatarMoeda(soma('falta'))}</span> · Guardado: <span class="font-bold text-emerald-400">${formatarMoeda(soma('guard'))}</span></div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    ${cartao('🏢 Empresarial', resumo.empresarial, retE, 'border-indigo-500/40')}
+                    ${cartao('🏠 Pessoal', resumo.pessoal, retP, 'border-emerald-500/40')}
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3">
+                    <h3 class="font-bold text-white text-sm">Divisão do compromisso mensal</h3>
+                    <div class="h-4 rounded-full overflow-hidden bg-slate-800 flex">
+                        <div class="h-full bg-indigo-500" style="width:${pctE}%"></div>
+                        <div class="h-full bg-emerald-500" style="width:${totalComp > 0 ? 100 - pctE : 0}%"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-slate-300">
+                        <span><span class="inline-block w-2.5 h-2.5 rounded-full bg-indigo-500 mr-1.5"></span>Empresarial ${Math.round(pctE)}%</span>
+                        <span><span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 mr-1.5"></span>Pessoal ${totalComp > 0 ? Math.round(100 - pctE) : 0}%</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3">
+                        <h3 class="font-bold text-white text-sm">Para onde vai o dinheiro (compromisso mensal)</h3>
+                        <p class="text-[11px] text-slate-400">As 10 contas que mais pesam no mês, nos dois perfis.</p>
+                        ${blocoBarras(topComp, 'Nenhuma conta cadastrada.')}
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3">
+                        <h3 class="font-bold text-white text-sm">Onde saiu mais dinheiro neste mês</h3>
+                        <p class="text-[11px] text-slate-400">Pagamentos e retiradas registrados em ${mes.split('-').reverse().join('/')}: ${formatarMoeda(totalSaidasMes)}.</p>
+                        ${blocoBarras(saidasMes, 'Ainda não há saídas registradas neste mês.')}
+                    </div>
+                </div>`;
         }
 
         function formatarMoeda(valor) {
@@ -704,7 +1137,7 @@
 
         function calcularGuardadoLiquido(contaId) {
             const conta = contas.find(c => c.id === contaId);
-            const inicioCiclo = conta ? calcularInicioCicloAtual(conta.diaPagamento) : null;
+            const inicioCiclo = conta ? inicioCicloDaConta(conta) : null;
             const resetTimestamp = conta ? (conta.cicloResetTimestamp || null) : null;
 
             const totalAportado = historicoAportes
@@ -725,7 +1158,7 @@
 
         function calcularPagoDireto(contaId) {
             const conta = contas.find(c => c.id === contaId);
-            const inicioCiclo = conta ? calcularInicioCicloAtual(conta.diaPagamento) : null;
+            const inicioCiclo = conta ? inicioCicloDaConta(conta) : null;
             const resetTimestamp = conta ? (conta.cicloResetTimestamp || null) : null;
 
             return historicoSaidas
@@ -755,13 +1188,14 @@
             };
         }
 
-        function calcularRetiradas() {
+        function calcularRetiradas(perfil = 'geral') {
             return historicoSaidas
-                .filter(s => s.tipo === 'retirada')
+                .filter(s => s.tipo === 'retirada' && (perfil === 'geral' || perfilDaSaida(s) === perfil))
                 .reduce((acc, curr) => acc + curr.valor, 0);
         }
 
         function renderizar() {
+            recalcularTotaisDiaristas();
             const busca = document.getElementById('filtroBusca').value.toLowerCase();
             const ordenarPor = document.getElementById('ordenarPor').value;
             const tbody = document.getElementById('tabelaContasBody');
@@ -770,7 +1204,7 @@
             let somaTotalGeral = 0;
             let somaTotalGuardado = 0;
             let somaTotalPago = 0;
-            let somaTotalRetiradas = calcularRetiradas();
+            let somaTotalRetiradas = calcularRetiradas(perfilAtivo);
             let somaTotalSepararDiaGeral = 0;
 
             const mostrarOcultas = document.getElementById('checkMostrarOcultas').checked;
@@ -778,7 +1212,8 @@
             // 1) Calcula os dados de cada conta visível (sem depender de ordem ainda)
             const linhas = [];
             contas.forEach(conta => {
-                if (busca && !conta.nome.toLowerCase().includes(busca)) return;
+                if (perfilAtivo !== 'geral' && perfilDe(conta) !== perfilAtivo) return;
+                if (perfilAtivo !== 'geral' && busca && !conta.nome.toLowerCase().includes(busca)) return;
 
                 // Conta oculta: só aparece na tabela se "Mostrar ocultas" estiver marcado,
                 // e NUNCA entra nos totais/somas (incluindo Separar por Dia).
@@ -787,12 +1222,16 @@
 
                 const diasArr = extrairDias(conta.diaPagamento);
                 const qtdDatas = Math.max(1, diasArr.length);
-                const valorPorData = conta.total / qtdDatas;
+                const diaria = conta.modoValor === 'diaria';
+                const diariaInativa = diariaInativaHoje(conta);
+                const valorPorData = valorPorOcorrencia(conta);
 
                 // Conta com número fixo de parcelas: depois de pagar a quantidade combinada,
                 // ela para de reiniciar e fica marcada como concluída (não entra mais nos totais).
                 const parcelasInfo = calcularStatusParcelas(conta, valorPorData);
                 const concluida = !!(parcelasInfo && parcelasInfo.concluida);
+                // Marcada à mão como "paga hoje" (vale só até a meia-noite)
+                const marcadaPagaHoje = conta.pagoHojeEm === formatarDataISO(new Date());
 
                 const guardado = calcularGuardadoLiquido(conta.id);
                 const pagoDireto = calcularPagoDireto(conta.id);
@@ -802,18 +1241,25 @@
                 let infoVenc = { dias: 1, texto: '-' };
                 let diasFaltam = 1;
 
-                if (!concluida) {
+                if (diariaInativa) {
+                    // Diarista em dia de folga: fica apagado (não oculto) até o próximo dia de trabalho
+                    const prox = proximoDiaTrabalho(conta);
+                    infoVenc = { dias: prox.dias, texto: 'Volta ' + prox.texto };
+                    diasFaltam = prox.dias;
+                } else if (!concluida) {
                     // guardado e pagoDireto já são do ciclo (vencimento) atual — assim que o
                     // vencimento passa, o ciclo reinicia sozinho e a conta volta a pedir pagamento.
                     const totalAbatidoOuPago = pagoDireto + guardado;
                     faltaPagar = Math.max(0, valorPorData - totalAbatidoOuPago);
 
-                    infoVenc = calcularProximoVencimento(conta.diaPagamento);
+                    infoVenc = diaria ? { dias: 1, texto: 'Hoje' } : calcularProximoVencimento(conta.diaPagamento);
                     diasFaltam = infoVenc.dias;
 
                     const diasCalculo = Math.max(1, diasFaltam);
                     separarPorDia = faltaPagar > 0 ? (faltaPagar / diasCalculo) : 0;
                 }
+
+                if (marcadaPagaHoje) separarPorDia = 0;
 
                 if (incluirNosTotais && !concluida) {
                     somaTotalGeral += conta.total;
@@ -822,7 +1268,7 @@
                     somaTotalSepararDiaGeral += separarPorDia;
                 }
 
-                linhas.push({ conta, guardado, pagoDireto, faltaPagar, infoVenc, diasFaltam, separarPorDia, parcelasInfo, concluida });
+                linhas.push({ conta, guardado, pagoDireto, faltaPagar, infoVenc, diasFaltam, separarPorDia, parcelasInfo, concluida, marcadaPagaHoje, diaria, diariaInativa });
             });
 
             // 2) Ordena conforme o filtro escolhido pelo usuário
@@ -835,12 +1281,41 @@
                 vencimentoAsc: (a, b) => a.diasFaltam - b.diasFaltam
             };
             linhas.sort(comparadores[ordenarPor] || comparadores.prioridade);
+            ultimasLinhas = linhas;
+
+            // Contas já quitadas ficam no fim da lista (ou somem, se "Esconder quitadas" estiver marcado)
+            const estaQuitada = l => l.concluida || (l.faltaPagar === 0 && !l.diariaInativa) || l.marcadaPagaHoje;
+            const esconderQuitadas = document.getElementById('checkEsconderQuitadas').checked;
+            const linhasVisiveis = esconderQuitadas
+                ? linhas.filter(l => !estaQuitada(l))
+                : [...linhas.filter(l => !estaQuitada(l)), ...linhas.filter(estaQuitada)];
 
             // 3) Monta as linhas da tabela já na ordem escolhida
-            linhas.forEach(({ conta, guardado, pagoDireto, faltaPagar, infoVenc, separarPorDia, parcelasInfo, concluida }) => {
+            linhasVisiveis.forEach(({ conta, guardado, pagoDireto, faltaPagar, infoVenc, separarPorDia, parcelasInfo, concluida, marcadaPagaHoje, diaria, diariaInativa }) => {
+                // Quitada no ciclo atual: aparece apagada e riscada, para não pagar duas vezes
+                const quitada = !concluida && ((!diariaInativa && faltaPagar === 0) || marcadaPagaHoje);
+                let notaDiaria = '';
+                if (conta.modoValor === 'diaria') {
+                    const hoje = new Date();
+                    const diasC = conta.diasSemana && conta.diasSemana.length ? conta.diasSemana : TODOS_OS_DIAS;
+                    const dAtual = diasTrabalhadosNoMes(diasC, hoje.getFullYear(), hoje.getMonth());
+                    const dProx = diasTrabalhadosNoMes(diasC, hoje.getFullYear(), hoje.getMonth() + 1);
+                    const tProx = conta.valorDiaria * dProx;
+                    notaDiaria = `<div class="text-[10px] font-normal text-slate-400">${dAtual} dias × ${formatarMoeda(conta.valorDiaria)}</div>` +
+                        `<div class="text-[10px] font-normal ${tProx > conta.total ? 'text-amber-400' : 'text-slate-500'}">Próx. mês: ${formatarMoeda(tProx)} (${dProx} dias)</div>`;
+                }
+                const hojeISO = formatarDataISO(new Date());
+                const pagoHoje = quitada && (marcadaPagaHoje || historicoSaidas.some(s =>
+                    s.contaId === conta.id && s.tipo === 'pagamento' && s.data === hojeISO && s.valor > 0 && !s.ajusteManual));
                 let statusHtml = '';
-                if (concluida) {
+                if (diariaInativa) {
+                    statusHtml = '<span class="px-2.5 py-1 rounded-full bg-slate-700/60 text-slate-300 border border-slate-600/40 text-[10px] font-semibold">Folga hoje</span>';
+                } else if (concluida) {
                     statusHtml = '<span class="px-2.5 py-1 rounded-full bg-violet-500/10 text-violet-400 border border-violet-500/20 text-[10px] font-semibold">Concluída</span>';
+                } else if (marcadaPagaHoje) {
+                    statusHtml = '<span class="px-2.5 py-1 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20 text-[10px] font-semibold">Pago hoje</span>';
+                } else if (diaria && faltaPagar > 0) {
+                    statusHtml = '<span class="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-semibold animate-pulse">Pagar hoje</span>';
                 } else if (faltaPagar === 0) {
                     statusHtml = '<span class="px-2.5 py-1 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20 text-[10px] font-semibold">Quitado</span>';
                 } else if (infoVenc.dias <= 3) {
@@ -854,20 +1329,35 @@
                 const tr = document.createElement('tr');
                 tr.className = (conta.oculta || concluida)
                     ? "hover:bg-slate-800/40 transition-colors opacity-40"
-                    : "hover:bg-slate-800/40 transition-colors";
+                    : diariaInativa
+                        ? "hover:bg-slate-800/40 transition-colors opacity-50 hover:opacity-100"
+                    : quitada
+                        ? "hover:bg-slate-800/40 transition-colors opacity-50 hover:opacity-100"
+                        : "hover:bg-slate-800/40 transition-colors";
+                const nomeBase = quitada
+                    ? `<span class="line-through decoration-slate-500">${conta.nome}</span>`
+                    : conta.nome;
+                const badgePagoHoje = pagoHoje
+                    ? ' <span class="ml-1.5 align-middle text-[9px] normal-case font-normal px-1.5 py-0.5 rounded-full bg-teal-500/10 text-teal-300 border border-teal-500/20">✅ Pago hoje</span>'
+                    : '';
                 const badgeParcelas = parcelasInfo
                     ? ` <span class="ml-1.5 align-middle text-[9px] normal-case font-normal px-1.5 py-0.5 rounded-full bg-violet-500/10 text-violet-300 border border-violet-500/20">Parcela ${Math.min(parcelasInfo.pagas + (concluida ? 0 : 1), parcelasInfo.total)}/${parcelasInfo.total}</span>`
                     : '';
                 const nomeExibido = (conta.oculta
                     ? `${conta.nome} <span class="ml-1.5 align-middle text-[9px] normal-case font-normal px-1.5 py-0.5 rounded-full bg-slate-700 text-slate-300"><span class="mr-1" role="img" aria-hidden="true">🙈</span>Oculta</span>`
-                    : conta.nome) + badgeParcelas;
+                    : nomeBase) + badgeParcelas + badgePagoHoje;
                 const btnOcultarIcon = conta.oculta ? '👁️' : '🙈';
                 const btnOcultarTitulo = conta.oculta ? 'Reexibir Conta' : 'Ocultar Conta';
                 tr.innerHTML = `
-                    <td class="p-3.5 font-medium"><span class="w-6 h-6 rounded-lg bg-indigo-600/20 text-indigo-400 font-bold inline-flex items-center justify-center text-xs border border-indigo-500/30">${conta.prioridade}</span></td>
+                    <td class="p-3.5 font-medium whitespace-nowrap">
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-lg bg-indigo-600/20 text-indigo-400 font-bold inline-flex items-center justify-center text-xs border border-indigo-500/30">${conta.prioridade}</span>
+                            <button onclick="togglePagoHoje('${conta.id}')" title="${marcadaPagaHoje ? 'Desfazer: voltar a mostrar esta conta hoje' : 'Marcar como paga hoje (some da frente até amanhã)'}" class="text-[10px] px-2 py-1 rounded-lg border cursor-pointer transition-colors ${marcadaPagaHoje ? 'border-teal-500/40 text-teal-300 bg-teal-500/10 hover:bg-teal-500/20' : 'border-slate-700 text-slate-300 hover:border-teal-500/50 hover:text-teal-300'}">${marcadaPagaHoje ? '↩ Desfazer' : '✓ Pago hoje'}</button>
+                        </div>
+                    </td>
                     <td class="p-3.5 font-semibold text-white uppercase">${nomeExibido}</td>
-                    <td class="p-3.5 text-slate-300 font-medium">${conta.diaPagamento || '-'}</td>
-                    <td class="p-3.5 text-right font-medium text-white">${formatarMoeda(conta.total)}</td>
+                    <td class="p-3.5 text-slate-300 font-medium">${conta.modoValor === 'diaria' ? 'Diária · ' + rotuloDiasSemana(conta) : (conta.diaPagamento || '-')}</td>
+                    <td class="p-3.5 text-right font-medium text-white">${formatarMoeda(conta.total)}${notaDiaria}</td>
                     <td class="p-3.5 text-center font-bold text-indigo-400">${infoVenc.texto}</td>
                     <td class="p-3.5 text-right font-medium text-emerald-400">${formatarMoeda(guardado)}</td>
                     <td class="p-3.5 text-right font-medium text-teal-400">${formatarMoeda(pagoDireto)}</td>
@@ -895,6 +1385,9 @@
             document.getElementById('resumoTotalSepararDia').innerText = formatarMoeda(somaTotalSepararDiaGeral);
             document.getElementById('subLabelTotalSepararDia').innerText = `total: ${formatarMoeda(somaTotalSepararDiaGeral)}/dia`;
             totalSepararDiaGlobal = somaTotalSepararDiaGeral;
+            atualizarAbas();
+            renderizarPrevisaoDiaristas();
+            if (perfilAtivo === 'geral') renderizarGeral();
 
             renderizarHistoricos();
         }
@@ -907,20 +1400,23 @@
 
             contas.forEach(conta => {
                 if (conta.oculta) return;
+                if (perfilAtivo !== 'geral' && perfilDe(conta) !== perfilAtivo) return;
 
                 const diasArr = extrairDias(conta.diaPagamento);
                 const qtdDatas = Math.max(1, diasArr.length);
-                const valorPorData = conta.total / qtdDatas;
+                const valorPorData = valorPorOcorrencia(conta);
+                if (diariaInativaHoje(conta)) return; // diarista de folga hoje
 
                 const parcelasInfo = calcularStatusParcelas(conta, valorPorData);
                 if (parcelasInfo && parcelasInfo.concluida) return; // parcelamento já quitado, nem entra no resumo
+                if (conta.pagoHojeEm === formatarDataISO(new Date())) return; // marcada como paga hoje
 
                 const guardado = calcularGuardadoLiquido(conta.id);
                 const pagoDireto = calcularPagoDireto(conta.id);
                 const totalAbatidoOuPago = pagoDireto + guardado;
                 const faltaPagar = Math.max(0, valorPorData - totalAbatidoOuPago);
 
-                const infoVenc = calcularProximoVencimento(conta.diaPagamento);
+                const infoVenc = conta.modoValor === 'diaria' ? { dias: 1, texto: 'Hoje' } : calcularProximoVencimento(conta.diaPagamento);
                 const diasFaltam = infoVenc.dias;
                 const diasCalculo = Math.max(1, diasFaltam);
                 const separarPorDia = faltaPagar > 0 ? (faltaPagar / diasCalculo) : 0;
@@ -938,7 +1434,7 @@
 
             linhas.sort((a, b) => a.diasFaltam - b.diasFaltam);
 
-            let texto = `📊 *Resumo Financeiro do Dia* — ${dataStr}\n\n`;
+            let texto = `📊 *Resumo Financeiro do Dia* — ${dataStr}${perfilAtivo === 'geral' ? '' : ' (' + ROTULO_PERFIL[perfilAtivo] + ')'}\n\n`;
             texto += `💰 Total a separar hoje: *${formatarMoeda(totalSepararHoje)}*\n`;
             texto += `⚠️ Total ainda faltando pagar: *${formatarMoeda(totalFaltaGeral)}*\n\n`;
             texto += `*Prioridades de hoje:*\n\n`;
@@ -974,9 +1470,10 @@
         function renderizarHistoricos() {
             const tbodyAportes = document.getElementById('tabelaAportesBody');
             tbodyAportes.innerHTML = '';
-            document.getElementById('badgeQtdAportes').innerText = `${historicoAportes.length} registros`;
+            const aportesFiltrados = historicoAportes.filter(a => perfilAtivo === 'geral' || perfilDeContaId(a.contaId) === perfilAtivo);
+            document.getElementById('badgeQtdAportes').innerText = `${aportesFiltrados.length} registros`;
 
-            const aportesOrdenados = [...historicoAportes].reverse();
+            const aportesOrdenados = [...aportesFiltrados].reverse();
             aportesOrdenados.forEach(aporte => {
                 const conta = contas.find(c => c.id === aporte.contaId);
                 const nomeConta = conta ? conta.nome : 'Conta Removida';
@@ -996,9 +1493,10 @@
 
             const tbodySaidas = document.getElementById('tabelaSaidasBody');
             tbodySaidas.innerHTML = '';
-            document.getElementById('badgeQtdSaidas').innerText = `${historicoSaidas.length} registros`;
+            const saidasFiltradas = historicoSaidas.filter(s => perfilAtivo === 'geral' || perfilDaSaida(s) === perfilAtivo);
+            document.getElementById('badgeQtdSaidas').innerText = `${saidasFiltradas.length} registros`;
 
-            const saidasOrdenadas = [...historicoSaidas].reverse();
+            const saidasOrdenadas = [...saidasFiltradas].reverse();
             saidasOrdenadas.forEach(saida => {
                 const conta = contas.find(c => c.id === saida.contaId);
                 const nomeConta = conta ? conta.nome : 'Outra Ocasião / Caixa';
@@ -1033,15 +1531,141 @@
         function popularSelectContas(elementId, selecionarId = null) {
             const select = document.getElementById(elementId);
             select.innerHTML = '';
-            contas.forEach(c => {
+            contas.filter(c => perfilAtivo === 'geral' || perfilDe(c) === perfilAtivo).forEach(c => {
                 const opt = document.createElement('option');
                 opt.value = c.id;
-                opt.text = c.nome.toUpperCase();
+                opt.text = c.nome.toUpperCase() + (perfilAtivo === 'geral' ? ` (${ROTULO_PERFIL[perfilDe(c)]})` : '');
                 if (selecionarId && c.id === selecionarId) {
                     opt.selected = true;
                 }
                 select.appendChild(opt);
             });
+        }
+
+        // ================= DIARISTAS (valor = dias trabalhados no mês x valor por dia) =================
+        const TODOS_OS_DIAS = [0, 1, 2, 3, 4, 5, 6];
+
+        function diasTrabalhadosNoMes(diasSemana, ano, mes) { // mes: 0-11
+            const ultimo = new Date(ano, mes + 1, 0).getDate();
+            let n = 0;
+            for (let d = 1; d <= ultimo; d++) {
+                if (diasSemana.includes(new Date(ano, mes, d).getDay())) n++;
+            }
+            return n;
+        }
+
+        function totalDiaristaNoMes(conta, ano, mes) {
+            const dias = diasTrabalhadosNoMes(conta.diasSemana && conta.diasSemana.length ? conta.diasSemana : TODOS_OS_DIAS, ano, mes);
+            return Math.round(conta.valorDiaria * dias * 100) / 100;
+        }
+
+        // Mantém o "total do mês" dos diaristas sempre igual ao do mês atual (vira sozinho na virada do mês)
+        function recalcularTotaisDiaristas() {
+            const h = new Date();
+            let mudou = false;
+            contas.forEach(c => {
+                if (c.modoValor !== 'diaria') return;
+                const t = totalDiaristaNoMes(c, h.getFullYear(), h.getMonth());
+                if (t !== c.total) { c.total = t; mudou = true; }
+            });
+            if (mudou) salvarNoStorage();
+        }
+
+        function lerDiasSemanaForm() {
+            return [...document.querySelectorAll('#contaDiasSemana input:checked')].map(i => parseInt(i.value, 10));
+        }
+
+        function atualizarCampoModoValor() {
+            const diaria = document.getElementById('contaModoValor').value === 'diaria';
+            document.getElementById('containerTotalFixo').classList.toggle('hidden', diaria);
+            document.getElementById('containerDiaria').classList.toggle('hidden', !diaria);
+            document.getElementById('contaTotal').required = !diaria;
+            document.getElementById('containerDiaPagamento').classList.toggle('hidden', diaria);
+            document.getElementById('contaDiaPagamento').required = !diaria;
+            atualizarPreviaDiaria();
+        }
+
+        function atualizarPreviaDiaria() {
+            const el = document.getElementById('previaDiaria');
+            const valor = parseFloat(document.getElementById('contaValorDiaria').value);
+            const dias = lerDiasSemanaForm();
+            if (!(valor > 0) || dias.length === 0) { el.innerText = ''; return; }
+            const h = new Date();
+            const dAtual = diasTrabalhadosNoMes(dias, h.getFullYear(), h.getMonth());
+            const dProx = diasTrabalhadosNoMes(dias, h.getFullYear(), h.getMonth() + 1);
+            el.innerText = `Este mês: ${dAtual} dias = ${formatarMoeda(valor * dAtual)}  |  Próximo mês: ${dProx} dias = ${formatarMoeda(valor * dProx)}`;
+        }
+
+        function renderizarPrevisaoDiaristas() {
+            const el = document.getElementById('painelPrevisao');
+            if (!el) return;
+            const h = new Date();
+            const a = h.getFullYear(), m = h.getMonth();
+            const dia = contas.filter(c => c.modoValor === 'diaria' && !c.oculta && (perfilAtivo === 'geral' || perfilDe(c) === perfilAtivo));
+            if (dia.length === 0) { el.classList.add('hidden'); return; }
+            const nomeMes = d => d.toLocaleDateString('pt-BR', { month: 'long' });
+            const mAtual = nomeMes(new Date(a, m, 1)), mProx = nomeMes(new Date(a, m + 1, 1));
+            let totAtual = 0, totProx = 0;
+            const linhas = dia.map(c => {
+                const dias = c.diasSemana && c.diasSemana.length ? c.diasSemana : TODOS_OS_DIAS;
+                const dA = diasTrabalhadosNoMes(dias, a, m), dP = diasTrabalhadosNoMes(dias, a, m + 1);
+                const vA = c.valorDiaria * dA, vP = c.valorDiaria * dP;
+                totAtual += vA; totProx += vP;
+                const dif = vP - vA;
+                const difTxt = dif === 0 ? 'igual' : (dif > 0 ? '+' : '-') + formatarMoeda(Math.abs(dif));
+                const difCor = dif > 0 ? 'text-amber-400' : (dif < 0 ? 'text-emerald-400' : 'text-slate-400');
+                return `<tr class="border-t border-slate-800">
+                    <td class="py-2 pr-3 font-semibold text-white uppercase">${esc(c.nome)} <span class="text-[10px] font-normal text-slate-400 normal-case">(${formatarMoeda(c.valorDiaria)}/dia)</span></td>
+                    <td class="py-2 pr-3 text-right text-slate-200">${dA} dias · ${formatarMoeda(vA)}</td>
+                    <td class="py-2 pr-3 text-right text-slate-200">${dP} dias · ${formatarMoeda(vP)}</td>
+                    <td class="py-2 text-right font-bold ${difCor}">${difTxt}</td></tr>`;
+            }).join('');
+            const difTot = totProx - totAtual;
+            const msg = difTot === 0
+                ? `O próximo mês terá o mesmo gasto com diaristas.`
+                : `Em ${mProx} você vai gastar ${formatarMoeda(Math.abs(difTot))} ${difTot > 0 ? 'a MAIS' : 'a menos'} com diaristas do que em ${mAtual}.`;
+            el.innerHTML = `
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3">
+                    <div><h3 class="font-bold text-white text-sm">Previsão dos diaristas</h3>
+                    <p class="text-xs ${difTot > 0 ? 'text-amber-400' : 'text-slate-400'}">${msg}</p></div>
+                    <div class="overflow-x-auto"><table class="w-full text-xs">
+                        <thead><tr class="text-[10px] uppercase text-slate-400 tracking-wider">
+                            <th class="pb-1 pr-3 text-left">Diarista</th><th class="pb-1 pr-3 text-right">${mAtual} (atual)</th><th class="pb-1 pr-3 text-right">${mProx}</th><th class="pb-1 text-right">Diferença</th>
+                        </tr></thead>
+                        <tbody>${linhas}</tbody>
+                    </table></div>
+                </div>`;
+            el.classList.remove('hidden');
+        }
+
+        // Diarista: o valor só vale nos dias da semana em que trabalha; nos outros dias a conta fica "de folga"
+        const NOMES_DIAS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+        function diasDaConta(conta) { return conta.diasSemana && conta.diasSemana.length ? conta.diasSemana : TODOS_OS_DIAS; }
+        function valorPorOcorrencia(conta) {
+            return conta.modoValor === 'diaria' ? conta.valorDiaria : conta.total / Math.max(1, extrairDias(conta.diaPagamento).length);
+        }
+        function diariaInativaHoje(conta) {
+            return conta.modoValor === 'diaria' && !diasDaConta(conta).includes(new Date().getDay());
+        }
+        function proximoDiaTrabalho(conta) {
+            const dias = diasDaConta(conta);
+            const h = new Date(); h.setHours(0, 0, 0, 0);
+            for (let i = 1; i <= 7; i++) {
+                const d = new Date(h); d.setDate(h.getDate() + i);
+                if (dias.includes(d.getDay())) {
+                    return { dias: i, texto: `${NOMES_DIAS[d.getDay()]} ${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}` };
+                }
+            }
+            return { dias: 1, texto: '-' };
+        }
+        function rotuloDiasSemana(conta) {
+            const dias = diasDaConta(conta);
+            if (dias.length === 7) return 'todos os dias';
+            return NOMES_DIAS.filter((n, i) => dias.includes(i)).join(', ');
+        }
+        // Diarista: o "ciclo" é o próprio dia. Os demais seguem o vencimento.
+        function inicioCicloDaConta(conta) {
+            return conta.modoValor === 'diaria' ? formatarDataISO(new Date()) : calcularInicioCicloAtual(conta.diaPagamento);
         }
 
         function atualizarCampoParcelas() {
@@ -1052,13 +1676,16 @@
             } else {
                 container.classList.add('hidden');
             }
+            atualizarCampoModoValor();
         }
 
         function abrirModalAdicionar() {
             document.getElementById('modalContaTitulo').innerText = "Nova Conta / Dívida";
             document.getElementById('formConta').reset();
             document.getElementById('contaEditId').value = '';
-            document.getElementById('contaPrioridade').value = contas.length + 1;
+            const perfilNovo = perfilAtivo === 'geral' ? 'empresarial' : perfilAtivo;
+            document.getElementById('contaPerfil').value = perfilNovo;
+            document.getElementById('contaPrioridade').value = contas.filter(c => perfilDe(c) === perfilNovo).length + 1;
             document.getElementById('contaRecorrencia').value = 'indeterminada';
             atualizarCampoParcelas();
             document.getElementById('modalConta').classList.remove('hidden');
@@ -1070,9 +1697,14 @@
             document.getElementById('modalContaTitulo').innerText = "Editar Conta";
             document.getElementById('contaEditId').value = conta.id;
             document.getElementById('contaNome').value = conta.nome;
+            document.getElementById('contaPerfil').value = perfilDe(conta);
             document.getElementById('contaPrioridade').value = conta.prioridade;
             document.getElementById('contaDiaPagamento').value = conta.diaPagamento;
-            document.getElementById('contaTotal').value = conta.total;
+            document.getElementById('contaTotal').value = conta.modoValor === 'diaria' ? '' : conta.total;
+            document.getElementById('contaModoValor').value = conta.modoValor === 'diaria' ? 'diaria' : 'fixo';
+            document.getElementById('contaValorDiaria').value = conta.valorDiaria || '';
+            const diasConta = conta.diasSemana && conta.diasSemana.length ? conta.diasSemana : TODOS_OS_DIAS;
+            document.querySelectorAll('#contaDiasSemana input').forEach(i => { i.checked = diasConta.includes(parseInt(i.value, 10)); });
             document.getElementById('contaRecorrencia').value = conta.recorrencia === 'parcelas' ? 'parcelas' : 'indeterminada';
             document.getElementById('contaTotalParcelas').value = conta.totalParcelas || '';
             atualizarCampoParcelas();
@@ -1087,9 +1719,24 @@
             event.preventDefault();
             const editId = document.getElementById('contaEditId').value;
             const nome = document.getElementById('contaNome').value.trim();
+            const perfil = document.getElementById('contaPerfil').value;
             const prioridade = parseInt(document.getElementById('contaPrioridade').value);
-            const diaPagamento = document.getElementById('contaDiaPagamento').value.trim();
-            const total = parseFloat(document.getElementById('contaTotal').value);
+            let diaPagamento = document.getElementById('contaDiaPagamento').value.trim();
+            const modoValor = document.getElementById('contaModoValor').value;
+            let total, valorDiaria = null, diasSemana = null;
+            if (modoValor === 'diaria') {
+                valorDiaria = parseFloat(document.getElementById('contaValorDiaria').value);
+                diasSemana = lerDiasSemanaForm();
+                if (!(valorDiaria > 0) || diasSemana.length === 0) {
+                    mostrarMensagem("Atenção", "Informe o valor por dia e marque pelo menos um dia da semana.", "info");
+                    return;
+                }
+                const h = new Date();
+                total = totalDiaristaNoMes({ valorDiaria, diasSemana }, h.getFullYear(), h.getMonth());
+                diaPagamento = ''; // diarista não tem dia de vencimento
+            } else {
+                total = parseFloat(document.getElementById('contaTotal').value);
+            }
             const recorrencia = document.getElementById('contaRecorrencia').value;
             const totalParcelas = recorrencia === 'parcelas'
                 ? Math.max(1, parseInt(document.getElementById('contaTotalParcelas').value) || 1)
@@ -1099,9 +1746,13 @@
                 const conta = contas.find(c => c.id === editId);
                 if (conta) {
                     conta.nome = nome;
+                    conta.perfil = perfil;
                     conta.prioridade = prioridade;
                     conta.diaPagamento = diaPagamento;
                     conta.total = total;
+                    conta.modoValor = modoValor;
+                    conta.valorDiaria = valorDiaria;
+                    conta.diasSemana = diasSemana;
                     conta.recorrencia = recorrencia;
                     conta.totalParcelas = totalParcelas;
                 }
@@ -1113,14 +1764,18 @@
                     diaPagamento,
                     total,
                     recorrencia,
-                    totalParcelas
+                    totalParcelas,
+                    perfil,
+                    modoValor,
+                    valorDiaria,
+                    diasSemana
                 };
                 contas.push(nova);
             }
 
             salvarNoStorage();
             fecharModalConta();
-            renderizar();
+            if (perfilAtivo !== 'geral' && perfil !== perfilAtivo) { trocarPerfil(perfil); } else { renderizar(); }
             mostrarMensagem("Sucesso", "Conta salva com sucesso!", "success");
         }
 
@@ -1137,6 +1792,49 @@
                     salvarNoStorage();
                     renderizar();
                     mostrarMensagem("Reiniciado", `"${conta.nome.toUpperCase()}" foi reiniciada: Já Guardado e Falta Pagar voltaram do zero, como uma conta nova — mantendo o mesmo dia de vencimento e valor total.`, "success");
+                }
+            );
+        }
+
+        function abrirModalBackup() {
+            document.getElementById('backupTexto').value = '';
+            document.getElementById('modalBackup').classList.remove('hidden');
+        }
+
+        function fecharModalBackup() {
+            document.getElementById('modalBackup').classList.add('hidden');
+        }
+
+        function gerarBackup() {
+            const ta = document.getElementById('backupTexto');
+            ta.value = JSON.stringify({ versao: 1, contas, aportes: historicoAportes, saidas: historicoSaidas });
+            ta.focus();
+            ta.select();
+        }
+
+        function importarBackup() {
+            let dados;
+            try {
+                dados = JSON.parse(document.getElementById('backupTexto').value);
+            } catch (e) {
+                mostrarMensagem("Erro", "O texto colado não é um backup válido.", "info");
+                return;
+            }
+            if (!dados || !Array.isArray(dados.contas) || !Array.isArray(dados.aportes) || !Array.isArray(dados.saidas)) {
+                mostrarMensagem("Erro", "O texto colado não parece ser um backup deste sistema.", "info");
+                return;
+            }
+            mostrarConfirmacao(
+                "Importar Backup",
+                `Isso vai SUBSTITUIR os dados atuais por ${dados.contas.length} conta(s), ${dados.aportes.length} aporte(s) e ${dados.saidas.length} saída(s). Deseja continuar?`,
+                function () {
+                    contas = dados.contas;
+                    historicoAportes = dados.aportes;
+                    historicoSaidas = dados.saidas;
+                    salvarNoStorage();
+                    fecharModalBackup();
+                    renderizar();
+                    mostrarMensagem("Importado", "Backup importado com sucesso.", "success");
                 }
             );
         }
@@ -1189,6 +1887,17 @@
             mostrarMensagem("Ajustado", (deltaGuardado === 0 && deltaPago === 0) ? "Nada mudou: os valores já estavam iguais." : "Valores reajustados e registrados como Ajuste Manual no histórico.", "success");
         }
 
+        // Marca/desmarca a conta como paga HOJE: ela fica apagada, vai pro fim da lista e sai do
+        // 'Separar por Dia'. A marca expira sozinha à meia-noite (compara com a data de hoje).
+        function togglePagoHoje(id) {
+            const conta = contas.find(c => c.id === id);
+            if (!conta) return;
+            const hoje = formatarDataISO(new Date());
+            conta.pagoHojeEm = conta.pagoHojeEm === hoje ? null : hoje;
+            salvarNoStorage();
+            renderizar();
+        }
+
         function toggleOcultarConta(id) {
             const conta = contas.find(c => c.id === id);
             if (!conta) return;
@@ -1223,11 +1932,13 @@
         function calcularSepararPorDiaConta(contaId) {
             const conta = contas.find(c => c.id === contaId);
             if (!conta || conta.oculta) return 0;
-            const valorPorData = conta.total / Math.max(1, extrairDias(conta.diaPagamento).length);
+            if (conta.pagoHojeEm === formatarDataISO(new Date())) return 0;
+            if (diariaInativaHoje(conta)) return 0;
+            const valorPorData = valorPorOcorrencia(conta);
             const parcelasInfo = calcularStatusParcelas(conta, valorPorData);
             if (parcelasInfo && parcelasInfo.concluida) return 0;
             const faltaPagar = Math.max(0, valorPorData - (calcularPagoDireto(conta.id) + calcularGuardadoLiquido(conta.id)));
-            const dias = Math.max(1, calcularProximoVencimento(conta.diaPagamento).dias);
+            const dias = conta.modoValor === 'diaria' ? 1 : Math.max(1, calcularProximoVencimento(conta.diaPagamento).dias);
             return faltaPagar > 0 ? faltaPagar / dias : 0;
         }
 
@@ -1593,7 +2304,8 @@
                 valor,
                 data,
                 motivo,
-                convertidoDeGuardado: false
+                convertidoDeGuardado: false,
+                perfil: perfilAtivo === 'geral' ? 'empresarial' : perfilAtivo
             };
 
             historicoSaidas.push(novaSaida);
@@ -1610,31 +2322,6 @@
             mostrarMensagem("Removido", "Registro de saída removido.", "info");
         }
 
-        // --- ATUALIZE AQUI NO FINAL DO CÓDIGO ---
-        async function carregarDadosDoSupabase() {
-            try {
-                const { data: dContas, error: eContas } = await supabase.from('financas_contas').select('*');
-                if (eContas) throw eContas;
-                if (dContas && dContas.length > 0) contas = dContas;
-
-                const { data: dAportes, error: eAportes } = await supabase.from('financas_aportes').select('*');
-                if (eAportes) throw eAportes;
-                if (dAportes) historicoAportes = dAportes;
-
-                const { data: dSaidas, error: eSaidas } = await supabase.from('financas_saidas').select('*');
-                if (eSaidas) throw eSaidas;
-                if (dSaidas) historicoSaidas = dSaidas;
-
-                salvarNoStorage();
-                renderizar();
-            } catch (err) {
-                // Se o Supabase falhar (ex: URL/chave não configuradas), os dados locais
-                // (localStorage) já foram exibidos por renderizar() no window.onload abaixo,
-                // então o app continua funcionando normalmente mesmo sem a sincronização.
-                console.error("Erro ao carregar do Supabase — usando apenas os dados locais:", err);
-            }
-        }
-
         let _ultimaDataExibida = '';
         function atualizarDataHeader() {
             const agora = new Date();
@@ -1643,17 +2330,14 @@
             document.getElementById('headerDiaSemana').innerText = diaSemana;
             document.getElementById('headerDataHoje').innerText = dataLonga;
             // Se o dia virou com a página aberta, recalcula vencimentos e ciclos
-            if (_ultimaDataExibida && _ultimaDataExibida !== dataLonga) renderizar();
+            if (_ultimaDataExibida && _ultimaDataExibida !== dataLonga && usuarioAtual) renderizar();
             _ultimaDataExibida = dataLonga;
         }
 
         window.onload = function() {
             atualizarDataHeader();
             setInterval(atualizarDataHeader, 60000);
-            // Mostra os dados salvos localmente IMEDIATAMENTE, sem depender do Supabase.
-            // Isso evita a tela "zerada" caso a sincronização com o Supabase falhe ou demore.
-            renderizar();
-            carregarDadosDoSupabase();
+            iniciarApp();
         };
     </script>
 </body>
