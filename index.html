@@ -35,13 +35,13 @@
         <div>
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-                    <span class="text-white text-sm" role="img" aria-hidden="true">ðŸ’°</span>
+                    <span class="text-white text-sm" role="img" aria-hidden="true">💰</span>
                 </div>
-                <h1 class="font-bold text-lg sm:text-xl text-white tracking-tight">FinanÃ§as Inteligentes</h1>
+                <h1 class="font-bold text-lg sm:text-xl text-white tracking-tight">Finanças Inteligentes</h1>
             </div>
-            <p class="text-xs text-slate-400 mt-0.5">Controle por quinzenas com divisÃ£o automÃ¡tica de valores por data</p>
+            <p class="text-xs text-slate-400 mt-0.5">Controle por quinzenas com divisão automática de valores por data</p>
             <div class="mt-2 inline-flex items-center gap-2 bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5">
-                <span role="img" aria-hidden="true">ðŸ“…</span>
+                <span role="img" aria-hidden="true">📅</span>
                 <div class="leading-tight">
                     <div id="headerDiaSemana" class="text-[10px] text-slate-400 uppercase tracking-wider"></div>
                     <div id="headerDataHoje" class="text-xs font-semibold text-white"></div>
@@ -51,25 +51,25 @@
 
         <div class="flex flex-wrap items-center gap-2.5">
             <button onclick="abrirModalAporteGeral()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 rounded-xl text-xs font-medium shadow-lg shadow-emerald-600/25 transition-all flex items-center gap-2 cursor-pointer">
-                <span role="img" aria-hidden="true">ðŸª™</span> Separar Dinheiro
+                <span role="img" aria-hidden="true">🪙</span> Separar Dinheiro
             </button>
             <button onclick="abrirModalConverterGuardado()" class="bg-teal-600 hover:bg-teal-500 text-white px-3.5 py-2 rounded-xl text-xs font-medium shadow-lg shadow-teal-600/25 transition-all flex items-center gap-2 cursor-pointer">
-                <span role="img" aria-hidden="true">ðŸ”</span> Efetivar Guardado p/ Pago
+                <span role="img" aria-hidden="true">🔁</span> Efetivar Guardado p/ Pago
             </button>
             <button onclick="abrirModalTransferir()" class="bg-violet-600 hover:bg-violet-500 text-white px-3.5 py-2 rounded-xl text-xs font-medium shadow-lg shadow-violet-600/25 transition-all flex items-center gap-2 cursor-pointer">
-                <span role="img" aria-hidden="true">ðŸ”€</span> Transferir Guardado
+                <span role="img" aria-hidden="true">🔀</span> Transferir Guardado
             </button>
             <button onclick="abrirModalSaida()" class="bg-rose-600 hover:bg-rose-500 text-white px-3.5 py-2 rounded-xl text-xs font-medium shadow-lg shadow-rose-600/25 transition-all flex items-center gap-2 cursor-pointer">
-                <span role="img" aria-hidden="true">ðŸ“¤</span> Registrar SaÃ­da / Vale
+                <span role="img" aria-hidden="true">📤</span> Registrar Saída / Vale
             </button>
             <button onclick="abrirModalAdicionar()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3.5 py-2 rounded-xl text-xs font-medium shadow-lg shadow-indigo-600/25 transition-all flex items-center gap-2 cursor-pointer">
-                <span role="img" aria-hidden="true">âž•</span> Nova Conta
+                <span role="img" aria-hidden="true">➕</span> Nova Conta
             </button>
             <button onclick="enviarResumoWhatsApp()" class="bg-[#25D366] hover:bg-[#20bd5a] text-white px-3.5 py-2 rounded-xl text-xs font-medium shadow-lg shadow-[#25D366]/25 transition-all flex items-center gap-2 cursor-pointer">
-                <span role="img" aria-hidden="true">ðŸ“²</span> Resumo RÃ¡pido (WhatsApp)
+                <span role="img" aria-hidden="true">📲</span> Resumo Rápido (WhatsApp)
             </button>
             <button onclick="abrirModalBackup()" class="bg-slate-700 hover:bg-slate-600 text-white px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-2 cursor-pointer">
-                <span role="img" aria-hidden="true">ðŸ’¾</span> Backup
+                <span role="img" aria-hidden="true">💾</span> Backup
             </button>
         </div>
     </header>
@@ -77,9 +77,9 @@
     <main class="flex-1 overflow-y-auto p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-6">
 
         <div id="abasPerfil" class="flex flex-wrap gap-2">
-            <button id="aba-empresarial" onclick="trocarPerfil('empresarial')"><span role="img" aria-hidden="true">ðŸ¢</span> Empresarial</button>
-            <button id="aba-pessoal" onclick="trocarPerfil('pessoal')"><span role="img" aria-hidden="true">ðŸ </span> Pessoal</button>
-            <button id="aba-geral" onclick="trocarPerfil('geral')"><span role="img" aria-hidden="true">ðŸ“Š</span> Geral (montante + grÃ¡ficos)</button>
+            <button id="aba-empresarial" onclick="trocarPerfil('empresarial')"><span role="img" aria-hidden="true">🏢</span> Empresarial</button>
+            <button id="aba-pessoal" onclick="trocarPerfil('pessoal')"><span role="img" aria-hidden="true">🏠</span> Pessoal</button>
+            <button id="aba-geral" onclick="trocarPerfil('geral')"><span role="img" aria-hidden="true">📊</span> Geral (montante + gráficos)</button>
         </div>
 
         <div id="painelContas" class="space-y-6">
@@ -88,37 +88,37 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl -mr-6 -mt-6"></div>
-                <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total de DÃ­vidas / Contas</span>
+                <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total de Dívidas / Contas</span>
                 <h3 id="resumoTotalGeral" class="text-xl sm:text-2xl font-bold text-white mt-1">R$ 0,00</h3>
                 <div class="mt-2 text-xs text-slate-400 flex items-center gap-1.5">
-                    <span class="text-indigo-400" role="img" aria-hidden="true">âš–ï¸</span> SomatÃ³rio de todas as contas
+                    <span class="text-indigo-400" role="img" aria-hidden="true">⚖️</span> Somatório de todas as contas
                 </div>
             </div>
 
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl -mr-6 -mt-6"></div>
-                <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Dinheiro JÃ¡ Guardado</span>
+                <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Dinheiro Já Guardado</span>
                 <h3 id="resumoTotalGuardado" class="text-xl sm:text-2xl font-bold text-emerald-400 mt-1">R$ 0,00</h3>
                 <div class="mt-2 text-xs text-slate-400 flex items-center gap-1.5">
-                    <span class="text-emerald-400" role="img" aria-hidden="true">ðŸ·</span> Total separado em caixa
+                    <span class="text-emerald-400" role="img" aria-hidden="true">🐷</span> Total separado em caixa
                 </div>
             </div>
 
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-24 h-24 bg-teal-500/5 rounded-full blur-2xl -mr-6 -mt-6"></div>
-                <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total JÃ¡ Pago / Abatido</span>
+                <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Já Pago / Abatido</span>
                 <h3 id="resumoTotalPago" class="text-xl sm:text-2xl font-bold text-teal-400 mt-1">R$ 0,00</h3>
                 <div class="mt-2 text-xs text-slate-400 flex items-center gap-1.5">
-                    <span class="text-teal-400" role="img" aria-hidden="true">âœ…</span> Abatido diretamente
+                    <span class="text-teal-400" role="img" aria-hidden="true">✅</span> Abatido diretamente
                 </div>
             </div>
 
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-24 h-24 bg-rose-500/5 rounded-full blur-2xl -mr-6 -mt-6"></div>
-                <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Retiradas p/ Outra OcasiÃ£o</span>
+                <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Retiradas p/ Outra Ocasião</span>
                 <h3 id="resumoTotalRetiradas" class="text-xl sm:text-2xl font-bold text-rose-400 mt-1">R$ 0,00</h3>
                 <div class="mt-2 text-xs text-slate-400 flex items-center gap-1.5">
-                    <span class="text-rose-400" role="img" aria-hidden="true">âš ï¸</span> PendÃªncia externa / Caixa
+                    <span class="text-rose-400" role="img" aria-hidden="true">⚠️</span> Pendência externa / Caixa
                 </div>
             </div>
         </div>
@@ -129,7 +129,7 @@
             <div class="p-4 sm:p-5 border-b border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <div>
                     <h2 class="font-bold text-white text-base">Planejamento e Prioridades</h2>
-                    <p class="text-xs text-slate-400">CÃ¡lculo automÃ¡tico de dias, divisÃ£o por datas quinzenais e valores diÃ¡rios</p>
+                    <p class="text-xs text-slate-400">Cálculo automático de dias, divisão por datas quinzenais e valores diários</p>
                 </div>
                 <div class="flex items-center gap-4 w-full sm:w-auto">
                     <div id="resumoTotalSepararDiaContainer" class="hidden sm:flex flex-col items-end text-right bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800">
@@ -148,12 +148,12 @@
                         <option value="prioridade">Ordenar: Prioridade</option>
                         <option value="nome">Ordenar: Nome (A-Z)</option>
                         <option value="totalDesc">Ordenar: Maior Valor Total</option>
-                        <option value="guardadoDesc">Ordenar: Maior JÃ¡ Guardado</option>
+                        <option value="guardadoDesc">Ordenar: Maior Já Guardado</option>
                         <option value="faltaDesc">Ordenar: Maior Falta Pagar</option>
-                        <option value="vencimentoAsc">Ordenar: Vencimento Mais PrÃ³ximo</option>
+                        <option value="vencimentoAsc">Ordenar: Vencimento Mais Próximo</option>
                     </select>
                     <div class="relative flex-1 sm:w-64">
-                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs" role="img" aria-hidden="true">ðŸ”</span>
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs" role="img" aria-hidden="true">🔍</span>
                         <input type="text" id="filtroBusca" oninput="renderizar()" placeholder="Buscar conta..." class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
                     </div>
                 </div>
@@ -166,17 +166,17 @@
                             <th class="p-3.5">Prioridade</th>
                             <th class="p-3.5">Nome / Credor</th>
                             <th class="p-3.5">Datas de Pgto</th>
-                            <th class="p-3.5 text-right">Valor Total MÃªs</th>
-                            <th class="p-3.5 text-center">PrÃ³x. Venc. / Dias</th>
-                            <th class="p-3.5 text-right">JÃ¡ Guardado</th>
-                            <th class="p-3.5 text-right">JÃ¡ Pago</th>
+                            <th class="p-3.5 text-right">Valor Total Mês</th>
+                            <th class="p-3.5 text-center">Próx. Venc. / Dias</th>
+                            <th class="p-3.5 text-right">Já Guardado</th>
+                            <th class="p-3.5 text-right">Já Pago</th>
                             <th class="p-3.5 text-right">Falta Pagar</th>
                             <th class="p-3.5 text-right">
                                 <div>Separar / Dia</div>
                                 <div id="subLabelTotalSepararDia" class="text-[9px] text-amber-400/80 font-normal lowercase tracking-normal mt-0.5">total: R$ 0,00/dia</div>
                             </th>
-                            <th class="p-3.5 text-center">Status / UrgÃªncia</th>
-                            <th class="p-3.5 text-right">AÃ§Ãµes</th>
+                            <th class="p-3.5 text-center">Status / Urgência</th>
+                            <th class="p-3.5 text-right">Ações</th>
                         </tr>
                     </thead>
                     <tbody id="tabelaContasBody" class="divide-y divide-slate-800/60 text-xs text-slate-200">
@@ -187,12 +187,12 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- HistÃ³rico de Aportes / Dinheiro Guardado -->
+            <!-- Histórico de Aportes / Dinheiro Guardado -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl flex flex-col">
                 <div class="p-4 sm:p-5 border-b border-slate-800 flex justify-between items-center">
                     <div>
-                        <h2 class="font-bold text-white text-base">HistÃ³rico de Dinheiro Guardado</h2>
-                        <p class="text-xs text-slate-400">Registro de todas as vezes que vocÃª separou valores</p>
+                        <h2 class="font-bold text-white text-base">Histórico de Dinheiro Guardado</h2>
+                        <p class="text-xs text-slate-400">Registro de todas as vezes que você separou valores</p>
                     </div>
                     <span id="badgeQtdAportes" class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-full text-[11px] font-medium">0 registros</span>
                 </div>
@@ -204,7 +204,7 @@
                                 <th class="p-3">Conta</th>
                                 <th class="p-3">Motivo / Origem</th>
                                 <th class="p-3 text-right">Valor</th>
-                                <th class="p-3 text-center">AÃ§Ã£o</th>
+                                <th class="p-3 text-center">Ação</th>
                             </tr>
                         </thead>
                         <tbody id="tabelaAportesBody" class="divide-y divide-slate-800/60 text-xs">
@@ -214,11 +214,11 @@
                 </div>
             </div>
 
-            <!-- HistÃ³rico de SaÃ­das e Pagamentos Diretos -->
+            <!-- Histórico de Saídas e Pagamentos Diretos -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl flex flex-col">
                 <div class="p-4 sm:p-5 border-b border-slate-800 flex justify-between items-center">
                     <div>
-                        <h2 class="font-bold text-white text-base">HistÃ³rico de SaÃ­das e Retiradas</h2>
+                        <h2 class="font-bold text-white text-base">Histórico de Saídas e Retiradas</h2>
                         <p class="text-xs text-slate-400">Pagamentos diretos ao credor ou retiradas de caixa</p>
                     </div>
                     <span id="badgeQtdSaidas" class="bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2.5 py-1 rounded-full text-[11px] font-medium">0 registros</span>
@@ -231,7 +231,7 @@
                                 <th class="p-3">Tipo / Conta</th>
                                 <th class="p-3">Motivo</th>
                                 <th class="p-3 text-right">Valor</th>
-                                <th class="p-3 text-center">AÃ§Ã£o</th>
+                                <th class="p-3 text-center">Ação</th>
                             </tr>
                         </thead>
                         <tbody id="tabelaSaidasBody" class="divide-y divide-slate-800/60 text-xs">
@@ -246,7 +246,7 @@
         <div id="painelGeral" class="hidden space-y-6"></div>
     </main>
 
-    <!-- INÃCIO DA INTEGRAÃ‡ÃƒO COM O SUPABASE -->
+    <!-- INÍCIO DA INTEGRAÇÃO COM O SUPABASE -->
     <!-- 1. Carrega a biblioteca oficial do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -257,7 +257,7 @@
         
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     </script>
-    <!-- FIM DA INTEGRAÃ‡ÃƒO COM O SUPABASE -->
+    <!-- FIM DA INTEGRAÇÃO COM O SUPABASE -->
 
 </body>
 </html>
@@ -266,8 +266,8 @@
     <div id="modalConta" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
             <div class="p-5 border-b border-slate-800 flex justify-between items-center">
-                <h3 id="modalContaTitulo" class="font-bold text-white text-base">Nova Conta / DÃ­vida</h3>
-                <button onclick="fecharModalConta()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">âœ•</span></button>
+                <h3 id="modalContaTitulo" class="font-bold text-white text-base">Nova Conta / Dívida</h3>
+                <button onclick="fecharModalConta()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">✕</span></button>
             </div>
             <form id="formConta" onsubmit="salvarConta(event)" class="p-6 space-y-4">
                 <input type="hidden" id="contaEditId">
@@ -289,17 +289,17 @@
                 <div id="containerDiaPagamento">
                     <label class="block text-xs font-medium text-slate-300 mb-1">Dia(s) do Vencimento (Ex: 25 ou 05 e 20)</label>
                     <input type="text" id="contaDiaPagamento" required placeholder="Ex: 05 e 20" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
-                    <p class="text-[10px] text-slate-400 mt-1">Separe mÃºltiplos dias por vÃ­rgula ou "e" (ex: 05 e 20). O valor total serÃ¡ dividido igualmente entre as datas.</p>
+                    <p class="text-[10px] text-slate-400 mt-1">Separe múltiplos dias por vírgula ou "e" (ex: 05 e 20). O valor total será dividido igualmente entre as datas.</p>
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Como Ã© calculado o valor?</label>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Como é calculado o valor?</label>
                     <select id="contaModoValor" onchange="atualizarCampoModoValor()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
-                        <option value="fixo">Valor fixo no mÃªs</option>
-                        <option value="diaria">Por dia trabalhado (diarista): muda conforme os dias do mÃªs</option>
+                        <option value="fixo">Valor fixo no mês</option>
+                        <option value="diaria">Por dia trabalhado (diarista): muda conforme os dias do mês</option>
                     </select>
                 </div>
                 <div id="containerTotalFixo">
-                    <label id="labelContaTotal" class="block text-xs font-medium text-slate-300 mb-1">Valor Total no MÃªs (R$)</label>
+                    <label id="labelContaTotal" class="block text-xs font-medium text-slate-300 mb-1">Valor Total no Mês (R$)</label>
                     <input type="number" step="0.01" id="contaTotal" oninput="atualizarCampoParcelas()" required placeholder="Ex: 2000.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
                 </div>
                 <div id="containerDiaria" class="hidden space-y-3">
@@ -315,24 +315,24 @@
                             <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer"><input type="checkbox" value="3" checked onchange="atualizarPreviaDiaria()" class="accent-indigo-500"> Qua</label>
                             <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer"><input type="checkbox" value="4" checked onchange="atualizarPreviaDiaria()" class="accent-indigo-500"> Qui</label>
                             <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer"><input type="checkbox" value="5" checked onchange="atualizarPreviaDiaria()" class="accent-indigo-500"> Sex</label>
-                            <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer"><input type="checkbox" value="6" checked onchange="atualizarPreviaDiaria()" class="accent-indigo-500"> SÃ¡b</label>
+                            <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer"><input type="checkbox" value="6" checked onchange="atualizarPreviaDiaria()" class="accent-indigo-500"> Sáb</label>
                             <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer"><input type="checkbox" value="0" checked onchange="atualizarPreviaDiaria()" class="accent-indigo-500"> Dom</label>
                         </div>
                     </div>
                     <p id="previaDiaria" class="text-[11px] text-amber-400"></p>
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">RecorrÃªncia</label>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Recorrência</label>
                     <select id="contaRecorrencia" onchange="atualizarCampoParcelas()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
-                        <option value="indeterminada">Mensal / Recorrente (sem previsÃ£o de acabar)</option>
-                        <option value="parcelas">NÃºmero fixo de parcelas (emprÃ©stimo, parcelamento...)</option>
+                        <option value="indeterminada">Mensal / Recorrente (sem previsão de acabar)</option>
+                        <option value="parcelas">Número fixo de parcelas (empréstimo, parcelamento...)</option>
                     </select>
                 </div>
                 <div id="containerParcelas" class="hidden">
                     <label class="block text-xs font-medium text-slate-300 mb-1">Quantidade de Parcelas</label>
                     <input type="number" min="1" step="1" id="contaTotalParcelas" oninput="atualizarCampoParcelas()" placeholder="Ex: 4" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
-                    <p class="text-[10px] text-slate-400 mt-1">Depois de pagar essa quantidade de vezes, a conta para de reiniciar e fica marcada como concluÃ­da.</p>
-                    <label class="block text-xs font-medium text-slate-300 mb-1 mt-3">O valor informado acima Ã©:</label>
+                    <p class="text-[10px] text-slate-400 mt-1">Depois de pagar essa quantidade de vezes, a conta para de reiniciar e fica marcada como concluída.</p>
+                    <label class="block text-xs font-medium text-slate-300 mb-1 mt-3">O valor informado acima é:</label>
                     <select id="contaTipoValorParcela" onchange="atualizarCampoParcelas()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
                         <option value="montante">O montante total (dividir pelas parcelas)</option>
                         <option value="parcela">O valor de cada parcela</option>
@@ -352,7 +352,7 @@
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
             <div class="p-5 border-b border-slate-800 flex justify-between items-center">
                 <h3 class="font-bold text-white text-base">Separar Dinheiro (Guardar em Caixa)</h3>
-                <button onclick="fecharModalAporte()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">âœ•</span></button>
+                <button onclick="fecharModalAporte()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">✕</span></button>
             </div>
             <form id="formAporte" onsubmit="salvarAporte(event)" class="p-6 space-y-4">
                 <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-xs space-y-1.5">
@@ -361,7 +361,7 @@
                         <span id="aporteInfoTotalDia" class="font-bold text-amber-400">R$ 0,00</span>
                     </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-amber-200/80">SÃ³ a conta selecionada:</span>
+                        <span class="text-amber-200/80">Só a conta selecionada:</span>
                         <span id="aporteInfoContaDia" class="font-bold text-amber-300">R$ 0,00</span>
                     </div>
                 </div>
@@ -384,23 +384,23 @@
                     <input type="date" id="aporteData" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Motivo / ObservaÃ§Ã£o</label>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Motivo / Observação</label>
                     <input type="text" id="aporteMotivo" required placeholder="Ex: Separei hoje / Pix do cliente" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
                 </div>
                 <div class="pt-4 flex justify-end gap-3 border-t border-slate-800">
                     <button type="button" onclick="fecharModalAporte()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs font-medium transition-colors cursor-pointer">Cancelar</button>
-                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 rounded-xl text-xs font-medium shadow-lg shadow-emerald-600/25 transition-all cursor-pointer">Confirmar SeparaÃ§Ã£o</button>
+                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 rounded-xl text-xs font-medium shadow-lg shadow-emerald-600/25 transition-all cursor-pointer">Confirmar Separação</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Modal Efetivar Dinheiro Guardado em JÃ¡ Pago -->
+    <!-- Modal Efetivar Dinheiro Guardado em Já Pago -->
     <div id="modalConverter" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
             <div class="p-5 border-b border-slate-800 flex justify-between items-center">
-                <h3 class="font-bold text-white text-base">Efetivar Dinheiro Guardado em JÃ¡ Pago</h3>
-                <button onclick="fecharModalConverter()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">âœ•</span></button>
+                <h3 class="font-bold text-white text-base">Efetivar Dinheiro Guardado em Já Pago</h3>
+                <button onclick="fecharModalConverter()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">✕</span></button>
             </div>
             <form id="formConverter" onsubmit="salvarConversaoGuardado(event)" class="p-6 space-y-4">
                 <div>
@@ -412,7 +412,7 @@
 
                 <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2 text-xs">
                     <div class="flex justify-between items-center">
-                        <span class="text-slate-400">Dinheiro Guardado DisponÃ­vel:</span>
+                        <span class="text-slate-400">Dinheiro Guardado Disponível:</span>
                         <span id="infoGuardadoDisponivel" class="font-bold text-emerald-400">R$ 0,00</span>
                     </div>
                     <div class="flex justify-between items-center">
@@ -429,7 +429,7 @@
                 <!-- Janela / Caixa Informativa de Expectativa (Preview) -->
                 <div class="bg-indigo-950/40 border border-indigo-500/30 p-3 rounded-xl text-xs space-y-1">
                     <div class="flex items-center gap-1.5 text-indigo-300 font-semibold mb-1">
-                        <span role="img" aria-hidden="true">ðŸ§®</span> Expectativa / ProjeÃ§Ã£o de Expectativa:
+                        <span role="img" aria-hidden="true">🧮</span> Expectativa / Projeção de Expectativa:
                     </div>
                     <div class="flex justify-between items-center text-slate-300">
                         <span>Novo Dinheiro Guardado Restante:</span>
@@ -439,7 +439,7 @@
                         <span>Novo Falta Pagar (Estimado):</span>
                         <span id="previaFaltaPagar" class="font-bold text-rose-300">R$ 0,00</span>
                     </div>
-                    <p class="text-[10px] text-slate-400 mt-1 italic">* Esta projeÃ§Ã£o Ã© apenas uma expectativa visual. SÃ³ serÃ¡ efetivada quando vocÃª clicar em "Efetivar Pagamento".</p>
+                    <p class="text-[10px] text-slate-400 mt-1 italic">* Esta projeção é apenas uma expectativa visual. Só será efetivada quando você clicar em "Efetivar Pagamento".</p>
                 </div>
 
                 <div>
@@ -448,7 +448,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Motivo / DescriÃ§Ã£o</label>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Motivo / Descrição</label>
                     <input type="text" id="converterMotivo" required placeholder="Ex: Pago ao credor usando o dinheiro guardado" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
                 </div>
 
@@ -465,7 +465,7 @@
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
             <div class="p-5 border-b border-slate-800 flex justify-between items-center">
                 <h3 class="font-bold text-white text-base">Transferir Dinheiro Guardado</h3>
-                <button onclick="fecharModalTransferir()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">âœ•</span></button>
+                <button onclick="fecharModalTransferir()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">✕</span></button>
             </div>
             <form id="formTransferir" onsubmit="salvarTransferencia(event)" class="p-6 space-y-4">
                 <div>
@@ -476,7 +476,7 @@
                 </div>
 
                 <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs flex justify-between items-center">
-                    <span class="text-slate-400">Dinheiro Guardado DisponÃ­vel na Origem:</span>
+                    <span class="text-slate-400">Dinheiro Guardado Disponível na Origem:</span>
                     <span id="infoGuardadoOrigem" class="font-bold text-emerald-400">R$ 0,00</span>
                 </div>
 
@@ -498,33 +498,33 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Motivo / DescriÃ§Ã£o</label>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Motivo / Descrição</label>
                     <input type="text" id="transferirMotivo" required placeholder="Ex: Reservei p/ Rafael mas preciso usar no aluguel" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
                 </div>
 
-                <p class="text-[10px] text-slate-400 italic">O valor sai do "JÃ¡ Guardado" da origem e entra direto no "JÃ¡ Guardado" do destino, sem precisar retirar e separar de novo.</p>
+                <p class="text-[10px] text-slate-400 italic">O valor sai do "Já Guardado" da origem e entra direto no "Já Guardado" do destino, sem precisar retirar e separar de novo.</p>
 
                 <div class="pt-4 flex justify-end gap-3 border-t border-slate-800">
                     <button type="button" onclick="fecharModalTransferir()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs font-medium transition-colors cursor-pointer">Cancelar</button>
-                    <button type="submit" class="bg-violet-600 hover:bg-violet-500 text-white px-5 py-2.5 rounded-xl text-xs font-medium shadow-lg shadow-violet-600/25 transition-all cursor-pointer">Confirmar TransferÃªncia</button>
+                    <button type="submit" class="bg-violet-600 hover:bg-violet-500 text-white px-5 py-2.5 rounded-xl text-xs font-medium shadow-lg shadow-violet-600/25 transition-all cursor-pointer">Confirmar Transferência</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Modal Registrar SaÃ­da / Pagamento / Retirada -->
+    <!-- Modal Registrar Saída / Pagamento / Retirada -->
     <div id="modalSaida" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
             <div class="p-5 border-b border-slate-800 flex justify-between items-center">
-                <h3 class="font-bold text-white text-base">Registrar SaÃ­da / Pagamento / Retirada</h3>
-                <button onclick="fecharModalSaida()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">âœ•</span></button>
+                <h3 class="font-bold text-white text-base">Registrar Saída / Pagamento / Retirada</h3>
+                <button onclick="fecharModalSaida()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">✕</span></button>
             </div>
             <form id="formSaida" onsubmit="salvarSaida(event)" class="p-6 space-y-4">
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Tipo de SaÃ­da</label>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Tipo de Saída</label>
                     <select id="saidaTipo" onchange="atualizarCamposSaida()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
-                        <option value="pagamento">Pagamento Direto (abate a dÃ­vida de uma conta fixa)</option>
-                        <option value="retirada">Retirada p/ Gasto Sem Conta Fixa (urgÃªncia, imprevisto...)</option>
+                        <option value="pagamento">Pagamento Direto (abate a dívida de uma conta fixa)</option>
+                        <option value="retirada">Retirada p/ Gasto Sem Conta Fixa (urgência, imprevisto...)</option>
                     </select>
                     <p id="saidaTipoAjuda" class="text-[10px] text-slate-400 mt-1"></p>
                 </div>
@@ -538,23 +538,23 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Valor da SaÃ­da (R$)</label>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Valor da Saída (R$)</label>
                     <input type="number" step="0.01" id="saidaValor" required placeholder="Ex: 500.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Data da SaÃ­da</label>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Data da Saída</label>
                     <input type="date" id="saidaData" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Motivo / DescriÃ§Ã£o</label>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Motivo / Descrição</label>
                     <input type="text" id="saidaMotivo" required placeholder="Ex: Vale quinzenal pago ao Rafael" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
                 </div>
 
                 <div class="pt-4 flex justify-end gap-3 border-t border-slate-800">
                     <button type="button" onclick="fecharModalSaida()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs font-medium transition-colors cursor-pointer">Cancelar</button>
-                    <button type="submit" class="bg-rose-600 hover:bg-rose-500 text-white px-5 py-2.5 rounded-xl text-xs font-medium shadow-lg shadow-rose-600/25 transition-all cursor-pointer">Confirmar SaÃ­da</button>
+                    <button type="submit" class="bg-rose-600 hover:bg-rose-500 text-white px-5 py-2.5 rounded-xl text-xs font-medium shadow-lg shadow-rose-600/25 transition-all cursor-pointer">Confirmar Saída</button>
                 </div>
             </form>
         </div>
@@ -565,10 +565,10 @@
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
             <div class="p-5 border-b border-slate-800 flex justify-between items-center">
                 <h3 class="font-bold text-white text-base">Backup dos Dados</h3>
-                <button onclick="fecharModalBackup()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">âœ•</span></button>
+                <button onclick="fecharModalBackup()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">✕</span></button>
             </div>
             <div class="p-6 space-y-3">
-                <p class="text-[11px] text-slate-400">Exportar: clique em "Gerar backup", copie todo o texto e guarde (ou cole no outro lugar). Importar: cole o texto aqui e clique em "Importar" â€” isso substitui os dados atuais.</p>
+                <p class="text-[11px] text-slate-400">Exportar: clique em "Gerar backup", copie todo o texto e guarde (ou cole no outro lugar). Importar: cole o texto aqui e clique em "Importar" — isso substitui os dados atuais.</p>
                 <textarea id="backupTexto" rows="9" spellcheck="false" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-[11px] text-white font-mono focus:outline-none focus:border-indigo-500" placeholder="O backup aparece aqui, ou cole um backup para importar..."></textarea>
                 <div class="flex flex-wrap justify-end gap-3">
                     <button type="button" onclick="gerarBackup()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2.5 rounded-xl text-xs font-medium transition-colors cursor-pointer">Gerar backup</button>
@@ -583,18 +583,18 @@
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
             <div class="p-5 border-b border-slate-800 flex justify-between items-center">
                 <h3 id="ajusteTitulo" class="font-bold text-white text-base">Reajustar Valores</h3>
-                <button onclick="fecharModalAjuste()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">âœ•</span></button>
+                <button onclick="fecharModalAjuste()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><span class="text-lg" role="img" aria-hidden="true">✕</span></button>
             </div>
             <form onsubmit="salvarAjuste(event)" class="p-6 space-y-4">
                 <input type="hidden" id="ajusteContaId">
-                <p class="text-[11px] text-slate-400">Digite o valor que estÃ¡ correto AGORA. O sistema calcula a diferenÃ§a e registra um "Ajuste Manual" no histÃ³rico â€” sem precisar lanÃ§ar cada retirada.</p>
+                <p class="text-[11px] text-slate-400">Digite o valor que está correto AGORA. O sistema calcula a diferença e registra um "Ajuste Manual" no histórico — sem precisar lançar cada retirada.</p>
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">JÃ¡ Guardado (R$)</label>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Já Guardado (R$)</label>
                     <input type="number" step="0.01" min="0" id="ajusteGuardado" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
                     <p id="ajusteGuardadoAtual" class="text-[10px] text-slate-400 mt-1"></p>
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">JÃ¡ Pago (R$)</label>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Já Pago (R$)</label>
                     <input type="number" step="0.01" min="0" id="ajustePago" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
                     <p id="ajustePagoAtual" class="text-[10px] text-slate-400 mt-1"></p>
                 </div>
@@ -610,7 +610,7 @@
     <div id="modalMensagem" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl p-6 text-center space-y-4">
             <div id="msgIcon" class="w-12 h-12 rounded-full mx-auto flex items-center justify-center text-xl bg-indigo-500/10 text-indigo-400">
-                <span role="img" aria-hidden="true">â„¹ï¸</span>
+                <span role="img" aria-hidden="true">ℹ️</span>
             </div>
             <h3 id="msgTitulo" class="font-bold text-white text-base">Aviso</h3>
             <p id="msgTexto" class="text-xs text-slate-300">Mensagem aqui...</p>
@@ -618,13 +618,13 @@
         </div>
     </div>
 
-    <!-- Modal de ConfirmaÃ§Ã£o (substitui window.confirm, que nÃ£o funciona dentro do artifact) -->
+    <!-- Modal de Confirmação (substitui window.confirm, que não funciona dentro do artifact) -->
     <div id="modalConfirmar" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-[60] flex items-center justify-center p-4 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl p-6 text-center space-y-4">
             <div class="w-12 h-12 rounded-full mx-auto flex items-center justify-center text-xl bg-rose-500/10 text-rose-400">
-                <span role="img" aria-hidden="true">âš ï¸</span>
+                <span role="img" aria-hidden="true">⚠️</span>
             </div>
-            <h3 id="confirmTitulo" class="font-bold text-white text-base">Confirmar aÃ§Ã£o</h3>
+            <h3 id="confirmTitulo" class="font-bold text-white text-base">Confirmar ação</h3>
             <p id="confirmTexto" class="text-xs text-slate-300">Tem certeza?</p>
             <div class="flex gap-3">
                 <button onclick="fecharConfirmacao()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer">Cancelar</button>
@@ -634,8 +634,8 @@
     </div>
 
     <script>
-        // Estado inicial da aplicaÃ§Ã£o com suporte a quinzenas e divisÃ£o automÃ¡tica
-        let totalSepararDiaGlobal = 0; // atualizado a cada renderizar(), usado no cÃ¡lculo de "Dias de FÃ´lego"
+        // Estado inicial da aplicação com suporte a quinzenas e divisão automática
+        let totalSepararDiaGlobal = 0; // atualizado a cada renderizar(), usado no cálculo de "Dias de Fôlego"
         let contas = JSON.parse(localStorage.getItem('fin_contas')) || [
             { id: '1', nome: 'jose', prioridade: 1, diaPagamento: '25', total: 3000.00 },
             { id: '2', nome: 'agiota', prioridade: 2, diaPagamento: '27', total: 2500.00 },
@@ -710,7 +710,7 @@
                 return `<div class="space-y-1">
                     <div class="flex justify-between gap-3 text-xs">
                         <span class="text-slate-200 uppercase font-medium truncate">${esc(i.nome)}</span>
-                        <span class="text-slate-400 whitespace-nowrap">${formatarMoeda(i.valor)} Â· ${pct}%</span>
+                        <span class="text-slate-400 whitespace-nowrap">${formatarMoeda(i.valor)} · ${pct}%</span>
                     </div>
                     <div class="h-2.5 rounded-full bg-slate-800 overflow-hidden"><div class="h-full rounded-full ${cor}" style="width:${larg}%"></div></div>
                 </div>`;
@@ -738,9 +738,9 @@
                     <div class="grid grid-cols-2 gap-3 text-xs">
                         <div><div class="text-slate-400">Separar por dia</div><div class="font-bold text-amber-400 text-base">${formatarMoeda(r.sep)}</div></div>
                         <div><div class="text-slate-400">Compromisso mensal</div><div class="font-bold text-white text-base">${formatarMoeda(r.total)}</div></div>
-                        <div><div class="text-slate-400">JÃ¡ guardado</div><div class="font-bold text-emerald-400">${formatarMoeda(r.guard)}</div></div>
+                        <div><div class="text-slate-400">Já guardado</div><div class="font-bold text-emerald-400">${formatarMoeda(r.guard)}</div></div>
                         <div><div class="text-slate-400">Falta pagar</div><div class="font-bold text-rose-400">${formatarMoeda(r.falta)}</div></div>
-                        <div><div class="text-slate-400">JÃ¡ pago</div><div class="font-bold text-teal-400">${formatarMoeda(r.pago)}</div></div>
+                        <div><div class="text-slate-400">Já pago</div><div class="font-bold text-teal-400">${formatarMoeda(r.pago)}</div></div>
                         <div><div class="text-slate-400">Retiradas</div><div class="font-bold text-rose-300">${formatarMoeda(ret)}</div></div>
                     </div>
                 </div>`;
@@ -751,7 +751,7 @@
             compromissos.sort((a, b) => b.valor - a.valor);
             const topComp = compromissos.slice(0, 10);
 
-            // SaÃ­das reais (pagamentos + retiradas) do mÃªs atual, somadas por conta
+            // Saídas reais (pagamentos + retiradas) do mês atual, somadas por conta
             const mes = formatarDataISO(new Date()).slice(0, 7);
             const porConta = new Map();
             historicoSaidas.forEach(s => {
@@ -776,15 +776,15 @@
                     </div>
                     <div class="text-right text-xs text-slate-400">
                         <div>Compromisso mensal: <span class="font-bold text-white">${formatarMoeda(totalComp)}</span></div>
-                        <div>Falta pagar: <span class="font-bold text-rose-400">${formatarMoeda(soma('falta'))}</span> Â· Guardado: <span class="font-bold text-emerald-400">${formatarMoeda(soma('guard'))}</span></div>
+                        <div>Falta pagar: <span class="font-bold text-rose-400">${formatarMoeda(soma('falta'))}</span> · Guardado: <span class="font-bold text-emerald-400">${formatarMoeda(soma('guard'))}</span></div>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    ${cartao('ðŸ¢ Empresarial', resumo.empresarial, retE, 'border-indigo-500/40')}
-                    ${cartao('ðŸ  Pessoal', resumo.pessoal, retP, 'border-emerald-500/40')}
+                    ${cartao('🏢 Empresarial', resumo.empresarial, retE, 'border-indigo-500/40')}
+                    ${cartao('🏠 Pessoal', resumo.pessoal, retP, 'border-emerald-500/40')}
                 </div>
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3">
-                    <h3 class="font-bold text-white text-sm">DivisÃ£o do compromisso mensal</h3>
+                    <h3 class="font-bold text-white text-sm">Divisão do compromisso mensal</h3>
                     <div class="h-4 rounded-full overflow-hidden bg-slate-800 flex">
                         <div class="h-full bg-indigo-500" style="width:${pctE}%"></div>
                         <div class="h-full bg-emerald-500" style="width:${totalComp > 0 ? 100 - pctE : 0}%"></div>
@@ -797,13 +797,13 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3">
                         <h3 class="font-bold text-white text-sm">Para onde vai o dinheiro (compromisso mensal)</h3>
-                        <p class="text-[11px] text-slate-400">As 10 contas que mais pesam no mÃªs, nos dois perfis.</p>
+                        <p class="text-[11px] text-slate-400">As 10 contas que mais pesam no mês, nos dois perfis.</p>
                         ${blocoBarras(topComp, 'Nenhuma conta cadastrada.')}
                     </div>
                     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3">
-                        <h3 class="font-bold text-white text-sm">Onde saiu mais dinheiro neste mÃªs</h3>
+                        <h3 class="font-bold text-white text-sm">Onde saiu mais dinheiro neste mês</h3>
                         <p class="text-[11px] text-slate-400">Pagamentos e retiradas registrados em ${mes.split('-').reverse().join('/')}: ${formatarMoeda(totalSaidasMes)}.</p>
-                        ${blocoBarras(saidasMes, 'Ainda nÃ£o hÃ¡ saÃ­das registradas neste mÃªs.')}
+                        ${blocoBarras(saidasMes, 'Ainda não há saídas registradas neste mês.')}
                     </div>
                 </div>`;
         }
@@ -818,10 +818,10 @@
             const iconDiv = document.getElementById('msgIcon');
             if (tipo === 'success') {
                 iconDiv.className = "w-12 h-12 rounded-full mx-auto flex items-center justify-center text-xl bg-emerald-500/10 text-emerald-400";
-                iconDiv.innerHTML = '<span role="img" aria-hidden="true">âœ…</span>';
+                iconDiv.innerHTML = '<span role="img" aria-hidden="true">✅</span>';
             } else {
                 iconDiv.className = "w-12 h-12 rounded-full mx-auto flex items-center justify-center text-xl bg-indigo-500/10 text-indigo-400";
-                iconDiv.innerHTML = '<span role="img" aria-hidden="true">â„¹ï¸</span>';
+                iconDiv.innerHTML = '<span role="img" aria-hidden="true">ℹ️</span>';
             }
             document.getElementById('modalMensagem').classList.remove('hidden');
         }
@@ -845,7 +845,7 @@
             document.getElementById('modalConfirmar').classList.add('hidden');
         }
 
-        // Extrai todos os dias numÃ©ricos de uma string (ex: "05 e 20" -> [5, 20])
+        // Extrai todos os dias numéricos de uma string (ex: "05 e 20" -> [5, 20])
         function extrairDias(diaPagamentoStr) {
             if (!diaPagamentoStr || diaPagamentoStr.trim() === '') return [new Date().getDate()];
             const matches = diaPagamentoStr.match(/\d+/g);
@@ -888,10 +888,10 @@
         }
 
         // Conta recorrente: a cada vencimento que chega, o ciclo reinicia automaticamente.
-        // Retorna a data (YYYY-MM-DD) em que o ciclo ATUAL comeÃ§ou, ou seja, o dia seguinte
-        // ao vencimento anterior. Pagamentos feitos a partir dessa data (inclusive no prÃ³prio
+        // Retorna a data (YYYY-MM-DD) em que o ciclo ATUAL começou, ou seja, o dia seguinte
+        // ao vencimento anterior. Pagamentos feitos a partir dessa data (inclusive no próprio
         // dia do vencimento, permitindo pagar adiantado) contam para o ciclo atual; tudo que
-        // foi guardado/pago antes disso pertence a um ciclo jÃ¡ encerrado e nÃ£o conta mais.
+        // foi guardado/pago antes disso pertence a um ciclo já encerrado e não conta mais.
         function calcularInicioCicloAtual(diaPagamentoStr) {
             const diasArr = [...new Set(extrairDias(diaPagamentoStr))].sort((a, b) => a - b);
             const hoje = new Date();
@@ -911,7 +911,7 @@
             const proximoVenc = proximos.length > 0 ? proximos[0] : candidatos[candidatos.length - 1];
 
             const anteriores = candidatos.filter(d => d < proximoVenc);
-            if (anteriores.length === 0) return null; // sem histÃ³rico suficiente pra definir inÃ­cio, nÃ£o filtra
+            if (anteriores.length === 0) return null; // sem histórico suficiente pra definir início, não filtra
 
             const anteriorVenc = anteriores[anteriores.length - 1];
             const inicioCiclo = new Date(anteriorVenc);
@@ -919,11 +919,11 @@
             return formatarDataISO(inicioCiclo);
         }
 
-        // Um registro (aporte/saÃ­da) sÃ³ conta para o ciclo atual se passar nos dois filtros:
-        // 1) data do registro dentro do ciclo de vencimento automÃ¡tico (se houver um definido);
+        // Um registro (aporte/saída) só conta para o ciclo atual se passar nos dois filtros:
+        // 1) data do registro dentro do ciclo de vencimento automático (se houver um definido);
         // 2) se a conta foi reiniciada manualmente, o registro precisa ter sido criado DEPOIS
-        //    do clique em "Reiniciar" â€” comparamos pelo timestamp do id (preciso atÃ© o milissegundo),
-        //    nÃ£o pela data do calendÃ¡rio, pra zerar de verdade mesmo pagamentos feitos no mesmo dia.
+        //    do clique em "Reiniciar" — comparamos pelo timestamp do id (preciso até o milissegundo),
+        //    não pela data do calendário, pra zerar de verdade mesmo pagamentos feitos no mesmo dia.
         function registroContaNoCiclo(registro, inicioCicloData, resetTimestamp) {
             if (inicioCicloData && registro.data < inicioCicloData) return false;
             if (resetTimestamp && parseInt(registro.id, 10) < resetTimestamp) return false;
@@ -961,15 +961,15 @@
                 .reduce((acc, curr) => acc + curr.valor, 0);
         }
 
-        // Soma TODO o histÃ³rico de pagamentos diretos de uma conta (sem filtrar por ciclo),
-        // usado para contar quantas parcelas jÃ¡ foram pagas em contas com recorrÃªncia limitada.
+        // Soma TODO o histórico de pagamentos diretos de uma conta (sem filtrar por ciclo),
+        // usado para contar quantas parcelas já foram pagas em contas com recorrência limitada.
         function calcularPagoTotalAllTime(contaId) {
             return historicoSaidas
                 .filter(s => s.contaId === contaId && s.tipo === 'pagamento')
                 .reduce((acc, curr) => acc + curr.valor, 0);
         }
 
-        // Para contas com recorrÃªncia de "parcelas", retorna {pagas, total} e se jÃ¡ concluiu.
+        // Para contas com recorrência de "parcelas", retorna {pagas, total} e se já concluiu.
         function calcularStatusParcelas(conta, valorPorData) {
             if (conta.recorrencia !== 'parcelas' || !conta.totalParcelas) return null;
             const pagoTotalAllTime = calcularPagoTotalAllTime(conta.id);
@@ -1004,13 +1004,13 @@
 
             const mostrarOcultas = document.getElementById('checkMostrarOcultas').checked;
 
-            // 1) Calcula os dados de cada conta visÃ­vel (sem depender de ordem ainda)
+            // 1) Calcula os dados de cada conta visível (sem depender de ordem ainda)
             const linhas = [];
             contas.forEach(conta => {
                 if (perfilAtivo !== 'geral' && perfilDe(conta) !== perfilAtivo) return;
                 if (perfilAtivo !== 'geral' && busca && !conta.nome.toLowerCase().includes(busca)) return;
 
-                // Conta oculta: sÃ³ aparece na tabela se "Mostrar ocultas" estiver marcado,
+                // Conta oculta: só aparece na tabela se "Mostrar ocultas" estiver marcado,
                 // e NUNCA entra nos totais/somas (incluindo Separar por Dia).
                 const incluirNosTotais = !conta.oculta;
                 if (conta.oculta && !mostrarOcultas) return;
@@ -1021,11 +1021,11 @@
                 const diariaInativa = diariaInativaHoje(conta);
                 const valorPorData = valorPorOcorrencia(conta);
 
-                // Conta com nÃºmero fixo de parcelas: depois de pagar a quantidade combinada,
-                // ela para de reiniciar e fica marcada como concluÃ­da (nÃ£o entra mais nos totais).
+                // Conta com número fixo de parcelas: depois de pagar a quantidade combinada,
+                // ela para de reiniciar e fica marcada como concluída (não entra mais nos totais).
                 const parcelasInfo = calcularStatusParcelas(conta, valorPorData);
                 const concluida = !!(parcelasInfo && parcelasInfo.concluida);
-                // Marcada Ã  mÃ£o como "paga hoje" (vale sÃ³ atÃ© a meia-noite)
+                // Marcada à mão como "paga hoje" (vale só até a meia-noite)
                 const marcadaPagaHoje = conta.pagoHojeEm === formatarDataISO(new Date());
 
                 const guardado = calcularGuardadoLiquido(conta.id);
@@ -1037,12 +1037,12 @@
                 let diasFaltam = 1;
 
                 if (diariaInativa) {
-                    // Diarista em dia de folga: fica apagado (nÃ£o oculto) atÃ© o prÃ³ximo dia de trabalho
+                    // Diarista em dia de folga: fica apagado (não oculto) até o próximo dia de trabalho
                     const prox = proximoDiaTrabalho(conta);
                     infoVenc = { dias: prox.dias, texto: 'Volta ' + prox.texto };
                     diasFaltam = prox.dias;
                 } else if (!concluida) {
-                    // guardado e pagoDireto jÃ¡ sÃ£o do ciclo (vencimento) atual â€” assim que o
+                    // guardado e pagoDireto já são do ciclo (vencimento) atual — assim que o
                     // vencimento passa, o ciclo reinicia sozinho e a conta volta a pedir pagamento.
                     const totalAbatidoOuPago = pagoDireto + guardado;
                     faltaPagar = Math.max(0, valorPorData - totalAbatidoOuPago);
@@ -1066,7 +1066,7 @@
                 linhas.push({ conta, guardado, pagoDireto, faltaPagar, infoVenc, diasFaltam, separarPorDia, parcelasInfo, concluida, marcadaPagaHoje, diaria, diariaInativa });
             });
 
-            // 2) Ordena conforme o filtro escolhido pelo usuÃ¡rio
+            // 2) Ordena conforme o filtro escolhido pelo usuário
             const comparadores = {
                 prioridade: (a, b) => a.conta.prioridade - b.conta.prioridade,
                 nome: (a, b) => a.conta.nome.localeCompare(b.conta.nome, 'pt-BR'),
@@ -1078,16 +1078,16 @@
             linhas.sort(comparadores[ordenarPor] || comparadores.prioridade);
             ultimasLinhas = linhas;
 
-            // Contas jÃ¡ quitadas ficam no fim da lista (ou somem, se "Esconder quitadas" estiver marcado)
+            // Contas já quitadas ficam no fim da lista (ou somem, se "Esconder quitadas" estiver marcado)
             const estaQuitada = l => l.concluida || (l.faltaPagar === 0 && !l.diariaInativa) || l.marcadaPagaHoje;
             const esconderQuitadas = document.getElementById('checkEsconderQuitadas').checked;
             const linhasVisiveis = esconderQuitadas
                 ? linhas.filter(l => !estaQuitada(l))
                 : [...linhas.filter(l => !estaQuitada(l)), ...linhas.filter(estaQuitada)];
 
-            // 3) Monta as linhas da tabela jÃ¡ na ordem escolhida
+            // 3) Monta as linhas da tabela já na ordem escolhida
             linhasVisiveis.forEach(({ conta, guardado, pagoDireto, faltaPagar, infoVenc, separarPorDia, parcelasInfo, concluida, marcadaPagaHoje, diaria, diariaInativa }) => {
-                // Quitada no ciclo atual: aparece apagada e riscada, para nÃ£o pagar duas vezes
+                // Quitada no ciclo atual: aparece apagada e riscada, para não pagar duas vezes
                 const quitada = !concluida && ((!diariaInativa && faltaPagar === 0) || marcadaPagaHoje);
                 let notaDiaria = '';
                 if (conta.modoValor === 'diaria') {
@@ -1096,8 +1096,8 @@
                     const dAtual = diasTrabalhadosNoMes(diasC, hoje.getFullYear(), hoje.getMonth());
                     const dProx = diasTrabalhadosNoMes(diasC, hoje.getFullYear(), hoje.getMonth() + 1);
                     const tProx = conta.valorDiaria * dProx;
-                    notaDiaria = `<div class="text-[10px] font-normal text-slate-400">${dAtual} dias Ã— ${formatarMoeda(conta.valorDiaria)}</div>` +
-                        `<div class="text-[10px] font-normal ${tProx > conta.total ? 'text-amber-400' : 'text-slate-500'}">PrÃ³x. mÃªs: ${formatarMoeda(tProx)} (${dProx} dias)</div>`;
+                    notaDiaria = `<div class="text-[10px] font-normal text-slate-400">${dAtual} dias × ${formatarMoeda(conta.valorDiaria)}</div>` +
+                        `<div class="text-[10px] font-normal ${tProx > conta.total ? 'text-amber-400' : 'text-slate-500'}">Próx. mês: ${formatarMoeda(tProx)} (${dProx} dias)</div>`;
                 }
                 if (conta.montante && parcelasInfo) {
                     const restam = Math.max(0, parcelasInfo.total - parcelasInfo.pagas);
@@ -1111,7 +1111,7 @@
                 if (diariaInativa) {
                     statusHtml = '<span class="px-2.5 py-1 rounded-full bg-slate-700/60 text-slate-300 border border-slate-600/40 text-[10px] font-semibold">Folga hoje</span>';
                 } else if (concluida) {
-                    statusHtml = '<span class="px-2.5 py-1 rounded-full bg-violet-500/10 text-violet-400 border border-violet-500/20 text-[10px] font-semibold">ConcluÃ­da</span>';
+                    statusHtml = '<span class="px-2.5 py-1 rounded-full bg-violet-500/10 text-violet-400 border border-violet-500/20 text-[10px] font-semibold">Concluída</span>';
                 } else if (marcadaPagaHoje) {
                     statusHtml = '<span class="px-2.5 py-1 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20 text-[10px] font-semibold">Pago hoje</span>';
                 } else if (diaria && faltaPagar > 0) {
@@ -1119,9 +1119,9 @@
                 } else if (faltaPagar === 0) {
                     statusHtml = '<span class="px-2.5 py-1 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20 text-[10px] font-semibold">Quitado</span>';
                 } else if (infoVenc.dias <= 3) {
-                    statusHtml = '<span class="px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 text-[10px] font-semibold animate-pulse">CrÃ­tico / Vencendo</span>';
+                    statusHtml = '<span class="px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 text-[10px] font-semibold animate-pulse">Crítico / Vencendo</span>';
                 } else if (infoVenc.dias <= 10) {
-                    statusHtml = '<span class="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-semibold">AtenÃ§Ã£o</span>';
+                    statusHtml = '<span class="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-semibold">Atenção</span>';
                 } else {
                     statusHtml = '<span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-semibold">Em Dia</span>';
                 }
@@ -1138,25 +1138,25 @@
                     ? `<span class="line-through decoration-slate-500">${conta.nome}</span>`
                     : conta.nome;
                 const badgePagoHoje = pagoHoje
-                    ? ' <span class="ml-1.5 align-middle text-[9px] normal-case font-normal px-1.5 py-0.5 rounded-full bg-teal-500/10 text-teal-300 border border-teal-500/20">âœ… Pago hoje</span>'
+                    ? ' <span class="ml-1.5 align-middle text-[9px] normal-case font-normal px-1.5 py-0.5 rounded-full bg-teal-500/10 text-teal-300 border border-teal-500/20">✅ Pago hoje</span>'
                     : '';
                 const badgeParcelas = parcelasInfo
                     ? ` <span class="ml-1.5 align-middle text-[9px] normal-case font-normal px-1.5 py-0.5 rounded-full bg-violet-500/10 text-violet-300 border border-violet-500/20">Parcela ${Math.min(parcelasInfo.pagas + (concluida ? 0 : 1), parcelasInfo.total)}/${parcelasInfo.total}</span>`
                     : '';
                 const nomeExibido = (conta.oculta
-                    ? `${conta.nome} <span class="ml-1.5 align-middle text-[9px] normal-case font-normal px-1.5 py-0.5 rounded-full bg-slate-700 text-slate-300"><span class="mr-1" role="img" aria-hidden="true">ðŸ™ˆ</span>Oculta</span>`
+                    ? `${conta.nome} <span class="ml-1.5 align-middle text-[9px] normal-case font-normal px-1.5 py-0.5 rounded-full bg-slate-700 text-slate-300"><span class="mr-1" role="img" aria-hidden="true">🙈</span>Oculta</span>`
                     : nomeBase) + badgeParcelas + badgePagoHoje;
-                const btnOcultarIcon = conta.oculta ? 'ðŸ‘ï¸' : 'ðŸ™ˆ';
+                const btnOcultarIcon = conta.oculta ? '👁️' : '🙈';
                 const btnOcultarTitulo = conta.oculta ? 'Reexibir Conta' : 'Ocultar Conta';
                 tr.innerHTML = `
                     <td class="p-3.5 font-medium whitespace-nowrap">
                         <div class="flex items-center gap-2">
                             <span class="w-6 h-6 rounded-lg bg-indigo-600/20 text-indigo-400 font-bold inline-flex items-center justify-center text-xs border border-indigo-500/30">${conta.prioridade}</span>
-                            <button onclick="togglePagoHoje('${conta.id}')" title="${marcadaPagaHoje ? 'Desfazer: voltar a mostrar esta conta hoje' : 'Marcar como paga hoje (some da frente atÃ© amanhÃ£)'}" class="text-[10px] px-2 py-1 rounded-lg border cursor-pointer transition-colors ${marcadaPagaHoje ? 'border-teal-500/40 text-teal-300 bg-teal-500/10 hover:bg-teal-500/20' : 'border-slate-700 text-slate-300 hover:border-teal-500/50 hover:text-teal-300'}">${marcadaPagaHoje ? 'â†© Desfazer' : 'âœ“ Pago hoje'}</button>
+                            <button onclick="togglePagoHoje('${conta.id}')" title="${marcadaPagaHoje ? 'Desfazer: voltar a mostrar esta conta hoje' : 'Marcar como paga hoje (some da frente até amanhã)'}" class="text-[10px] px-2 py-1 rounded-lg border cursor-pointer transition-colors ${marcadaPagaHoje ? 'border-teal-500/40 text-teal-300 bg-teal-500/10 hover:bg-teal-500/20' : 'border-slate-700 text-slate-300 hover:border-teal-500/50 hover:text-teal-300'}">${marcadaPagaHoje ? '↩ Desfazer' : '✓ Pago hoje'}</button>
                         </div>
                     </td>
                     <td class="p-3.5 font-semibold text-white uppercase">${nomeExibido}</td>
-                    <td class="p-3.5 text-slate-300 font-medium">${conta.modoValor === 'diaria' ? 'DiÃ¡ria Â· ' + rotuloDiasSemana(conta) : (conta.diaPagamento || '-')}</td>
+                    <td class="p-3.5 text-slate-300 font-medium">${conta.modoValor === 'diaria' ? 'Diária · ' + rotuloDiasSemana(conta) : (conta.diaPagamento || '-')}</td>
                     <td class="p-3.5 text-right font-medium text-white">${formatarMoeda(conta.total)}${notaDiaria}</td>
                     <td class="p-3.5 text-center font-bold text-indigo-400">${infoVenc.texto}</td>
                     <td class="p-3.5 text-right font-medium text-emerald-400">${formatarMoeda(guardado)}</td>
@@ -1165,14 +1165,14 @@
                     <td class="p-3.5 text-right font-bold text-amber-400">${formatarMoeda(separarPorDia)}</td>
                     <td class="p-3.5 text-center">${statusHtml}</td>
                     <td class="p-3.5 text-right space-x-1 whitespace-nowrap">
-                        <button onclick="reiniciarCicloConta('${conta.id}')" title="Reiniciar Conta (quitou antes do tempo)" class="text-slate-400 hover:text-violet-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">ðŸ”„</span></button>
+                        <button onclick="reiniciarCicloConta('${conta.id}')" title="Reiniciar Conta (quitou antes do tempo)" class="text-slate-400 hover:text-violet-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">🔄</span></button>
                         <button onclick="toggleOcultarConta('${conta.id}')" title="${btnOcultarTitulo}" class="text-slate-400 hover:text-amber-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">${btnOcultarIcon}</span></button>
-                        <button onclick="abrirModalAporteParaConta('${conta.id}')" title="Separar Dinheiro" class="text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">ðŸª™</span></button>
-                        <button onclick="abrirModalConverterParaConta('${conta.id}')" title="Efetivar Guardado em Pago" class="text-slate-400 hover:text-teal-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">ðŸ”</span></button>
-                        <button onclick="abrirModalSaidaParaConta('${conta.id}')" title="Registrar SaÃ­da / Vale" class="text-slate-400 hover:text-rose-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">ðŸ“¤</span></button>
-                        <button onclick="abrirModalAjuste('${conta.id}')" title="Reajustar JÃ¡ Guardado / JÃ¡ Pago" class="text-slate-400 hover:text-sky-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">ðŸ› ï¸</span></button>
-                        <button onclick="editarConta('${conta.id}')" title="Editar Conta" class="text-slate-400 hover:text-indigo-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">âœï¸</span></button>
-                        <button onclick="excluirConta('${conta.id}')" title="Excluir Conta" class="text-slate-400 hover:text-rose-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">ðŸ—‘ï¸</span></button>
+                        <button onclick="abrirModalAporteParaConta('${conta.id}')" title="Separar Dinheiro" class="text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">🪙</span></button>
+                        <button onclick="abrirModalConverterParaConta('${conta.id}')" title="Efetivar Guardado em Pago" class="text-slate-400 hover:text-teal-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">🔁</span></button>
+                        <button onclick="abrirModalSaidaParaConta('${conta.id}')" title="Registrar Saída / Vale" class="text-slate-400 hover:text-rose-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">📤</span></button>
+                        <button onclick="abrirModalAjuste('${conta.id}')" title="Reajustar Já Guardado / Já Pago" class="text-slate-400 hover:text-sky-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">🛠️</span></button>
+                        <button onclick="editarConta('${conta.id}')" title="Editar Conta" class="text-slate-400 hover:text-indigo-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">✏️</span></button>
+                        <button onclick="excluirConta('${conta.id}')" title="Excluir Conta" class="text-slate-400 hover:text-rose-400 transition-colors cursor-pointer p-1"><span role="img" aria-hidden="true">🗑️</span></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1208,7 +1208,7 @@
                 if (diariaInativaHoje(conta)) return; // diarista de folga hoje
 
                 const parcelasInfo = calcularStatusParcelas(conta, valorPorData);
-                if (parcelasInfo && parcelasInfo.concluida) return; // parcelamento jÃ¡ quitado, nem entra no resumo
+                if (parcelasInfo && parcelasInfo.concluida) return; // parcelamento já quitado, nem entra no resumo
                 if (conta.pagoHojeEm === formatarDataISO(new Date())) return; // marcada como paga hoje
 
                 const guardado = calcularGuardadoLiquido(conta.id);
@@ -1224,34 +1224,34 @@
                 totalSepararHoje += separarPorDia;
                 totalFaltaGeral += faltaPagar;
 
-                let statusEmoji = 'ðŸŸ¢';
-                if (faltaPagar === 0) statusEmoji = 'âœ…';
-                else if (diasFaltam <= 3) statusEmoji = 'ðŸ”´';
-                else if (diasFaltam <= 10) statusEmoji = 'ðŸŸ¡';
+                let statusEmoji = '🟢';
+                if (faltaPagar === 0) statusEmoji = '✅';
+                else if (diasFaltam <= 3) statusEmoji = '🔴';
+                else if (diasFaltam <= 10) statusEmoji = '🟡';
 
                 linhas.push({ conta, faltaPagar, diasFaltam, separarPorDia, statusEmoji, vencTexto: infoVenc.texto });
             });
 
             linhas.sort((a, b) => a.diasFaltam - b.diasFaltam);
 
-            let texto = `ðŸ“Š *Resumo Financeiro do Dia* â€” ${dataStr}${perfilAtivo === 'geral' ? '' : ' (' + ROTULO_PERFIL[perfilAtivo] + ')'}\n\n`;
-            texto += `ðŸ’° Total a separar hoje: *${formatarMoeda(totalSepararHoje)}*\n`;
-            texto += `âš ï¸ Total ainda faltando pagar: *${formatarMoeda(totalFaltaGeral)}*\n\n`;
+            let texto = `📊 *Resumo Financeiro do Dia* — ${dataStr}${perfilAtivo === 'geral' ? '' : ' (' + ROTULO_PERFIL[perfilAtivo] + ')'}\n\n`;
+            texto += `💰 Total a separar hoje: *${formatarMoeda(totalSepararHoje)}*\n`;
+            texto += `⚠️ Total ainda faltando pagar: *${formatarMoeda(totalFaltaGeral)}*\n\n`;
             texto += `*Prioridades de hoje:*\n\n`;
 
             const pendentes = linhas.filter(l => l.faltaPagar > 0);
             if (pendentes.length === 0) {
-                texto += `Nenhuma pendÃªncia â€” tudo quitado! âœ…\n`;
+                texto += `Nenhuma pendência — tudo quitado! ✅\n`;
             } else {
                 const blocos = pendentes.map(l =>
-                    `${l.statusEmoji} *${l.conta.nome.toUpperCase()}* â€” separar ${formatarMoeda(l.separarPorDia)}/dia\n   Vence: ${l.vencTexto} â€¢ Falta: ${formatarMoeda(l.faltaPagar)}`
+                    `${l.statusEmoji} *${l.conta.nome.toUpperCase()}* — separar ${formatarMoeda(l.separarPorDia)}/dia\n   Vence: ${l.vencTexto} • Falta: ${formatarMoeda(l.faltaPagar)}`
                 );
                 texto += blocos.join('\n\n') + '\n';
             }
 
             const quitadas = linhas.filter(l => l.faltaPagar === 0);
             if (quitadas.length > 0) {
-                texto += `\nâœ… Quitadas: ${quitadas.map(l => l.conta.nome.toUpperCase()).join(', ')}\n`;
+                texto += `\n✅ Quitadas: ${quitadas.map(l => l.conta.nome.toUpperCase()).join(', ')}\n`;
             }
 
             return texto;
@@ -1259,7 +1259,7 @@
 
         function enviarResumoWhatsApp() {
             if (contas.length === 0) {
-                mostrarMensagem("AtenÃ§Ã£o", "Cadastre pelo menos uma conta para gerar o resumo.", "info");
+                mostrarMensagem("Atenção", "Cadastre pelo menos uma conta para gerar o resumo.", "info");
                 return;
             }
             const texto = gerarTextoResumoDiario();
@@ -1285,7 +1285,7 @@
                     <td class="p-3 text-slate-300">${aporte.motivo}</td>
                     <td class="p-3 text-right font-bold text-emerald-400">${formatarMoeda(aporte.valor)}</td>
                     <td class="p-3 text-center">
-                        <button onclick="excluirAporte('${aporte.id}')" title="Excluir Aporte" class="text-slate-500 hover:text-rose-400 transition-colors cursor-pointer"><span role="img" aria-hidden="true">ðŸ—‘ï¸</span></button>
+                        <button onclick="excluirAporte('${aporte.id}')" title="Excluir Aporte" class="text-slate-500 hover:text-rose-400 transition-colors cursor-pointer"><span role="img" aria-hidden="true">🗑️</span></button>
                     </td>
                 `;
                 tbodyAportes.appendChild(tr);
@@ -1299,13 +1299,13 @@
             const saidasOrdenadas = [...saidasFiltradas].reverse();
             saidasOrdenadas.forEach(saida => {
                 const conta = contas.find(c => c.id === saida.contaId);
-                const nomeConta = conta ? conta.nome : 'Outra OcasiÃ£o / Caixa';
+                const nomeConta = conta ? conta.nome : 'Outra Ocasião / Caixa';
                 const tipoBadge = (saida.tipo === 'ajuste' || saida.ajusteManual)
                     ? '<span class="text-sky-400 font-semibold">Ajuste Manual</span>'
                     : saida.tipo === 'pagamento'
                     ? '<span class="text-teal-400 font-semibold">Pagamento Direto</span>'
                     : saida.tipo === 'transferencia'
-                        ? '<span class="text-violet-400 font-semibold">TransferÃªncia (saiu)</span>'
+                        ? '<span class="text-violet-400 font-semibold">Transferência (saiu)</span>'
                         : saida.contaId
                             ? '<span class="text-amber-400 font-semibold">Retirada (do Guardado)</span>'
                             : '<span class="text-rose-400 font-semibold">Retirada (Caixa/Externa)</span>';
@@ -1321,7 +1321,7 @@
                     <td class="p-3 text-slate-300">${saida.motivo}</td>
                     <td class="p-3 text-right font-bold text-rose-400">${formatarMoeda(saida.valor)}</td>
                     <td class="p-3 text-center">
-                        <button onclick="excluirSaida('${saida.id}')" title="Excluir SaÃ­da" class="text-slate-500 hover:text-rose-400 transition-colors cursor-pointer"><span role="img" aria-hidden="true">ðŸ—‘ï¸</span></button>
+                        <button onclick="excluirSaida('${saida.id}')" title="Excluir Saída" class="text-slate-500 hover:text-rose-400 transition-colors cursor-pointer"><span role="img" aria-hidden="true">🗑️</span></button>
                     </td>
                 `;
                 tbodySaidas.appendChild(tr);
@@ -1342,7 +1342,7 @@
             });
         }
 
-        // ================= DIARISTAS (valor = dias trabalhados no mÃªs x valor por dia) =================
+        // ================= DIARISTAS (valor = dias trabalhados no mês x valor por dia) =================
         const TODOS_OS_DIAS = [0, 1, 2, 3, 4, 5, 6];
 
         function diasTrabalhadosNoMes(diasSemana, ano, mes) { // mes: 0-11
@@ -1359,7 +1359,7 @@
             return Math.round(conta.valorDiaria * dias * 100) / 100;
         }
 
-        // MantÃ©m o "total do mÃªs" dos diaristas sempre igual ao do mÃªs atual (vira sozinho na virada do mÃªs)
+        // Mantém o "total do mês" dos diaristas sempre igual ao do mês atual (vira sozinho na virada do mês)
         function recalcularTotaisDiaristas() {
             const h = new Date();
             let mudou = false;
@@ -1393,7 +1393,7 @@
             const h = new Date();
             const dAtual = diasTrabalhadosNoMes(dias, h.getFullYear(), h.getMonth());
             const dProx = diasTrabalhadosNoMes(dias, h.getFullYear(), h.getMonth() + 1);
-            el.innerText = `Este mÃªs: ${dAtual} dias = ${formatarMoeda(valor * dAtual)}  |  PrÃ³ximo mÃªs: ${dProx} dias = ${formatarMoeda(valor * dProx)}`;
+            el.innerText = `Este mês: ${dAtual} dias = ${formatarMoeda(valor * dAtual)}  |  Próximo mês: ${dProx} dias = ${formatarMoeda(valor * dProx)}`;
         }
 
         function renderizarPrevisaoDiaristas() {
@@ -1416,8 +1416,8 @@
                 const difCor = dif > 0 ? 'text-amber-400' : (dif < 0 ? 'text-emerald-400' : 'text-slate-400');
                 return `<tr class="border-t border-slate-800">
                     <td class="py-2 pr-3 font-semibold text-white uppercase">${esc(c.nome)} <span class="text-[10px] font-normal text-slate-400 normal-case">(${formatarMoeda(c.valorDiaria)}/dia)</span></td>
-                    <td class="py-2 pr-3 text-right text-slate-200">${dA} dias Â· ${formatarMoeda(vA)}</td>
-                    <td class="py-2 pr-3 text-right text-slate-200">${dP} dias Â· ${formatarMoeda(vP)}</td>
+                    <td class="py-2 pr-3 text-right text-slate-200">${dA} dias · ${formatarMoeda(vA)}</td>
+                    <td class="py-2 pr-3 text-right text-slate-200">${dP} dias · ${formatarMoeda(vP)}</td>
                     <td class="py-2 text-right font-bold ${difCor}">${difTxt}</td></tr>`;
             }).join('');
             const difTot = totProx - totAtual;
@@ -1448,40 +1448,40 @@
                         clicavel = true;
                     } else {
                         rest++; cls = 'border border-slate-600 text-slate-300'; tit = 'Dia de trabalho que ainda vai chegar';
-                        if (iso === hojeISO) { clicavel = true; tit = 'Hoje, ainda nÃ£o pago (clique para marcar falta)'; }
+                        if (iso === hojeISO) { clicavel = true; tit = 'Hoje, ainda não pago (clique para marcar falta)'; }
                     }
                     chips += clicavel
-                        ? `<button title="${tit} Â· ${String(d).padStart(2,'0')}/${String(m + 1).padStart(2,'0')}" onclick="toggleFaltaDiarista('${c.id}','${iso}')" class="w-6 h-6 rounded text-[10px] cursor-pointer ${cls}${ehHoje}">${d}</button>`
-                        : `<span title="${tit} Â· ${String(d).padStart(2,'0')}/${String(m + 1).padStart(2,'0')}" class="w-6 h-6 rounded text-[10px] inline-flex items-center justify-center ${cls}${ehHoje}">${d}</span>`;
+                        ? `<button title="${tit} · ${String(d).padStart(2,'0')}/${String(m + 1).padStart(2,'0')}" onclick="toggleFaltaDiarista('${c.id}','${iso}')" class="w-6 h-6 rounded text-[10px] cursor-pointer ${cls}${ehHoje}">${d}</button>`
+                        : `<span title="${tit} · ${String(d).padStart(2,'0')}/${String(m + 1).padStart(2,'0')}" class="w-6 h-6 rounded text-[10px] inline-flex items-center justify-center ${cls}${ehHoje}">${d}</span>`;
                 }
                 return `<div class="border-t border-slate-800 pt-3">
                     <div class="text-xs font-semibold text-white uppercase">${esc(c.nome)}</div>
-                    <div class="text-[11px] text-slate-300 mt-0.5">JÃ¡ trabalhou ${trab} dia${trab === 1 ? '' : 's'} Â· recebeu em ${receb} Â· faltou ${falt} Â· restam ${rest} dia${rest === 1 ? '' : 's'} de trabalho Â· ${folgaRest} folga${folgaRest === 1 ? '' : 's'} pela frente</div>
+                    <div class="text-[11px] text-slate-300 mt-0.5">Já trabalhou ${trab} dia${trab === 1 ? '' : 's'} · recebeu em ${receb} · faltou ${falt} · restam ${rest} dia${rest === 1 ? '' : 's'} de trabalho · ${folgaRest} folga${folgaRest === 1 ? '' : 's'} pela frente</div>
                     <div class="flex flex-wrap gap-1 mt-2">${chips}</div>
                 </div>`;
             }).join('');
             const msg = difTot === 0
-                ? `O prÃ³ximo mÃªs terÃ¡ o mesmo gasto com diaristas.`
-                : `Em ${mProx} vocÃª vai gastar ${formatarMoeda(Math.abs(difTot))} ${difTot > 0 ? 'a MAIS' : 'a menos'} com diaristas do que em ${mAtual}.`;
+                ? `O próximo mês terá o mesmo gasto com diaristas.`
+                : `Em ${mProx} você vai gastar ${formatarMoeda(Math.abs(difTot))} ${difTot > 0 ? 'a MAIS' : 'a menos'} com diaristas do que em ${mAtual}.`;
             el.innerHTML = `
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3">
-                    <div><h3 class="font-bold text-white text-sm">PrevisÃ£o dos diaristas</h3>
+                    <div><h3 class="font-bold text-white text-sm">Previsão dos diaristas</h3>
                     <p class="text-xs ${difTot > 0 ? 'text-amber-400' : 'text-slate-400'}">${msg}</p></div>
                     <div class="overflow-x-auto"><table class="w-full text-xs">
                         <thead><tr class="text-[10px] uppercase text-slate-400 tracking-wider">
-                            <th class="pb-1 pr-3 text-left">Diarista</th><th class="pb-1 pr-3 text-right">${mAtual} (atual)</th><th class="pb-1 pr-3 text-right">${mProx}</th><th class="pb-1 text-right">DiferenÃ§a</th>
+                            <th class="pb-1 pr-3 text-left">Diarista</th><th class="pb-1 pr-3 text-right">${mAtual} (atual)</th><th class="pb-1 pr-3 text-right">${mProx}</th><th class="pb-1 text-right">Diferença</th>
                         </tr></thead>
                         <tbody>${linhas}</tbody>
                     </table></div>
                     <div class="space-y-3">${detalhes}
-                        <p class="text-[10px] text-slate-500">Verde: trabalhou e recebeu Â· Amarelo: trabalhou sem pagamento registrado Â· Vermelho: faltou Â· Contorno: dia que ainda vai trabalhar Â· Apagado: folga. Clique num dia passado ou em hoje para marcar/desfazer falta.</p>
+                        <p class="text-[10px] text-slate-500">Verde: trabalhou e recebeu · Amarelo: trabalhou sem pagamento registrado · Vermelho: faltou · Contorno: dia que ainda vai trabalhar · Apagado: folga. Clique num dia passado ou em hoje para marcar/desfazer falta.</p>
                     </div>
                 </div>`;
             el.classList.remove('hidden');
         }
 
-        // Diarista: o valor sÃ³ vale nos dias da semana em que trabalha; nos outros dias a conta fica "de folga"
-        const NOMES_DIAS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'SÃ¡b'];
+        // Diarista: o valor só vale nos dias da semana em que trabalha; nos outros dias a conta fica "de folga"
+        const NOMES_DIAS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
         function diasDaConta(conta) { return conta.diasSemana && conta.diasSemana.length ? conta.diasSemana : TODOS_OS_DIAS; }
         function valorPorOcorrencia(conta) {
             return conta.modoValor === 'diaria' ? conta.valorDiaria : conta.total / Math.max(1, extrairDias(conta.diaPagamento).length);
@@ -1514,7 +1514,7 @@
             renderizar();
         }
 
-        // Diarista: o "ciclo" Ã© o prÃ³prio dia. Os demais seguem o vencimento.
+        // Diarista: o "ciclo" é o próprio dia. Os demais seguem o vencimento.
         function inicioCicloDaConta(conta) {
             return conta.modoValor === 'diaria' ? formatarDataISO(new Date()) : calcularInicioCicloAtual(conta.diaPagamento);
         }
@@ -1529,7 +1529,7 @@
             }
             atualizarCampoModoValor();
             const montanteSel = tipo === 'parcelas' && document.getElementById('contaTipoValorParcela').value === 'montante';
-            document.getElementById('labelContaTotal').innerText = montanteSel ? 'Montante Total da DÃ­vida (R$)' : (tipo === 'parcelas' ? 'Valor de Cada Parcela (R$)' : 'Valor Total no MÃªs (R$)');
+            document.getElementById('labelContaTotal').innerText = montanteSel ? 'Montante Total da Dívida (R$)' : (tipo === 'parcelas' ? 'Valor de Cada Parcela (R$)' : 'Valor Total no Mês (R$)');
             const prev = document.getElementById('previaParcela');
             const vt = parseFloat(document.getElementById('contaTotal').value);
             const np = parseInt(document.getElementById('contaTotalParcelas').value, 10);
@@ -1537,7 +1537,7 @@
         }
 
         function abrirModalAdicionar() {
-            document.getElementById('modalContaTitulo').innerText = "Nova Conta / DÃ­vida";
+            document.getElementById('modalContaTitulo').innerText = "Nova Conta / Dívida";
             document.getElementById('formConta').reset();
             document.getElementById('contaEditId').value = '';
             const perfilNovo = perfilAtivo === 'geral' ? 'empresarial' : perfilAtivo;
@@ -1586,12 +1586,12 @@
                 valorDiaria = parseFloat(document.getElementById('contaValorDiaria').value);
                 diasSemana = lerDiasSemanaForm();
                 if (!(valorDiaria > 0) || diasSemana.length === 0) {
-                    mostrarMensagem("AtenÃ§Ã£o", "Informe o valor por dia e marque pelo menos um dia da semana.", "info");
+                    mostrarMensagem("Atenção", "Informe o valor por dia e marque pelo menos um dia da semana.", "info");
                     return;
                 }
                 const h = new Date();
                 total = totalDiaristaNoMes({ valorDiaria, diasSemana }, h.getFullYear(), h.getMonth());
-                diaPagamento = ''; // diarista nÃ£o tem dia de vencimento
+                diaPagamento = ''; // diarista não tem dia de vencimento
             } else {
                 total = parseFloat(document.getElementById('contaTotal').value);
             }
@@ -1600,7 +1600,7 @@
                 ? Math.max(1, parseInt(document.getElementById('contaTotalParcelas').value) || 1)
                 : null;
 
-            // Parcelado com montante: guarda o montante e usa como valor da conta sÃ³ a parcela (montante Ã· nÂº de parcelas)
+            // Parcelado com montante: guarda o montante e usa como valor da conta só a parcela (montante ÷ nº de parcelas)
             let montante = null;
             if (modoValor !== 'diaria' && recorrencia === 'parcelas' && document.getElementById('contaTipoValorParcela').value === 'montante') {
                 montante = total;
@@ -1647,18 +1647,18 @@
         }
 
         // Reinicia manualmente o ciclo de uma conta (ex: pagou tudo de uma vez antes do
-        // vencimento) para jÃ¡ voltar a pedir separaÃ§Ã£o de dinheiro desde hoje.
+        // vencimento) para já voltar a pedir separação de dinheiro desde hoje.
         function reiniciarCicloConta(id) {
             const conta = contas.find(c => c.id === id);
             if (!conta) return;
             mostrarConfirmacao(
                 "Reiniciar Conta",
-                `Isso vai fazer "${conta.nome.toUpperCase()}" voltar a pedir separaÃ§Ã£o de dinheiro a partir de hoje, mesmo jÃ¡ tendo sido quitada antes do vencimento. O histÃ³rico de pagamentos nÃ£o Ã© apagado. Deseja continuar?`,
+                `Isso vai fazer "${conta.nome.toUpperCase()}" voltar a pedir separação de dinheiro a partir de hoje, mesmo já tendo sido quitada antes do vencimento. O histórico de pagamentos não é apagado. Deseja continuar?`,
                 function () {
                     conta.cicloResetTimestamp = Date.now();
                     salvarNoStorage();
                     renderizar();
-                    mostrarMensagem("Reiniciado", `"${conta.nome.toUpperCase()}" foi reiniciada: JÃ¡ Guardado e Falta Pagar voltaram do zero, como uma conta nova â€” mantendo o mesmo dia de vencimento e valor total.`, "success");
+                    mostrarMensagem("Reiniciado", `"${conta.nome.toUpperCase()}" foi reiniciada: Já Guardado e Falta Pagar voltaram do zero, como uma conta nova — mantendo o mesmo dia de vencimento e valor total.`, "success");
                 }
             );
         }
@@ -1684,16 +1684,16 @@
             try {
                 dados = JSON.parse(document.getElementById('backupTexto').value);
             } catch (e) {
-                mostrarMensagem("Erro", "O texto colado nÃ£o Ã© um backup vÃ¡lido.", "info");
+                mostrarMensagem("Erro", "O texto colado não é um backup válido.", "info");
                 return;
             }
             if (!dados || !Array.isArray(dados.contas) || !Array.isArray(dados.aportes) || !Array.isArray(dados.saidas)) {
-                mostrarMensagem("Erro", "O texto colado nÃ£o parece ser um backup deste sistema.", "info");
+                mostrarMensagem("Erro", "O texto colado não parece ser um backup deste sistema.", "info");
                 return;
             }
             mostrarConfirmacao(
                 "Importar Backup",
-                `Isso vai SUBSTITUIR os dados atuais por ${dados.contas.length} conta(s), ${dados.aportes.length} aporte(s) e ${dados.saidas.length} saÃ­da(s). Deseja continuar?`,
+                `Isso vai SUBSTITUIR os dados atuais por ${dados.contas.length} conta(s), ${dados.aportes.length} aporte(s) e ${dados.saidas.length} saída(s). Deseja continuar?`,
                 function () {
                     contas = dados.contas;
                     historicoAportes = dados.aportes;
@@ -1724,14 +1724,14 @@
             document.getElementById('modalAjuste').classList.add('hidden');
         }
 
-        // Registra sÃ³ a diferenÃ§a como "Ajuste Manual", mantendo o histÃ³rico e os cÃ¡lculos consistentes
+        // Registra só a diferença como "Ajuste Manual", mantendo o histórico e os cálculos consistentes
         function salvarAjuste(event) {
             event.preventDefault();
             const contaId = document.getElementById('ajusteContaId').value;
             const novoGuardado = parseFloat(document.getElementById('ajusteGuardado').value);
             const novoPago = parseFloat(document.getElementById('ajustePago').value);
             if (isNaN(novoGuardado) || isNaN(novoPago) || novoGuardado < 0 || novoPago < 0) {
-                mostrarMensagem("Erro", "Informe valores vÃ¡lidos (zero ou maiores).", "info");
+                mostrarMensagem("Erro", "Informe valores válidos (zero ou maiores).", "info");
                 return;
             }
             const data = new Date().toISOString().split('T')[0];
@@ -1751,11 +1751,11 @@
             salvarNoStorage();
             fecharModalAjuste();
             renderizar();
-            mostrarMensagem("Ajustado", (deltaGuardado === 0 && deltaPago === 0) ? "Nada mudou: os valores jÃ¡ estavam iguais." : "Valores reajustados e registrados como Ajuste Manual no histÃ³rico.", "success");
+            mostrarMensagem("Ajustado", (deltaGuardado === 0 && deltaPago === 0) ? "Nada mudou: os valores já estavam iguais." : "Valores reajustados e registrados como Ajuste Manual no histórico.", "success");
         }
 
         // Marca/desmarca a conta como paga HOJE: ela fica apagada, vai pro fim da lista e sai do
-        // 'Separar por Dia'. A marca expira sozinha Ã  meia-noite (compara com a data de hoje).
+        // 'Separar por Dia'. A marca expira sozinha à meia-noite (compara com a data de hoje).
         function togglePagoHoje(id) {
             const conta = contas.find(c => c.id === id);
             if (!conta) return;
@@ -1774,8 +1774,8 @@
             mostrarMensagem(
                 conta.oculta ? "Conta Ocultada" : "Conta Reexibida",
                 conta.oculta
-                    ? "Esta conta nÃ£o entra mais nos totais e no cÃ¡lculo de 'Separar por Dia'. Marque 'Mostrar ocultas' para vÃª-la na lista, ou clique no olho novamente para reexibi-la."
-                    : "Esta conta voltou a contar nos totais e no cÃ¡lculo de 'Separar por Dia'.",
+                    ? "Esta conta não entra mais nos totais e no cálculo de 'Separar por Dia'. Marque 'Mostrar ocultas' para vê-la na lista, ou clique no olho novamente para reexibi-la."
+                    : "Esta conta voltou a contar nos totais e no cálculo de 'Separar por Dia'.",
                 "success"
             );
         }
@@ -1783,14 +1783,14 @@
         function excluirConta(id) {
             mostrarConfirmacao(
                 "Excluir Conta",
-                "Deseja realmente excluir esta conta e seus histÃ³ricos associados? Essa aÃ§Ã£o nÃ£o pode ser desfeita.",
+                "Deseja realmente excluir esta conta e seus históricos associados? Essa ação não pode ser desfeita.",
                 function () {
                     contas = contas.filter(c => c.id !== id);
                     historicoAportes = historicoAportes.filter(a => a.contaId !== id);
                     historicoSaidas = historicoSaidas.filter(s => s.contaId !== id);
                     salvarNoStorage();
                     renderizar();
-                    mostrarMensagem("ExcluÃ­do", "Conta removida com sucesso.", "success");
+                    mostrarMensagem("Excluído", "Conta removida com sucesso.", "success");
                 }
             );
         }
@@ -1817,13 +1817,13 @@
 
         function abrirModalAporteGeral() {
             if (contas.length === 0) {
-                mostrarMensagem("AtenÃ§Ã£o", "Cadastre pelo menos uma conta antes de separar dinheiro.", "info");
+                mostrarMensagem("Atenção", "Cadastre pelo menos uma conta antes de separar dinheiro.", "info");
                 return;
             }
             popularSelectContas('aporteContaId');
             document.getElementById('formAporte').reset();
             document.getElementById('aporteData').value = new Date().toISOString().split('T')[0];
-            document.getElementById('aporteMotivo').value = "SeparaÃ§Ã£o de valor";
+            document.getElementById('aporteMotivo').value = "Separação de valor";
             document.getElementById('cardFolegoAporte').classList.add('hidden');
             atualizarInfoSepararDia();
             document.getElementById('modalAporte').classList.remove('hidden');
@@ -1832,15 +1832,15 @@
         function abrirModalAporteParaConta(contaId) {
             popularSelectContas('aporteContaId', contaId);
             document.getElementById('formAporte').reset();
-            document.getElementById('aporteContaId').value = contaId; // reset() volta pra 1Âª opÃ§Ã£o, entÃ£o reaplica
+            document.getElementById('aporteContaId').value = contaId; // reset() volta pra 1ª opção, então reaplica
             document.getElementById('aporteData').value = new Date().toISOString().split('T')[0];
-            document.getElementById('aporteMotivo').value = "SeparaÃ§Ã£o de valor";
+            document.getElementById('aporteMotivo').value = "Separação de valor";
             document.getElementById('cardFolegoAporte').classList.add('hidden');
             atualizarInfoSepararDia();
             document.getElementById('modalAporte').classList.remove('hidden');
         }
 
-        // Calcula quantos dias de fÃ´lego um aporte garante frente ao gasto diÃ¡rio total (margem mÃ­nima: 3 dias)
+        // Calcula quantos dias de fôlego um aporte garante frente ao gasto diário total (margem mínima: 3 dias)
         function atualizarFolegoAporte() {
             const valor = parseFloat(document.getElementById('aporteValor').value) || 0;
             const card = document.getElementById('cardFolegoAporte');
@@ -1855,8 +1855,8 @@
 
             if (totalSepararDiaGlobal <= 0) {
                 card.className = "rounded-xl p-3 text-xs space-y-1 border bg-emerald-950/40 border-emerald-500/30";
-                titulo.innerHTML = '<span role="img" aria-hidden="true">âœ…</span> Sem gasto diÃ¡rio pendente agora';
-                texto.innerText = 'NÃ£o hÃ¡ "Total a Separar por Dia" ativo no momento â€” esse aporte jÃ¡ cobre tudo tranquilamente.';
+                titulo.innerHTML = '<span role="img" aria-hidden="true">✅</span> Sem gasto diário pendente agora';
+                texto.innerText = 'Não há "Total a Separar por Dia" ativo no momento — esse aporte já cobre tudo tranquilamente.';
                 card.classList.remove('hidden');
                 return;
             }
@@ -1866,12 +1866,12 @@
             if (diasFolego < MARGEM_MINIMA_DIAS) {
                 const valorMinimo = totalSepararDiaGlobal * MARGEM_MINIMA_DIAS;
                 card.className = "rounded-xl p-3 text-xs space-y-1 border bg-rose-950/40 border-rose-500/30";
-                titulo.innerHTML = `<span role="img" aria-hidden="true">âš ï¸</span> FÃ´lego curto: ${diasFolego.toFixed(1)} dia(s)`;
-                texto.innerText = `AtenÃ§Ã£o: este valor cobre apenas ${diasFolego.toFixed(1)} dia(s). O ideal para sua margem de seguranÃ§a de ${MARGEM_MINIMA_DIAS} dias seria separar pelo menos ${formatarMoeda(valorMinimo)}.`;
+                titulo.innerHTML = `<span role="img" aria-hidden="true">⚠️</span> Fôlego curto: ${diasFolego.toFixed(1)} dia(s)`;
+                texto.innerText = `Atenção: este valor cobre apenas ${diasFolego.toFixed(1)} dia(s). O ideal para sua margem de segurança de ${MARGEM_MINIMA_DIAS} dias seria separar pelo menos ${formatarMoeda(valorMinimo)}.`;
             } else {
                 card.className = "rounded-xl p-3 text-xs space-y-1 border bg-emerald-950/40 border-emerald-500/30";
-                titulo.innerHTML = `<span role="img" aria-hidden="true">âœ…</span> Aporte aceito: ${diasFolego.toFixed(1)} dia(s) de fÃ´lego`;
-                texto.innerText = `VocÃª garantiu ${diasFolego.toFixed(1)} dia(s) de fÃ´lego total sem precisar de novos aportes diÃ¡rios, superando sua margem de seguranÃ§a de ${MARGEM_MINIMA_DIAS} dias.`;
+                titulo.innerHTML = `<span role="img" aria-hidden="true">✅</span> Aporte aceito: ${diasFolego.toFixed(1)} dia(s) de fôlego`;
+                texto.innerText = `Você garantiu ${diasFolego.toFixed(1)} dia(s) de fôlego total sem precisar de novos aportes diários, superando sua margem de segurança de ${MARGEM_MINIMA_DIAS} dias.`;
             }
             card.classList.remove('hidden');
         }
@@ -1911,7 +1911,7 @@
 
         function abrirModalConverterGuardado() {
             if (contas.length === 0) {
-                mostrarMensagem("AtenÃ§Ã£o", "Nenhuma conta cadastrada.", "info");
+                mostrarMensagem("Atenção", "Nenhuma conta cadastrada.", "info");
                 return;
             }
             popularSelectContas('converterContaId');
@@ -1925,7 +1925,7 @@
         function abrirModalConverterParaConta(contaId) {
             popularSelectContas('converterContaId', contaId);
             document.getElementById('formConverter').reset();
-            document.getElementById('converterContaId').value = contaId; // reset() volta pra 1Âª opÃ§Ã£o, entÃ£o reaplica
+            document.getElementById('converterContaId').value = contaId; // reset() volta pra 1ª opção, então reaplica
             document.getElementById('converterData').value = new Date().toISOString().split('T')[0];
             document.getElementById('converterMotivo').value = "Pagamento efetivado usando o dinheiro guardado";
             atualizarInfoGuardadoConta();
@@ -1964,7 +1964,7 @@
             const faltaPagar = Math.max(0, faltaPagarBruto - guardado);
 
             const novoGuardadoRestante = Math.max(0, guardado - valorInput);
-            // ProjeÃ§Ã£o do falta pagar considerando o que restarÃ¡ de guardado
+            // Projeção do falta pagar considerando o que restará de guardado
             const novoFaltaPagarBruto = Math.max(0, faltaPagarBruto - valorInput);
             const novoFaltaPagar = Math.max(0, novoFaltaPagarBruto - novoGuardadoRestante);
 
@@ -1981,7 +1981,7 @@
 
             const guardado = calcularGuardadoLiquido(contaId);
             if (valor > guardado) {
-                mostrarMensagem("Erro", "O valor a efetivar nÃ£o pode ser maior que o dinheiro guardado disponÃ­vel para esta conta.", "info");
+                mostrarMensagem("Erro", "O valor a efetivar não pode ser maior que o dinheiro guardado disponível para esta conta.", "info");
                 return;
             }
 
@@ -1999,12 +1999,12 @@
             salvarNoStorage();
             fecharModalConverter();
             renderizar();
-            mostrarMensagem("Sucesso", "Dinheiro guardado efetivado como pago e abatido da dÃ­vida!", "success");
+            mostrarMensagem("Sucesso", "Dinheiro guardado efetivado como pago e abatido da dívida!", "success");
         }
 
         function abrirModalTransferir() {
             if (contas.length < 2) {
-                mostrarMensagem("AtenÃ§Ã£o", "Cadastre pelo menos duas contas para transferir dinheiro guardado entre elas.", "info");
+                mostrarMensagem("Atenção", "Cadastre pelo menos duas contas para transferir dinheiro guardado entre elas.", "info");
                 return;
             }
             popularSelectContas('transferirOrigemId');
@@ -2041,14 +2041,14 @@
 
             const guardadoOrigem = calcularGuardadoLiquido(origemId);
             if (valor > guardadoOrigem) {
-                mostrarMensagem("Erro", "O valor a transferir nÃ£o pode ser maior que o dinheiro guardado disponÃ­vel na conta de origem.", "info");
+                mostrarMensagem("Erro", "O valor a transferir não pode ser maior que o dinheiro guardado disponível na conta de origem.", "info");
                 return;
             }
 
             const nomeOrigem = (contas.find(c => c.id === origemId) || {}).nome || 'Conta';
             const nomeDestino = (contas.find(c => c.id === destinoId) || {}).nome || 'Conta';
 
-            // Sai do guardado da origem (nÃ£o conta como pago nem como retirada)
+            // Sai do guardado da origem (não conta como pago nem como retirada)
             historicoSaidas.push({
                 id: Date.now().toString() + '-t1',
                 contaId: origemId,
@@ -2071,12 +2071,12 @@
             salvarNoStorage();
             fecharModalTransferir();
             renderizar();
-            mostrarMensagem("Sucesso", `TransferÃªncia de ${formatarMoeda(valor)} realizada de ${nomeOrigem.toUpperCase()} para ${nomeDestino.toUpperCase()}!`, "success");
+            mostrarMensagem("Sucesso", `Transferência de ${formatarMoeda(valor)} realizada de ${nomeOrigem.toUpperCase()} para ${nomeDestino.toUpperCase()}!`, "success");
         }
 
         function abrirModalSaida() {
             if (contas.length === 0) {
-                mostrarMensagem("AtenÃ§Ã£o", "Cadastre pelo menos uma conta.", "info");
+                mostrarMensagem("Atenção", "Cadastre pelo menos uma conta.", "info");
                 return;
             }
             popularSelectContas('saidaContaId');
@@ -2110,7 +2110,7 @@
 
             if (tipo === 'retirada') {
                 label.innerText = 'Abater do Dinheiro Guardado de (opcional)';
-                ajuda.innerText = 'Use quando o dinheiro sair de uma conta que vocÃª jÃ¡ tinha guardado, mas o gasto nÃ£o Ã© da dÃ­vida fixa dela (ex: emergÃªncia). Se nÃ£o veio de nenhuma conta guardada, deixe em "Nenhuma".';
+                ajuda.innerText = 'Use quando o dinheiro sair de uma conta que você já tinha guardado, mas o gasto não é da dívida fixa dela (ex: emergência). Se não veio de nenhuma conta guardada, deixe em "Nenhuma".';
                 if (!optNenhuma) {
                     optNenhuma = document.createElement('option');
                     optNenhuma.id = 'optContaNenhuma';
@@ -2121,7 +2121,7 @@
                 }
             } else {
                 label.innerText = 'Conta Relacionada';
-                ajuda.innerText = 'O valor serÃ¡ abatido diretamente da dÃ­vida desta conta fixa.';
+                ajuda.innerText = 'O valor será abatido diretamente da dívida desta conta fixa.';
                 if (optNenhuma) {
                     optNenhuma.remove();
                     if (select.options.length > 0) select.selectedIndex = 0;
@@ -2136,7 +2136,7 @@
             const info = document.getElementById('infoGuardadoSaidaTexto');
             if (tipo === 'retirada' && contaId) {
                 const guardado = calcularGuardadoLiquido(contaId);
-                info.innerText = `Guardado disponÃ­vel nesta conta: ${formatarMoeda(guardado)} â€” este valor serÃ¡ descontado do "JÃ¡ Guardado" dela.`;
+                info.innerText = `Guardado disponível nesta conta: ${formatarMoeda(guardado)} — este valor será descontado do "Já Guardado" dela.`;
                 info.classList.remove('hidden');
             } else {
                 info.classList.add('hidden');
@@ -2152,14 +2152,14 @@
             const motivo = document.getElementById('saidaMotivo').value.trim();
 
             if (tipo === 'pagamento' && !contaId) {
-                mostrarMensagem("AtenÃ§Ã£o", "Selecione a conta relacionada a este pagamento.", "info");
+                mostrarMensagem("Atenção", "Selecione a conta relacionada a este pagamento.", "info");
                 return;
             }
 
             if (tipo === 'retirada' && contaId) {
                 const guardado = calcularGuardadoLiquido(contaId);
                 if (valor > guardado) {
-                    mostrarMensagem("Erro", "O valor da retirada nÃ£o pode ser maior que o dinheiro guardado disponÃ­vel nesta conta.", "info");
+                    mostrarMensagem("Erro", "O valor da retirada não pode ser maior que o dinheiro guardado disponível nesta conta.", "info");
                     return;
                 }
             }
@@ -2179,17 +2179,17 @@
             salvarNoStorage();
             fecharModalSaida();
             renderizar();
-            mostrarMensagem("Sucesso", "SaÃ­da registrada com sucesso!", "success");
+            mostrarMensagem("Sucesso", "Saída registrada com sucesso!", "success");
         }
 
         function excluirSaida(id) {
             historicoSaidas = historicoSaidas.filter(s => s.id !== id);
             salvarNoStorage();
             renderizar();
-            mostrarMensagem("Removido", "Registro de saÃ­da removido.", "info");
+            mostrarMensagem("Removido", "Registro de saída removido.", "info");
         }
 
-        // --- ATUALIZE AQUI NO FINAL DO CÃ“DIGO ---
+        // --- ATUALIZE AQUI NO FINAL DO CÓDIGO ---
         async function carregarDadosDoSupabase() {
             try {
                 const { data: dContas, error: eContas } = await supabase.from('financas_contas').select('*');
@@ -2207,10 +2207,10 @@
                 salvarNoStorage();
                 renderizar();
             } catch (err) {
-                // Se o Supabase falhar (ex: URL/chave nÃ£o configuradas), os dados locais
-                // (localStorage) jÃ¡ foram exibidos por renderizar() no window.onload abaixo,
-                // entÃ£o o app continua funcionando normalmente mesmo sem a sincronizaÃ§Ã£o.
-                console.error("Erro ao carregar do Supabase â€” usando apenas os dados locais:", err);
+                // Se o Supabase falhar (ex: URL/chave não configuradas), os dados locais
+                // (localStorage) já foram exibidos por renderizar() no window.onload abaixo,
+                // então o app continua funcionando normalmente mesmo sem a sincronização.
+                console.error("Erro ao carregar do Supabase — usando apenas os dados locais:", err);
             }
         }
 
@@ -2221,7 +2221,7 @@
             const dataLonga = agora.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
             document.getElementById('headerDiaSemana').innerText = diaSemana;
             document.getElementById('headerDataHoje').innerText = dataLonga;
-            // Se o dia virou com a pÃ¡gina aberta, recalcula vencimentos e ciclos
+            // Se o dia virou com a página aberta, recalcula vencimentos e ciclos
             if (_ultimaDataExibida && _ultimaDataExibida !== dataLonga) renderizar();
             _ultimaDataExibida = dataLonga;
         }
@@ -2230,7 +2230,7 @@
             atualizarDataHeader();
             setInterval(atualizarDataHeader, 60000);
             // Mostra os dados salvos localmente IMEDIATAMENTE, sem depender do Supabase.
-            // Isso evita a tela "zerada" caso a sincronizaÃ§Ã£o com o Supabase falhe ou demore.
+            // Isso evita a tela "zerada" caso a sincronização com o Supabase falhe ou demore.
             renderizar();
             carregarDadosDoSupabase();
         };
